@@ -1,12 +1,25 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-class Parser {
+#include <string>
+using namespace std;
 
+class Parser {
+private: 
+	string command;
+
+public:
 	Parser();
 	~Parser();
 
+	string getCommand();
+	string getDescription();
+	int getIndex();
+	string getDate();
+	string getStartTime();
+	string getEndTime();
+	string getCategory();
+
 };
-
-
 #endif
+
