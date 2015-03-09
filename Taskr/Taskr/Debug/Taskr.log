@@ -1,4 +1,4 @@
-﻿Build started 9/3/2015 4:14:10 PM.
+﻿Build started 9/3/2015 5:27:00 PM.
      1>Project "C:\GIT\main\Taskr\Taskr\Taskr.vcxproj" on node 2 (Build target(s)).
        Project file contains ToolsVersion="12.0". This toolset is unknown or missing. You may be able to resolve this by installing the appropriate .NET Framework for this toolset. Treating the project as if it had ToolsVersion="4.0".
      1>ClCompile:
@@ -6,6 +6,8 @@
          UI.cpp
      1>c:\git\main\taskr\taskr\ui.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
      1>c:\git\main\taskr\taskr\ui.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>c:\git\main\taskr\taskr\ui.cpp(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+     1>c:\git\main\taskr\taskr\ui.cpp(35): warning C4018: '<' : signed/unsigned mismatch
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\GIT\main\Taskr\Debug\Taskr.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\GIT\main\Taskr\Debug\Taskr.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\GIT\main\Taskr\Debug\Taskr.lib" /MACHINE:X86 Debug\driver.obj
          Debug\Logic.obj

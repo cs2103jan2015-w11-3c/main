@@ -21,6 +21,7 @@ public:
 	Logic();
 	~Logic();
 
+	int executeCommand(std::string);
 	int getParameter(std::string&, std::string&);
 	int displayTask(std::string);
 	int updateTask(Task);
