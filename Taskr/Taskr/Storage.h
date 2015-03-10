@@ -16,9 +16,15 @@ public:
   void readFile();
   void saveFile();
   
+  std::vector<Task> getAllTasks() {
+	  return _listOfTasks;
+  }
+
   bool addTask(Task);
-  bool deleteTask(int taskIndex);
-  bool displayTask();
-  bool editTask(int taskIndex, Task);
+  bool deleteTask(int index);
+  // bool displayTask();
+  bool editTask(int index, Task);
+
+  bool isValidIndex(int index);
   
 };

@@ -45,14 +45,15 @@ bool TaskStorage::addTask(Task task) {
 	if (!task.isValid()) {
 		return false;
 	}
-
-	_listOfTasks.push_back(task);
-	saveFile();
+	else {
+		_listOfTasks.push_back(task);
+		saveFile();
 		return true;
+	}
 }
 
-bool TaskStorage::deleteTask(int taskIndex) {
-	int i = taskIndex;
+bool TaskStorage::deleteTask(int index) {
+	int i = index;
 	if (i <= _listOfTasks.size() && i > 0) {
 		_listOfTasks.erase(_listOfTasks.begin() + i - 1);
 		saveFile();
@@ -64,7 +65,7 @@ bool TaskStorage::deleteTask(int taskIndex) {
 }
 //bool taskstorage::displaytask() {
 //	if (!_listoftasks.empty()) {
-//		for (int i = 0; i < _listoftasks.size(); i++) {
+//		for (int i = 0; i < _listOfTasks.size(); i++) {
 //			const task &task = _listoftasks[i];
 //			cout << i + 1 << ". " << task.getdescription() << endl;
 //			return true;
@@ -73,9 +74,16 @@ bool TaskStorage::deleteTask(int taskIndex) {
 //		return false;
 //	}
 //}
-bool TaskStorage::editTask(int taskIndex, Task task) {
-	
-	_listOfTasks[taskIndex - 1] = task;
+
+bool TaskStorage::editTask(int index, Task task) {
+	if (!isValidIndex(index) || task.getDescription() == "") {
+		return false;
+	}
+	_listOfTasks[index - 1] = task;
 	saveFile();
 	return true;
+}
+
+bool TaskStorage::isValidIndex(int index) {
+	return index > 0 && index <= _listOfTasks.size();
 }
