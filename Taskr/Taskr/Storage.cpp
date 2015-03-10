@@ -8,6 +8,7 @@ TaskStorage::TaskStorage() {
 }
 
 void TaskStorage::readFile() {
+  ifstream myFile(_filename, ifstream::out);
  
 }
 void TaskStorage::saveFile() {
@@ -23,13 +24,18 @@ int TaskStorage::addTask(Task task) {
  _listOfTasks.push_back(task);
  return 1;
  
- // if insufficient disk space
- //
  
  
 }
-void TaskStorage::deleteTask(int taskIndex) {
- 
+bool TaskStorage::deleteTask(int taskIndex) {
+  int i = taskIndex;
+  if (i <=_listOfTasks.size() && i > 0) {
+    _listOfTasks.erase (_listOfTasks.begin() + i - 1);
+    saveFile();
+    return true;
+  } else {
+    return false;
+  }
 }
 void TaskStorage::displayTask() {
  if(!_listOfTasks.empty()) {

@@ -17,7 +17,7 @@ public:
   void saveFile();
   
   int addTask(Task);
-  void deleteTask(int taskIndex);
+  bool deleteTask(int taskIndex);
   void displayTask();
   void editTask(int taskIndex, Task);
   
