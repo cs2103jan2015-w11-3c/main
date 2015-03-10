@@ -6,30 +6,26 @@
 #include<string>
 #include<vector>
 #include "Task.h"
+#include "Parser.h"
+#include "Storage.h"
+
+
 
 
 class Logic {
 private:
-	std::string userInput;
-	std::string userCommand;
-	Task task;
-	std::vector<Task> listOfTasks;
+	Parser _parse;
+	Storage _store;
+	Task _task;
+	std::vector<Task> _listOfTasks;
 
-	Task retrieveTask(std::string);
 
 public:
 	Logic();
 	~Logic();
 
-	int executeCommand(std::string);
-	int getParameter(std::string&, std::string&);
-	int displayTask(std::string);
-	int updateTask(Task);
-	int addTask(Task); //Task object here instead?
-	int deletetask(std::string);
-	int clearList();
+	int executeCommand(std::string userInput);
 
-	Task splitTask(std::string);
 
 };
 

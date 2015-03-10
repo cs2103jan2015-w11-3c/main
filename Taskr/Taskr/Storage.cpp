@@ -3,10 +3,10 @@
 
 using namespace std;
 
-TaskStorage::TaskStorage() {
+Storage::Storage() {
 }
 
-void TaskStorage::readFile() {
+void Storage::readFile() {
 	ifstream myFile(_filename, ifstream::in);
 	_listOfTasks.clear();
 
@@ -28,7 +28,7 @@ void TaskStorage::readFile() {
 	return;
 }
 
-void TaskStorage::saveFile() {
+void Storage::saveFile() {
 	ofstream outFile(_filename, ofstream::out);
 	for (int i = 0; i < _listOfTasks.size(); i++) {
 		Task &task = _listOfTasks[i];
@@ -41,7 +41,7 @@ void TaskStorage::saveFile() {
 	return;
 }
 
-bool TaskStorage::addTask(Task task) {
+bool Storage::addTask(Task task) {
 	if (!task.isValid()) {
 		return false;
 	}
@@ -52,7 +52,7 @@ bool TaskStorage::addTask(Task task) {
 	}
 }
 
-bool TaskStorage::deleteTask(int index) {
+bool Storage::deleteTask(int index) {
 	int i = index;
 	if (i <= _listOfTasks.size() && i > 0) {
 		_listOfTasks.erase(_listOfTasks.begin() + i - 1);
@@ -63,7 +63,7 @@ bool TaskStorage::deleteTask(int index) {
 		return false;
 	}
 }
-//bool taskstorage::displaytask() {
+//bool Storage::displaytask() {
 //	if (!_listoftasks.empty()) {
 //		for (int i = 0; i < _listOfTasks.size(); i++) {
 //			const task &task = _listoftasks[i];
@@ -75,7 +75,7 @@ bool TaskStorage::deleteTask(int index) {
 //	}
 //}
 
-bool TaskStorage::editTask(int index, Task task) {
+bool Storage::editTask(int index, Task task) {
 	if (!isValidIndex(index) || task.getDescription() == "") {
 		return false;
 	}
@@ -84,6 +84,6 @@ bool TaskStorage::editTask(int index, Task task) {
 	return true;
 }
 
-bool TaskStorage::isValidIndex(int index) {
+bool Storage::isValidIndex(int index) {
 	return index > 0 && index <= _listOfTasks.size();
 }
