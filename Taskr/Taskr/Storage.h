@@ -1,10 +1,13 @@
 #pragma once
 
-using namespace std;
+#include <vector>
+#include <string>
+#include "Task.h"
 
 class TaskStorage {
 private:
-  vector <Task> _listOfTasks;
+  std::vector <Task> _listOfTasks;
+  std::string _filename;
   
   
 public:
