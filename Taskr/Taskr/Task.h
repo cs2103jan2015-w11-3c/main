@@ -8,9 +8,8 @@
 
 class Task {
 private:
-	std::string taskTitle;
-	std::string category;
-	bool isHighlighted;
+	std::string description;
+	bool isDone;
 	int dueDate;
 	int duration;
 
