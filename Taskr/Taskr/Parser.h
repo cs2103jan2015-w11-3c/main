@@ -12,6 +12,7 @@ private:
 	int _index;
 	
 public:
+	Parser();
 	Parser(std::string input);
 	~Parser();
 

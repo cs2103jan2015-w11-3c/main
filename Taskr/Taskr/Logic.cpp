@@ -11,15 +11,15 @@ Logic::~Logic() {
 
 int Logic::executeCommand(std::string userInput) {
 	std::string command;
+	std::string description;
+
 	_parse = Parser(userInput);
 
 	command = _parse.getCommand();
-
+	description = _parse.getDescription();
 
 	while (command != "exit") {
-		std::string userInput;
-		std::ostringstream outputMessageOSS;
-
+		
 		if (command == "add") {
 			removeLeadingSpaces(userInput);
 			inputVector.Task::addTask(userInput, outputMessageOSS);
@@ -34,7 +34,7 @@ int Logic::executeCommand(std::string userInput) {
 			inputVector.Task::clearList(outputMessageOSS);
 		}
 		else {
-			undefinedCommandError(outputMessageOSS);
+			return ERRORCODE_0;
 		}
 
 		inputVector.Task::writeToFile();
