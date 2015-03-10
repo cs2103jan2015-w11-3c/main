@@ -22,3 +22,4 @@ void Task::setIndex(int index) {
 void Task::setAsDone() {
 	_isDone = true;
 }
+
