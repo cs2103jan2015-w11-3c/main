@@ -8,7 +8,8 @@
 #include "Task.h"
 #include "Parser.h"
 #include "Storage.h"
-
+#define USER_INPUT_EXIT -1
+#define USER_COMMAND_INVALID -2
 
 
 

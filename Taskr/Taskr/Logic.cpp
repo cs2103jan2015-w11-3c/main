@@ -14,10 +14,11 @@ int Logic::executeCommand(std::string userInput) {
 	std::string description;
 
 	_parse = Parser(userInput);
-
+	_parse.setCommand();
 	command = _parse.getCommand();
 
 	if (command != "exit") {
+		_parse.setDescription();
 		description = _parse.getDescription();
 
 		if (command == "add") {
@@ -26,15 +27,17 @@ int Logic::executeCommand(std::string userInput) {
 		}
 		else if (command == "delete") {
 			int indexToDelete;
+			_parse.setIndex();
 			indexToDelete = _parse.getIndex();
 			_confirmationMessageIndex = _store.deleteTask(indexToDelete);
 		}
 		else if (command == "view") {
-			_confirmationMessageIndex = _store.displayTask();
+			_confirmationMessageIndex = _store.displayList();
 		}
 		else if (command == "edit") {
 			_task.Task::setDescription(description);
 			int indexToEdit;
+			_parse.setIndex();
 			indexToEdit = _parse.getIndex();
 			_confirmationMessageIndex = _store.editTask(indexToEdit, _task);
 		}

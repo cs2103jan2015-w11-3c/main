@@ -10,8 +10,8 @@ Parser::Parser(std::string input) {
 Parser::~Parser() {
 }
 
-std::string Parser::getCommand() {
-	std::string CommandType[] = {"add", "view", "delete", "edit"};
+void Parser::setCommand() {
+	std::string CommandType[] = {"add", "display", "delete", "edit"};
 	std::vector<std::string> commands;
 	commands.assign(CommandType, CommandType+4);
 	int j;
@@ -24,10 +24,9 @@ std::string Parser::getCommand() {
 	}
 
 	_command = commands[j];
-	return _command;
 }
 
-std::string Parser::getDescription() {
+void Parser::setDescription() {
 	int temp;
 	if(_command == "add") {
 		temp = _userInput.find_first_of(" ");
@@ -37,13 +36,22 @@ std::string Parser::getDescription() {
 	}
 
 	_description = _userInput.substr(temp+1);		//takes in all input after command
+}
+
+void Parser::setIndex() {
+	int temp = _userInput.find_first_of(" ");
+	char num = _userInput[temp+1];
+	_index = num;
+}
+
+std::string Parser::getCommand() {
+	return _command;
+}
+
+std::string Parser::getDescription() {
 	return _description;
 }
 
 int Parser::getIndex() {
-	int temp = _userInput.find_first_of(" ");
-	char num = _userInput[temp+1];
-	_index = num;
 	return _index;
 }
-

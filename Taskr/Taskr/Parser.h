@@ -16,6 +16,10 @@ public:
 	Parser(std::string input);
 	~Parser();
 
+	void setCommand();
+	void setDescription();
+	void setIndex();
+
 	std::string getCommand();
 	std::string getDescription();
 	int getIndex();

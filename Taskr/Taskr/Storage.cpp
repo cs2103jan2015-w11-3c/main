@@ -6,84 +6,99 @@ using namespace std;
 Storage::Storage() {
 }
 
-void Storage::readFile() {
-	ifstream myFile(_filename, ifstream::in);
-	_listOfTasks.clear();
-
-	while (!myFile.eof()) {
-		Task task;
-		string description;
-		int index;
-		bool isDone;
-		getline(myFile, description);
-		myFile >> index >> isDone;
-
-		task.setDescription(description);
-		task.setIndex(index);
-		if (isDone) {
-			task.setAsDone();
-		}
-		_listOfTasks.push_back(task);
-	}
-	return;
+Storage::~Storage() {
 }
+
+//void Storage::readFile() {
+//	ifstream myFile(_filename, ifstream::in);
+//	_listOfTasks.clear();
+//
+//	while (!myFile.eof()) {
+//		Task task;
+//		string description;
+//		int index;
+//		bool isDone;
+//		getline(myFile, description);
+//		myFile >> index >> isDone;
+//
+//		task.setDescription(description);
+//		if (isDone) {
+//			task.setAsDone();
+//		}
+//		_listOfTasks.push_back(task);
+//	}
+//	return;
+//}
 
 void Storage::saveFile() {
 	ofstream outFile(_filename, ofstream::out);
 	for (int i = 0; i < _listOfTasks.size(); i++) {
-		Task &task = _listOfTasks[i];
-		//outFile << task.getDescription() << endl;
-		//outFile << task.getIndex() << endl;
-		//outFile << task.getIsDone() << endl;
-		// outFile << _listOfTasks[i] << endl;
+		if (!_listOfTasks[i].isDone()) {
+			outFile << i + 1 << ". " << _listOfTasks[i].getDescription() << endl;
+		}
 	}
 	outFile.close();
 	return;
 }
 
-bool Storage::addTask(Task task) {
-	if (!task.isValid()) {
-		return false;
+int Storage::addTask(Task task) {
+	if (isRepeated(task)) {
+		return ERROR_REPEATED_TASK;
 	}
 	else {
 		_listOfTasks.push_back(task);
 		saveFile();
-		return true;
+		return SUCCESS;
 	}
 }
 
-bool Storage::deleteTask(int index) {
-	int i = index;
-	if (i <= _listOfTasks.size() && i > 0) {
-		_listOfTasks.erase(_listOfTasks.begin() + i - 1);
+int Storage::deleteTask(int index) {
+	if (isValidIndex(index)) {
+		_listOfTasks.erase(_listOfTasks.begin() + index - 1);
 		saveFile();
-		return true;
+		return SUCCESS;
 	}
 	else {
-		return false;
+		return ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
-//bool Storage::displaytask() {
-//	if (!_listoftasks.empty()) {
-//		for (int i = 0; i < _listOfTasks.size(); i++) {
-//			const task &task = _listoftasks[i];
-//			cout << i + 1 << ". " << task.getdescription() << endl;
-//			return true;
-//		}
-//	} else {
-//		return false;
-//	}
-//}
 
-bool Storage::editTask(int index, Task task) {
-	if (!isValidIndex(index) || task.getDescription() == "") {
-		return false;
+int Storage::displayList() {
+	if (!_listOfTasks.empty()) {
+		for (int i = 0; i < _listOfTasks.size(); i++) {
+			if (!(_listOfTasks[i].isDone())) {
+				cout << i + 1 << ". " << _listOfTasks[i].getDescription() << endl;
+			}
+		}
+		return SUCCESS;
+	} else {
+		return ERROR_EMPTY_LIST;
 	}
+}
+
+int Storage::editTask(int index, Task task) {
+	if (!isValidIndex(index)) {
+		return ERROR_INDEX_OUT_OF_RANGE;
+	}
+
+	if (task.getDescription() == "") {
+		return ERROR_INVALID_DESCRIPTION;
+	}
+
 	_listOfTasks[index - 1] = task;
 	saveFile();
-	return true;
+	return SUCCESS;
 }
 
 bool Storage::isValidIndex(int index) {
 	return index > 0 && index <= _listOfTasks.size();
+}
+
+bool Storage::isRepeated(Task task) {
+	for (int i = 0; i < _listOfTasks.size(); i++) {
+		if (task.getDescription() == _listOfTasks[i].getDescription()) {
+			return true;
+		}
+	}
+	return false;
 }

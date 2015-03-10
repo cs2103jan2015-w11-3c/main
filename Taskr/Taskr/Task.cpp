@@ -15,10 +15,6 @@ void Task::setDescription(std::string description) {
 	_description = description;
 }
 
-void Task::setIndex(int index) {
-	_index = index;
-}
-
 void Task::setAsDone() {
 	_isDone = true;
 }
@@ -27,3 +23,6 @@ std::string Task::getDescription() {
 	return _description;
 }
 
+bool Task::isDone() {
+	return _isDone;
+}

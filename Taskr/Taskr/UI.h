@@ -1,9 +1,11 @@
 #ifndef UI_H
 #define UI_H
 
-#include<iostream>;
-#include "Logic.h";
-#include "Task.h";
+
+#include<iostream>
+#include <vector>
+#include "Logic.h"
+#include "Task.h"
 
 class UI {
 private:
@@ -22,8 +24,8 @@ public:
 	const std::string MESSAGE_EMPTY;
 
 	void readUserInput();
-	void printConfirmationMessage(std::string);
-	void printListOfTasks();
+	void printConfirmationMessage(int);
+	//void printListOfTasks();
 };
 
 #endif
