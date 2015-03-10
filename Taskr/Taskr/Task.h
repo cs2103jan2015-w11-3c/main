@@ -22,6 +22,8 @@ public:
 	void setDescription(std::string description);
 	void setIndex(int index);
 	void setAsDone();
+
+	bool isValid();
 };
 
 #endif

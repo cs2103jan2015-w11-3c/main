@@ -16,9 +16,9 @@ public:
   void readFile();
   void saveFile();
   
-  int addTask(Task);
+  bool addTask(Task);
   bool deleteTask(int taskIndex);
-  void displayTask();
-  void editTask(int taskIndex, Task);
+  bool displayTask();
+  bool editTask(int taskIndex, Task);
   
 };
