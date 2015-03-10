@@ -1,25 +1,28 @@
 #ifndef PARSER_H
 #define PARSER_H
-//test pushing
+
 #include <string>
-using namespace std;
+#include <vector>
 
 class Parser {
 private: 
-	string command;
-
+	std::string UserInput;
+	std::string command;
+	std::string description;
+	int index;
+	
 public:
-	Parser();
+	Parser(std::string input);
 	~Parser();
 
-	string getCommand();
-	string getDescription();
+	std::string getCommand();
+	std::string getDescription();
 	int getIndex();
-	string getDate();
-	string getStartTime();
-	string getEndTime();
-	string getCategory();
-
+	/*std::string getDate();
+	std::string getStartTime();
+	std::string getEndTime();
+	std::string getCategory();
+	*/
 };
 #endif
 
