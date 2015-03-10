@@ -23,3 +23,7 @@ void Task::setAsDone() {
 	_isDone = true;
 }
 
+std::string Task::getDescription() {
+	return _description;
+}
+

@@ -18,7 +18,7 @@ private:
 	Storage _store;
 	Task _task;
 	std::vector<Task> _listOfTasks;
-
+	int _confirmationMessageIndex;
 
 public:
 	Logic();

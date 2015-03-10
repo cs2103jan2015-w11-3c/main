@@ -16,29 +16,35 @@ int Logic::executeCommand(std::string userInput) {
 	_parse = Parser(userInput);
 
 	command = _parse.getCommand();
-	description = _parse.getDescription();
 
-	while (command != "exit") {
-		
+	if (command != "exit") {
+		description = _parse.getDescription();
+
 		if (command == "add") {
-			removeLeadingSpaces(userInput);
-			inputVector.Task::addTask(userInput, outputMessageOSS);
+			_task.Task::setDescription(description);
+			_confirmationMessageIndex = _store.addTask(_task);
 		}
 		else if (command == "delete") {
-			inputVector.Task::deleteTask(outputMessageOSS);
+			int indexToDelete;
+			indexToDelete = _parse.getIndex();
+			_confirmationMessageIndex = _store.deleteTask(indexToDelete);
 		}
 		else if (command == "view") {
-			inputVector.Task::displayList(outputMessageOSS);
+			_confirmationMessageIndex = _store.displayTask();
 		}
 		else if (command == "edit") {
-			inputVector.Task::clearList(outputMessageOSS);
+			_task.Task::setDescription(description);
+			int indexToEdit;
+			indexToEdit = _parse.getIndex();
+			_confirmationMessageIndex = _store.editTask(indexToEdit, _task);
 		}
 		else {
-			return ERRORCODE_0;
+			return USER_COMMAND_INVALID;
 		}
+		return _confirmationMessageIndex;
 
-		inputVector.Task::writeToFile();
-		printOutputMessage(outputMessageOSS);
-		parseUserCommand(command);
+	}
+	else {
+		return USER_INPUT_EXIT;
 	}
 }

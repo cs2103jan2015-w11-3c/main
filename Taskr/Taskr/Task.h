@@ -23,10 +23,7 @@ public:
 	void setIndex(int index);
 	void setAsDone();
 
-	std::string getDescription() {
-		return _description;
-	}
-
+	std::string getDescription();
 	bool isValid();
 };
 

@@ -18,10 +18,12 @@ const std::string MESSAGE_EMPTY = "Taskr is empty.";
 
 void UI::readUserInput(){
 	std::cout << MESSAGE_WELCOME << std::endl;
-	while(true){
+	int confirmationIndex = 0;
+	while (confirmationIndex != USER_INPUT_EXIT) {
 		std::string userInput;
 		std::getline(std::cin, userInput);
-		logic.executeCommand(userInput);
+		confirmationIndex = logic.executeCommand(userInput);
+		printConfirmationMessage(confirmationIndex);
 	}
 }
 
