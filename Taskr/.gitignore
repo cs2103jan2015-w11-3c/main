@@ -4,7 +4,6 @@
 *.tlog
 *.exe
 *.filters
-*.vcxproj
 *.suo
 *.sdf
 *.ipch
