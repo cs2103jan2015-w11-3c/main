@@ -31,7 +31,7 @@ void Parser::setDescription() {
 	if(_command == "add") {
 		temp = _userInput.find_first_of(" ");
 	}
-	else if(_command == "edit") {
+	else {
 		temp = _userInput.find_first_of(",");
 	}
 
