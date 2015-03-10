@@ -38,7 +38,6 @@ void Storage::saveFile() {
 		}
 	}
 	outFile.close();
-	return;
 }
 
 int Storage::addTask(Task task) {

@@ -7,18 +7,12 @@ UI::UI() {
 UI::~UI() {
 }
 
-const std::string MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
-const std::string MESSAGE_ADDED = "New task added to Taskr";
-const std::string MESSAGE_DELETED = "Task deleted from Taskr";
-const std::string MESSAGE_EDITED = "Task has been edited to new task";
-const std::string MESSAGE_TASK_IS_EXISTED = "Task already exists";
-const std::string MESSAGE_ERROR_TASK_NOT_EXIST = "Task does not exist";
-const std::string MESSAGE_EMPTY = "Taskr is empty.";
 
 void UI::readUserInput(){
 	std::cout << MESSAGE_WELCOME << std::endl;
 	int confirmationIndex = 0;
 	while (confirmationIndex != USER_INPUT_EXIT) {
+		std::cout << "command: ";
 		std::string userInput;
 		std::getline(std::cin, userInput);
 		confirmationIndex = logic.executeCommand(userInput);
@@ -26,8 +20,46 @@ void UI::readUserInput(){
 	}
 }
 
+
 void UI::printConfirmationMessage(int confirmationIndex){
-	//std::cout << message << std::endl;
+	switch (confirmationIndex) {
+	case SUCCESS:
+		if (logic.getCommand() == "add") {
+			std::cout << MESSAGE_ADDED << std::endl;
+		}
+		else if (logic.getCommand() == "edit") {
+			std::cout << MESSAGE_EDITED << std::endl;
+		}
+		else if (logic.getCommand() == "delete") {
+			std::cout << MESSAGE_DELETED << std::endl;
+		}
+		break;
+
+	case USER_COMMAND_INVALID:
+		std::cout << MESSAGE_USER_COMMAND_INVALID << std::endl;
+		break;
+	
+	case ERROR_REPEATED_TASK:
+		std::cout << MESSAGE_TASK_EXISTS << std::endl;
+		break;
+
+	case ERROR_INDEX_OUT_OF_RANGE:
+		std::cout << MESSAGE_INDEX_INVALID << std::endl;
+		break;
+
+	case ERROR_EMPTY_LIST:
+		std::cout << MESSAGE_EMPTY << std::endl;
+		break;
+
+	case ERROR_INVALID_DESCRIPTION:
+		std::cout << MESSAGE_USER_COMMAND_INVALID << std::endl;
+		break;
+
+
+	default:
+		break;
+	}
+	
 }
 
 //void UI::printListOfTasks(){

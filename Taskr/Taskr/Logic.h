@@ -26,7 +26,7 @@ public:
 	~Logic();
 
 	int executeCommand(std::string userInput);
-
+	std::string getCommand();
 
 };
 

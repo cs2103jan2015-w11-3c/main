@@ -14,7 +14,7 @@
 class Storage {
 private:
   std::vector<Task> _listOfTasks;
-  std::string _filename;
+  std::string _filename = "Taskr.txt";
   
   
 public:

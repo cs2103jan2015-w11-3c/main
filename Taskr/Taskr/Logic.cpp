@@ -31,7 +31,7 @@ int Logic::executeCommand(std::string userInput) {
 			indexToDelete = _parse.getIndex();
 			_confirmationMessageIndex = _store.deleteTask(indexToDelete);
 		}
-		else if (command == "view") {
+		else if (command == "display") {
 			_confirmationMessageIndex = _store.displayList();
 		}
 		else if (command == "edit") {
@@ -50,4 +50,8 @@ int Logic::executeCommand(std::string userInput) {
 	else {
 		return USER_INPUT_EXIT;
 	}
+}
+
+std::string Logic::getCommand() {
+	return _parse.getCommand();
 }
