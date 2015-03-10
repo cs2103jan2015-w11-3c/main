@@ -4,15 +4,15 @@
 #include <string>
 #include "Task.h"
 
-class TaskStorage {
+class Storage {
 private:
   std::vector <Task> _listOfTasks;
   std::string _filename;
   
   
 public:
-  TaskStorage();
-  ~TaskStorage();
+  Storage();
+  ~Storage();
   void readFile();
   void saveFile();
   

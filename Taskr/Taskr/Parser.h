@@ -6,10 +6,10 @@
 
 class Parser {
 private: 
-	std::string UserInput;
-	std::string command;
-	std::string description;
-	int index;
+	std::string _userInput;
+	std::string _command;
+	std::string _description;
+	int _index;
 	
 public:
 	Parser(std::string input);

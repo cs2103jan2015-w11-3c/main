@@ -4,14 +4,14 @@
 
 using namespace std;
 
-TaskStorage::TaskStorage() {
+Storage::Storage() {
 }
 
-void TaskStorage::readFile() {
+void Storage::readFile() {
   ifstream myFile(_filename, ifstream::out);
  
 }
-void TaskStorage::saveFile() {
+void Storage::saveFile() {
  ofstream outFile(_filename, ofstream::out);
  for (int i = 0; i < _listOfTasks.size(); i++) {
    // outFile << _listOfTasks[i] << endl;
@@ -19,7 +19,7 @@ void TaskStorage::saveFile() {
  outFile.close();
 }
 
-int TaskStorage::addTask(Task task) {
+int Storage::addTask(Task task) {
  int index;
  _listOfTasks.push_back(task);
  return 1;
@@ -27,7 +27,7 @@ int TaskStorage::addTask(Task task) {
  
  
 }
-bool TaskStorage::deleteTask(int taskIndex) {
+bool Storage::deleteTask(int taskIndex) {
   int i = taskIndex;
   if (i <=_listOfTasks.size() && i > 0) {
     _listOfTasks.erase (_listOfTasks.begin() + i - 1);
@@ -37,7 +37,7 @@ bool TaskStorage::deleteTask(int taskIndex) {
     return false;
   }
 }
-void TaskStorage::displayTask() {
+void Storage::displayTask() {
  if(!_listOfTasks.empty()) {
    for (int i = 0; i < _listOfTasks.size(); i++) {
      // cout << i + 1 << ". " << _listOfTasks[i] << endl;
@@ -47,6 +47,6 @@ void TaskStorage::displayTask() {
  }
  
 }
-void TaskStorage::editTask(int taskIndex, Task) {
+void Storage::editTask(int taskIndex, Task) {
  
 }
