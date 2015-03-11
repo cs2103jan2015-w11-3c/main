@@ -4,6 +4,7 @@
 using namespace std;
 
 Storage::Storage() {
+	_filename = "Taskr.txt";
 }
 
 Storage::~Storage() {

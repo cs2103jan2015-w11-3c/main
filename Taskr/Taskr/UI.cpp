@@ -1,5 +1,15 @@
 #include "UI.h"
 
+const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
+const std::string UI::MESSAGE_ADDED = "New task added to Taskr";
+const std::string UI::MESSAGE_DELETED = "Task deleted from Taskr";
+const std::string UI::MESSAGE_EDITED = "Task has been edited to new task";
+const std::string UI::MESSAGE_TASK_EXISTS = "Task already exists";
+const std::string UI::MESSAGE_ERROR_TASK_NOT_EXIST = "Task does not exist";
+const std::string UI::MESSAGE_EMPTY = "Taskr is empty.";
+const std::string UI::MESSAGE_USER_COMMAND_INVALID = "Command is invalid.";
+const std::string UI::MESSAGE_INDEX_INVALID = "Index entered is invalid.";
+
 UI::UI() {
 }
 
