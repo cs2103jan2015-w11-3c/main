@@ -17,7 +17,7 @@ void Parser::splitTokens() {
 		size_t found = temp.find(",");
 		std::string token = temp.substr(previousNum, found);
 		tokens.push_back(token);
-		previousNum = found;
+		previousNum = found + 1;		//moves onto next character after ","
 	}
 }
 void Parser::setCommand() {
