@@ -9,6 +9,7 @@
 class Parser {
 private: 
 	std::string _userInput;
+	std::vector<std::string> tokens;
 	std::string _command;
 	std::string _description;
 	int _index;
@@ -18,6 +19,7 @@ public:
 	Parser(std::string input);
 	~Parser();
 
+	void splitTokens();
 	void setCommand();
 	void setDescription();
 	void setIndex();

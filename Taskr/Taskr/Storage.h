@@ -14,7 +14,7 @@
 class Storage {
 private:
   std::vector<Task> _listOfTasks;
-  std::string _filename = "Taskr.txt";
+  std::string _filename;
   
   
 public:
@@ -23,9 +23,7 @@ public:
   void readFile();
   void saveFile();
   
-  std::vector<Task> getAllTasks() {
-	  return _listOfTasks;
-  }
+  std::vector<Task> getAllTasks();
 
   int addTask(Task);
   int deleteTask(int);
@@ -34,6 +32,7 @@ public:
 
   bool isValidIndex(int index);
   bool isRepeated(Task);
+
 };
 
 #endif

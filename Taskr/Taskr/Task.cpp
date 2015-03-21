@@ -26,3 +26,9 @@ std::string Task::getDescription() {
 bool Task::isDone() {
 	return _isDone;
 }
+
+std::string Task::toString() {
+	std::ostringstream oss;
+	oss << _description;
+	return oss.str();
+}

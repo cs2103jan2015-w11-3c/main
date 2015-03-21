@@ -20,7 +20,11 @@ public:
 	~Task();
 	void setDescription(std::string description);
 	void setAsDone();
+	
+	//WEEK 10 ADDITIONS
+	std::string toString();
 
+	//_____
 	std::string getDescription();
 	bool isDone();
 };
