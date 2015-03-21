@@ -20,12 +20,13 @@ UI::~UI() {
 
 void UI::readUserInput(){
 	std::cout << MESSAGE_WELCOME << std::endl;
+	_logic.initializeListOfTasks();
 	int confirmationIndex = 0;
 	while (confirmationIndex != USER_INPUT_EXIT) {
 		std::cout << "command: ";
 		std::string userInput;
 		std::getline(std::cin, userInput);
-		confirmationIndex = logic.executeCommand(userInput);
+		confirmationIndex = _logic.executeCommand(userInput);
 		printConfirmationMessage(confirmationIndex);
 	}
 }
@@ -34,13 +35,13 @@ void UI::readUserInput(){
 void UI::printConfirmationMessage(int confirmationIndex){
 	switch (confirmationIndex) {
 	case SUCCESS:
-		if (logic.getCommand() == "add") {
+		if (_logic.getCommand() == "add") {
 			std::cout << MESSAGE_ADDED << std::endl;
 		}
-		else if (logic.getCommand() == "edit") {
+		else if (_logic.getCommand() == "edit") {
 			std::cout << MESSAGE_EDITED << std::endl;
 		}
-		else if (logic.getCommand() == "delete") {
+		else if (_logic.getCommand() == "delete") {
 			std::cout << MESSAGE_DELETED << std::endl;
 		}
 		break;

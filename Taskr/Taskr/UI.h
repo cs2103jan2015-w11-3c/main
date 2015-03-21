@@ -8,7 +8,7 @@
 
 class UI {
 private:
-	Logic logic;
+	Logic _logic;
 
 public:
 	UI();

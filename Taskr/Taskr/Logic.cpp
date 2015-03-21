@@ -55,3 +55,7 @@ int Logic::executeCommand(std::string userInput) {
 std::string Logic::getCommand() {
 	return _parse.getCommand();
 }
+
+void Logic::initializeListOfTasks() {
+	_listOfTasks = _store.getAllTasks();
+}

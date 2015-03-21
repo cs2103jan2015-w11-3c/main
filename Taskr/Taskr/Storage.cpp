@@ -10,6 +10,25 @@ Storage::Storage() {
 Storage::~Storage() {
 }
 
+//NOTE: this will only work for our V0.1 implementation. will need to update this when Task has more attributes.
+//I just realized this is what you wanted to do with your readFile() method, so sorry about that..
+vector<Task> Storage::getAllTasks() {
+	vector<Task> tempVector;
+	ifstream inFile(_filename);
+	while (!inFile.eof()) {
+		std::string taskContent;
+		int index;
+		Task tempTask;
+
+		inFile >> index;
+		getline(inFile, taskContent);
+		tempTask.setDescription(taskContent);
+		tempVector.push_back(tempTask);
+	}
+	inFile.close();
+	return tempVector;
+}
+
 //void Storage::readFile() {
 //	ifstream myFile(_filename, ifstream::in);
 //	_listOfTasks.clear();
