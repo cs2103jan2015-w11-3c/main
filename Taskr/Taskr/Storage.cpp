@@ -1,5 +1,6 @@
 #include "Storage.h"
 #include <fstream>
+#include <assert.h>
 
 using namespace std;
 
@@ -53,6 +54,8 @@ int Storage::addTask(Task task) {
 
 int Storage::deleteTask(int index) {
 	if (isValidIndex(index)) {
+		assert (index > 0); 
+		// if index passed in is not greater than 0; error message will be shown
 		_listOfTasks.erase(_listOfTasks.begin() + index - 1);
 		saveFile();
 		return SUCCESS;
