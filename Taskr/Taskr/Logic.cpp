@@ -9,6 +9,21 @@ Logic::~Logic() {
 }
 
 
+std::string Logic::displayAll() {
+	std::ostringstream oss;
+	oss << std::endl;
+	if (_listOfTasks.empty()) {
+		oss << "list is empty." << std::endl;
+		return oss.str();
+	}
+	else {
+		for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
+			oss << (i + 1) << ". " << _listOfTasks[i].toString() << std::endl;
+		}
+		return oss.str();
+	}
+}
+
 int Logic::executeCommand(std::string userInput) {
 	std::string command;
 	std::string description;
@@ -32,7 +47,8 @@ int Logic::executeCommand(std::string userInput) {
 			_confirmationMessageIndex = _store.deleteTask(indexToDelete);
 		}
 		else if (command == "display") {
-			_confirmationMessageIndex = _store.displayList();
+			std::cout << displayAll();
+			//_confirmationMessageIndex = _store.displayList();
 		}
 		else if (command == "edit") {
 			_task.Task::setDescription(description);
@@ -58,4 +74,6 @@ std::string Logic::getCommand() {
 
 void Logic::initializeListOfTasks() {
 	_listOfTasks = _store.getAllTasks();
+	//getAllTasks reads in an extra empty last item. popBack to get rid of it.
+	_listOfTasks.pop_back();
 }

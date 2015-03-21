@@ -28,6 +28,7 @@ public:
 	int executeCommand(std::string userInput);
 	std::string getCommand();
 	//WEEK 10 ADDITIONS
+	std::string displayAll();
 	void initializeListOfTasks();
 	//_____
 };
