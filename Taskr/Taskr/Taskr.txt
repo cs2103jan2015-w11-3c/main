@@ -1,5 +1,2 @@
-<<<<<<< HEAD
-1. sdf
-=======
-1. test test 3
->>>>>>> origin/master
+1.   test 2
+2. 2

@@ -21,15 +21,10 @@ public:
   Storage();
   ~Storage();
   void readFile();
-  void saveFile();
+  void saveFile(std::vector<Task>);
   
   std::vector<Task> getAllTasks();
-
-  int addTask(Task);
-  int deleteTask(int);
-  int displayList();
-  int editTask(int, Task);
-
+  void addTask(int, Task);
   bool isValidIndex(int index);
   bool isRepeated(Task);
 

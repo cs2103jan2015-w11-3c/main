@@ -9,18 +9,17 @@ Logic::~Logic() {
 }
 
 
-std::string Logic::displayAll() {
-	std::ostringstream oss;
-	oss << std::endl;
-	if (_listOfTasks.empty()) {
-		oss << "list is empty." << std::endl;
-		return oss.str();
+int Logic::displayList() {
+	if (!_listOfTasks.empty()) {
+		for (int i = 0; i < _listOfTasks.size(); i++) {
+			if (!(_listOfTasks[i].isDone())) {
+				std::cout << i + 1 << ". " << _listOfTasks[i].getDescription() << std::endl;
+			}
+		}
+		return SUCCESS;
 	}
 	else {
-		for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-			oss << (i + 1) << ". " << _listOfTasks[i].toString() << std::endl;
-		}
-		return oss.str();
+		return ERROR_EMPTY_LIST;
 	}
 }
 
@@ -37,25 +36,26 @@ int Logic::executeCommand(std::string userInput) {
 		description = _parse.getDescription();
 
 		if (command == "add") {
-			_task.Task::setDescription(description);
-			_confirmationMessageIndex = _store.addTask(_task);
+			Task tempTask;
+			tempTask.setDescription(description);
+			_confirmationMessageIndex = addTask(tempTask);
 		}
 		else if (command == "delete") {
 			int indexToDelete;
 			_parse.setIndex();
 			indexToDelete = _parse.getIndex();
-			_confirmationMessageIndex = _store.deleteTask(indexToDelete);
+			_confirmationMessageIndex = deleteTask(indexToDelete);
 		}
 		else if (command == "display") {
-			std::cout << displayAll();
-			//_confirmationMessageIndex = _store.displayList();
+			_confirmationMessageIndex = displayList();
 		}
 		else if (command == "edit") {
-			_task.Task::setDescription(description);
+			Task tempTask;
+			tempTask.setDescription(description);
 			int indexToEdit;
 			_parse.setIndex();
 			indexToEdit = _parse.getIndex();
-			_confirmationMessageIndex = _store.editTask(indexToEdit, _task);
+			_confirmationMessageIndex = editTask(indexToEdit, tempTask);
 		}
 		else {
 			return USER_COMMAND_INVALID;
@@ -76,4 +76,53 @@ void Logic::initializeListOfTasks() {
 	_listOfTasks = _store.getAllTasks();
 	//getAllTasks reads in an extra empty last item. popBack to get rid of it.
 	_listOfTasks.pop_back();
+}
+
+int Logic::addTask(Task tempTask) {
+	if (isRepeated(tempTask)) {
+		return ERROR_REPEATED_TASK;
+	}
+	else {
+		_listOfTasks.push_back(tempTask);
+		_store.addTask(_listOfTasks.size(), tempTask);
+		return SUCCESS;
+	}
+}
+
+int Logic::editTask(int index, Task task) {
+	if (!isValidIndex(index)) {
+		return ERROR_INDEX_OUT_OF_RANGE;
+	}
+
+	if (task.getDescription() == "") {
+		return ERROR_INVALID_DESCRIPTION;
+	}
+
+	_listOfTasks[index - 1] = task;
+	_store.saveFile(_listOfTasks);
+	return SUCCESS;
+}
+
+int Logic::deleteTask(int index) {
+	if (isValidIndex(index)) {
+		_listOfTasks.erase(_listOfTasks.begin() + index - 1);
+		_store.saveFile(_listOfTasks);
+		return SUCCESS;
+	}
+	else {
+		return ERROR_INDEX_OUT_OF_RANGE;
+	}
+}
+
+bool Logic::isValidIndex(int index) {
+	return index > 0 && index <= _listOfTasks.size();
+}
+
+bool Logic::isRepeated(Task task) {
+	for (int i = 0; i < _listOfTasks.size(); i++) {
+		if (task.getDescription() == _listOfTasks[i].getDescription()) {
+			return true;
+		}
+	}
+	return false;
 }

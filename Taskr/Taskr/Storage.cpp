@@ -55,76 +55,19 @@ vector<Task> Storage::getAllTasks() {
 //	return;
 //}
 
-void Storage::saveFile() {
+void Storage::saveFile(vector<Task> listOfTasks) {
 	ofstream outFile(_filename, ofstream::out);
-	for (int i = 0; i < _listOfTasks.size(); i++) {
-		if (!_listOfTasks[i].isDone()) {
-			outFile << i + 1 << ". " << _listOfTasks[i].getDescription() << endl;
+	for (int i = 0; i < listOfTasks.size(); i++) {
+		if (!listOfTasks[i].isDone()) {
+			outFile << i + 1 << ". " << listOfTasks[i].getDescription() << endl;
 		}
 	}
 	outFile.close();
 }
 
-int Storage::addTask(Task task) {
-	if (isRepeated(task)) {
-		return ERROR_REPEATED_TASK;
-	}
-	else {
-		_listOfTasks.push_back(task);
-		saveFile();
-		return SUCCESS;
-	}
-}
-
-int Storage::deleteTask(int index) {
-	if (isValidIndex(index)) {
-		assert (index > 0); 
-		// if index passed in is not greater than 0; error message will be shown
-		_listOfTasks.erase(_listOfTasks.begin() + index - 1);
-		saveFile();
-		return SUCCESS;
-	}
-	else {
-		return ERROR_INDEX_OUT_OF_RANGE;
-	}
-}
-
-int Storage::displayList() {
-	if (!_listOfTasks.empty()) {
-		for (int i = 0; i < _listOfTasks.size(); i++) {
-			if (!(_listOfTasks[i].isDone())) {
-				cout << i + 1 << ". " << _listOfTasks[i].getDescription() << endl;
-			}
-		}
-		return SUCCESS;
-	} else {
-		return ERROR_EMPTY_LIST;
-	}
-}
-
-int Storage::editTask(int index, Task task) {
-	if (!isValidIndex(index)) {
-		return ERROR_INDEX_OUT_OF_RANGE;
-	}
-
-	if (task.getDescription() == "") {
-		return ERROR_INVALID_DESCRIPTION;
-	}
-
-	_listOfTasks[index - 1] = task;
-	saveFile();
-	return SUCCESS;
-}
-
-bool Storage::isValidIndex(int index) {
-	return index > 0 && index <= _listOfTasks.size();
-}
-
-bool Storage::isRepeated(Task task) {
-	for (int i = 0; i < _listOfTasks.size(); i++) {
-		if (task.getDescription() == _listOfTasks[i].getDescription()) {
-			return true;
-		}
-	}
-	return false;
+void Storage::addTask(int index, Task task) {
+	fstream outFile;
+	outFile.open(_filename, fstream::out | fstream::app);
+	outFile << index << ". " << task.toString() << endl;
+	outFile.close();
 }
