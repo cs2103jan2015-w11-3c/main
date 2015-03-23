@@ -36,6 +36,7 @@ public:
 	int displayList();
 	int deleteTask(int);
 	int editTask(int, Task);
+	int setDone(int);
 	void initializeListOfTasks();
 	bool isValidIndex(int);
 	bool isRepeated(Task);

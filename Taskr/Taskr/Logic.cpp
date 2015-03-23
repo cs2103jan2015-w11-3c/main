@@ -57,6 +57,12 @@ int Logic::executeCommand(std::string userInput) {
 			indexToEdit = _parse.getIndex();
 			_confirmationMessageIndex = editTask(indexToEdit, tempTask);
 		}
+		else if (command == "done") {
+			int indexToSet;
+			_parse.setIndex();
+			indexToSet = _parse.getIndex();
+			_confirmationMessageIndex = setDone(indexToSet);
+		}
 		else {
 			return USER_COMMAND_INVALID;
 		}
@@ -106,6 +112,17 @@ int Logic::editTask(int index, Task task) {
 int Logic::deleteTask(int index) {
 	if (isValidIndex(index)) {
 		_listOfTasks.erase(_listOfTasks.begin() + index - 1);
+		_store.saveFile(_listOfTasks);
+		return SUCCESS;
+	}
+	else {
+		return ERROR_INDEX_OUT_OF_RANGE;
+	}
+}
+
+int Logic::setDone(int index) {
+	if (isValidIndex(index)) {
+		_listOfTasks[index - 1].setAsDone();
 		_store.saveFile(_listOfTasks);
 		return SUCCESS;
 	}
