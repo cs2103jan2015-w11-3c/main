@@ -2,26 +2,13 @@
 
 
 Logic::Logic() {
+	_doneTasksCount = 0;
 }
 
 
 Logic::~Logic() {
 }
 
-
-int Logic::displayList() {
-	if (!_listOfTasks.empty()) {
-		for (int i = 0; i < _listOfTasks.size(); i++) {
-			if (!(_listOfTasks[i].isDone())) {
-				std::cout << i + 1 << ". " << _listOfTasks[i].getDescription() << std::endl;
-			}
-		}
-		return SUCCESS;
-	}
-	else {
-		return ERROR_EMPTY_LIST;
-	}
-}
 
 int Logic::executeCommand(std::string userInput) {
 	std::string command;
@@ -80,6 +67,11 @@ std::string Logic::getCommand() {
 
 void Logic::initializeListOfTasks() {
 	_listOfTasks = _store.getAllTasks();
+	for (int i = 0; i < _listOfTasks.size(); i++) {
+		if (_listOfTasks[i].isDone()) {
+			_doneTasksCount++;
+		}
+	}
 }
 
 int Logic::addTask(Task tempTask) {
@@ -88,7 +80,7 @@ int Logic::addTask(Task tempTask) {
 	}
 	else {
 		_listOfTasks.push_back(tempTask);
-		_store.addTask(_listOfTasks.size(), tempTask);
+		_store.addTask(tempTask);
 		return SUCCESS;
 	}
 }
@@ -102,14 +94,31 @@ int Logic::editTask(int index, Task task) {
 		return ERROR_INVALID_DESCRIPTION;
 	}
 
-	_listOfTasks[index - 1] = task;
+	_listOfTasks[index + _doneTasksCount - 1] = task;
 	_store.saveFile(_listOfTasks);
 	return SUCCESS;
 }
 
+
+int Logic::displayList() {
+	if (!_listOfTasks.empty()) {
+		int displayIndex = 1;
+		for (int i = 0; i < _listOfTasks.size(); i++) {
+			if (!(_listOfTasks[i].isDone())) {
+				std::cout << displayIndex++ << ". " << _listOfTasks[i].getDescription() << std::endl;
+			}
+		}
+		return SUCCESS;
+	}
+	else {
+		return ERROR_EMPTY_LIST;
+	}
+}
+
+
 int Logic::deleteTask(int index) {
 	if (isValidIndex(index)) {
-		_listOfTasks.erase(_listOfTasks.begin() + index - 1);
+		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + index - 1);
 		_store.saveFile(_listOfTasks);
 		return SUCCESS;
 	}
@@ -120,7 +129,9 @@ int Logic::deleteTask(int index) {
 
 int Logic::setDone(int index) {
 	if (isValidIndex(index)) {
-		_listOfTasks[index - 1].setAsDone();
+		_listOfTasks[index + _doneTasksCount - 1].setAsDone();
+		_doneTasksCount++;
+		sortDoneTasks();
 		_store.saveFile(_listOfTasks);
 		return SUCCESS;
 	}
@@ -130,7 +141,7 @@ int Logic::setDone(int index) {
 }
 
 bool Logic::isValidIndex(int index) {
-	return index > 0 && index <= _listOfTasks.size();
+	return index > 0 && index <= (_listOfTasks.size() - _doneTasksCount);
 }
 
 bool Logic::isRepeated(Task task) {
@@ -140,4 +151,19 @@ bool Logic::isRepeated(Task task) {
 		}
 	}
 	return false;
+}
+
+void Logic::sortDoneTasks() {
+	std::vector<Task> sortedDoneTaskList;
+	for (int i = 0; i < _listOfTasks.size(); i++) {
+		if (_listOfTasks[i].isDone()) {
+			sortedDoneTaskList.push_back(_listOfTasks[i]);
+		}
+	}
+	for (int i = 0; i < _listOfTasks.size(); i++) {
+		if (!(_listOfTasks[i].isDone())) {
+			sortedDoneTaskList.push_back(_listOfTasks[i]);
+		}
+	}
+	_listOfTasks = sortedDoneTaskList;
 }

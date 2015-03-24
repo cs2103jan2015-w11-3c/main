@@ -23,6 +23,7 @@ private:
 	Storage _store;
 	std::vector<Task> _listOfTasks;
 	int _confirmationMessageIndex;
+	int _doneTasksCount;
 
 public:
 	Logic();
@@ -39,6 +40,8 @@ public:
 	void initializeListOfTasks();
 	bool isValidIndex(int);
 	bool isRepeated(Task);
+	void sortDoneTasks();
+
 	//_____
 };
 

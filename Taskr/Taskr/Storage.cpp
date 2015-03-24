@@ -45,7 +45,7 @@ void Storage::saveFile(vector<Task> listOfTasks) {
 	outFile.close();
 }
 
-void Storage::addTask(int index, Task task) {
+void Storage::addTask(Task task) {
 	fstream outFile;
 	outFile.open(_filename, fstream::out | fstream::app);
 	outFile << task.isDone() << endl;

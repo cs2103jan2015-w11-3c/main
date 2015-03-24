@@ -2,7 +2,7 @@
 test1
 0
 testEdit
-0
-checkthis
+1
+this should work
 0
 testing addTask() function in Logic and Storage

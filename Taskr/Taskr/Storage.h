@@ -23,7 +23,7 @@ public:
   void readFile();
   void saveFile(std::vector<Task>);
   std::vector<Task> getAllTasks();
-  void addTask(int, Task);
+  void addTask(Task);
 
 };
 
