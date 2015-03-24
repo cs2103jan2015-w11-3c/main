@@ -36,8 +36,8 @@ int Logic::executeCommand(std::string userInput) {
 			Task tempTask;
 			int indexToEdit;
 			indexToEdit = _parse.getIndex();
-			_confirmationMessageIndex = editTask(indexToEdit, tempTask);
 			tempTask.setDescription(_parse.getDescription());
+			_confirmationMessageIndex = editTask(indexToEdit, tempTask);
 		}
 		else if (command == "done") {
 			int indexToSet;

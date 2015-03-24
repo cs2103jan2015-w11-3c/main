@@ -61,10 +61,10 @@ std::string Parser::removeWhiteSpaces(std::string input) {   //to remove consecu
 }
 
 std::string Parser::retrieveCommand() {
-	std::istringstream iss;
-	iss >> _userInput;
-
-	return iss.str();
+	std::istringstream iss(_userInput);
+	std::string tempCommand;
+	iss >> tempCommand;
+	return tempCommand;
 }
 
 std::string Parser::convertCase(std::string command) {
