@@ -90,7 +90,7 @@ int Logic::addTask(Task tempTask) {
 	}
 	else {
 		_listOfTasks.push_back(tempTask);
-		_store.saveFile(_listOfTasks.size);
+		_store.saveFile(_listOfTasks);
 		return SUCCESS;
 	}
 }
