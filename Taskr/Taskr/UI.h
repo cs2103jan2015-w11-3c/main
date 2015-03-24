@@ -14,14 +14,6 @@ public:
 	UI();
 	~UI();
 
-	//const std::string MESSAGE_WELCOME;
-	//const std::string MESSAGE_ADDED;
-	//const std::string MESSAGE_DELETED;
-	//const std::string MESSAGE_EDITED;
-	//const std::string MESSAGE_TASK_IS_EXISTED;
-	//const std::string MESSAGE_ERROR_TASK_NOT_EXIST;
-	//const std::string MESSAGE_EMPTY;
-
 	static const std::string MESSAGE_WELCOME;
 	static const std::string MESSAGE_ADDED;
 	static const std::string MESSAGE_DELETED;
@@ -31,7 +23,7 @@ public:
 	static const std::string MESSAGE_EMPTY;
 	static const std::string MESSAGE_USER_COMMAND_INVALID;
 	static const std::string MESSAGE_INDEX_INVALID;
-
+	static const std::string MESSAGE_MARK_DONE;
 
 	void readUserInput();
 	void printConfirmationMessage(int);
