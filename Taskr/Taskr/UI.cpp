@@ -9,7 +9,6 @@ const std::string UI::MESSAGE_ERROR_TASK_NOT_EXIST = "Task does not exist";
 const std::string UI::MESSAGE_EMPTY = "Taskr is empty.";
 const std::string UI::MESSAGE_USER_COMMAND_INVALID = "Command is invalid.";
 const std::string UI::MESSAGE_INDEX_INVALID = "Index entered is invalid.";
-const std::string UI::MESSAGE_MARK_DONE = "Great you've done the task!";
 
 UI::UI() {
 }
@@ -44,9 +43,6 @@ void UI::printConfirmationMessage(int confirmationIndex){
 		}
 		else if (_logic.getCommand() == "delete") {
 			std::cout << MESSAGE_DELETED << std::endl;
-		}
-		else if (_logic.getCommand() == "done") {
-			std::cout << MESSAGE_MARK_DONE << std::endl;
 		}
 		break;
 
