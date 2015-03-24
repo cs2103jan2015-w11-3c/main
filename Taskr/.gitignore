@@ -42,3 +42,4 @@ packages/**
 *.resharper
 *.ncrunch*
 *.ndproj
+*.txt
