@@ -22,11 +22,8 @@ public:
   ~Storage();
   void readFile();
   void saveFile(std::vector<Task>);
-  
   std::vector<Task> getAllTasks();
   void addTask(int, Task);
-  bool isValidIndex(int index);
-  bool isRepeated(Task);
 
 };
 

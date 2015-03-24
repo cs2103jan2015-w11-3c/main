@@ -80,8 +80,6 @@ std::string Logic::getCommand() {
 
 void Logic::initializeListOfTasks() {
 	_listOfTasks = _store.getAllTasks();
-	//getAllTasks reads in an extra empty last item. popBack to get rid of it.
-	_listOfTasks.pop_back();
 }
 
 int Logic::addTask(Task tempTask) {
@@ -90,7 +88,7 @@ int Logic::addTask(Task tempTask) {
 	}
 	else {
 		_listOfTasks.push_back(tempTask);
-		_store.saveFile(_listOfTasks);
+		_store.addTask(_listOfTasks.size(), tempTask);
 		return SUCCESS;
 	}
 }

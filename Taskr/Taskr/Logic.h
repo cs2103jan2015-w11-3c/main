@@ -21,7 +21,6 @@ class Logic {
 private:
 	Parser _parse;
 	Storage _store;
-	//Task _task;
 	std::vector<Task> _listOfTasks;
 	int _confirmationMessageIndex;
 
