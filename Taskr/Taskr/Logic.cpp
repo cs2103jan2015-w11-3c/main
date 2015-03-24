@@ -15,21 +15,17 @@ int Logic::executeCommand(std::string userInput) {
 	std::string description;
 
 	_parse = Parser(userInput);
-	_parse.setCommand();
 	command = _parse.getCommand();
 
 	if (command != "exit") {
-		_parse.setDescription();
-		description = _parse.getDescription();
 
 		if (command == "add") {
 			Task tempTask;
-			tempTask.setDescription(description);
+			tempTask.setDescription(_parse.getDescription());
 			_confirmationMessageIndex = addTask(tempTask);
 		}
 		else if (command == "delete") {
 			int indexToDelete;
-			_parse.setIndex();
 			indexToDelete = _parse.getIndex();
 			_confirmationMessageIndex = deleteTask(indexToDelete);
 		}
@@ -38,15 +34,13 @@ int Logic::executeCommand(std::string userInput) {
 		}
 		else if (command == "edit") {
 			Task tempTask;
-			tempTask.setDescription(description);
 			int indexToEdit;
-			_parse.setIndex();
 			indexToEdit = _parse.getIndex();
 			_confirmationMessageIndex = editTask(indexToEdit, tempTask);
+			tempTask.setDescription(_parse.getDescription());
 		}
 		else if (command == "done") {
 			int indexToSet;
-			_parse.setIndex();
 			indexToSet = _parse.getIndex();
 			_confirmationMessageIndex = setDone(indexToSet);
 		}
