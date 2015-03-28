@@ -8,3 +8,5 @@ testEdit should be edited now
 testing addTask() function in Logic and Storage
 0
 a task to delete
+0
+test
