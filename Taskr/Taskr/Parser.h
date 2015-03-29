@@ -20,21 +20,19 @@ public:
 	Parser(std::string input);
 	~Parser();
 
-	/*void setCommand();
-	void setDescription();
-	void setIndex();*/
 	static const std::string ADD;
 	static const std::string DELETE;
 	static const std::string EDIT;
 	static const std::string DISPLAY;
 	static const std::string DONE;
 	static const std::string EXIT;
+	static const std::string SEARCH;
+	static const std::string UNDO;
 
 	static const char WhiteSpace;
 	static const int Start_Index;
 
 	std::string trimInput(std::string input);
-	std::string trimStart(std::string input);
 	std::string trimEnd(std::string input);
 	std::string removeWhiteSpaces(std::string input);
 

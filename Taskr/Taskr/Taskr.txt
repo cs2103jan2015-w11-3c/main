@@ -6,5 +6,3 @@ test me!
 testEdit should work
 0
 a task to delete
-0
-test v0.1
