@@ -2,9 +2,9 @@
 this should work
 1
 test me!
-0
-testEdit should be edited now
-0
-testing addTask() function in Logic and Storage
+1
+testEdit should work
 0
 a task to delete
+0
+test v0.1
