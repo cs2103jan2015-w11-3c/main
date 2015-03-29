@@ -1,15 +1,15 @@
 #include "UI.h"
 
 const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
-const std::string UI::MESSAGE_ADDED = "New task added to Taskr";
-const std::string UI::MESSAGE_DELETED = "Task deleted from Taskr";
-const std::string UI::MESSAGE_EDITED = "Task has been edited to new task";
-const std::string UI::MESSAGE_TASK_EXISTS = "Task already exists";
-const std::string UI::MESSAGE_ERROR_TASK_NOT_EXIST = "Task does not exist";
-const std::string UI::MESSAGE_EMPTY = "Taskr is empty.";
-const std::string UI::MESSAGE_USER_COMMAND_INVALID = "Command is invalid.";
-const std::string UI::MESSAGE_INDEX_INVALID = "Index entered is invalid.";
-const std::string UI::MESSAGE_MARK_DONE = "Great you've done the task!";
+//const std::string UI::MESSAGE_ADDED = "New task added to Taskr";
+//const std::string UI::MESSAGE_DELETED = "Task deleted from Taskr";
+//const std::string UI::MESSAGE_EDITED = "Task has been edited to new task";
+//const std::string UI::MESSAGE_TASK_EXISTS = "Task already exists";
+//const std::string UI::MESSAGE_ERROR_TASK_NOT_EXIST = "Task does not exist";
+//const std::string UI::MESSAGE_EMPTY = "Taskr is empty.";
+//const std::string UI::MESSAGE_USER_COMMAND_INVALID = "Command is invalid.";
+//const std::string UI::MESSAGE_INDEX_INVALID = "Index entered is invalid.";
+//const std::string UI::MESSAGE_MARK_DONE = "Great you've done the task!";
 
 UI::UI() {
 }
@@ -22,19 +22,19 @@ UI::~UI() {
 void UI::readUserInput(){
 	std::cout << MESSAGE_WELCOME << std::endl;
 	_logic.initializeListOfTasks();
-	int confirmationIndex = 0;
-	while (confirmationIndex != USER_INPUT_EXIT) {
+	std::string confirmationMessage;
+	while (confirmationMessage != "exit") {
 		std::cout << "command: ";
 		std::string userInput;
 		std::getline(std::cin, userInput);
-		confirmationIndex = _logic.executeCommand(userInput);
-		printConfirmationMessage(confirmationIndex);
+		confirmationMessage = _logic.executeCommand(userInput);
+		printConfirmationMessage(confirmationMessage);
 	}
 }
 
 
-void UI::printConfirmationMessage(int confirmationIndex){
-	switch (confirmationIndex) {
+void UI::printConfirmationMessage(std::string confirmationMessage) {
+	/*switch (confirmationIndex) {
 	case SUCCESS:
 		if (_logic.getCommand() == "add") {
 			std::cout << MESSAGE_ADDED << std::endl;
@@ -73,8 +73,8 @@ void UI::printConfirmationMessage(int confirmationIndex){
 
 	default:
 		break;
-	}
-	
+	}*/
+	std::cout << confirmationMessage << std::endl;
 }
 
 //void UI::printListOfTasks(){

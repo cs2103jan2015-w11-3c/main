@@ -26,7 +26,7 @@ public:
 	static const std::string MESSAGE_MARK_DONE;
 
 	void readUserInput();
-	void printConfirmationMessage(int);
+	void printConfirmationMessage(std::string);
 	//void printListOfTasks();
 };
 

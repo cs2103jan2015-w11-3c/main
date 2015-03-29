@@ -8,13 +8,7 @@
 #include "Task.h"
 #include "Parser.h"
 #include "Storage.h"
-#define USER_INPUT_EXIT -1
-#define USER_COMMAND_INVALID -2
-#define SUCCESS 1
-#define ERROR_REPEATED_TASK 21
-#define ERROR_INDEX_OUT_OF_RANGE 22
-#define ERROR_EMPTY_LIST 23
-#define ERROR_INVALID_DESCRIPTION 24
+
 
 
 class Logic {
@@ -22,27 +16,39 @@ private:
 	Parser _parse;
 	Storage _store;
 	std::vector<Task> _listOfTasks;
-	int _confirmationMessageIndex;
+	std::string _confirmationMessage;
 	int _doneTasksCount;
 
 public:
 	Logic();
 	~Logic();
 
-	int executeCommand(std::string userInput);
+	std::string executeCommand(std::string userInput);
 	std::string getCommand();
 	//WEEK 10 ADDITIONS
-	int addTask(Task);
-	int displayList();
-	int deleteTask(int);
-	int editTask(int, Task);
-	int setDone(int);
+	void addTask(Task, std::ostringstream&);
+	void displayList(std::ostringstream&);
+	void deleteTask(int, std::ostringstream&);
+	void editTask(int, Task, std::ostringstream&);
+	void setDone(int, std::ostringstream&);
+
 	void initializeListOfTasks();
 	bool isValidIndex(int);
 	bool isRepeated(Task);
 	void sortDoneTasks();
-
 	//_____
+
+	static const std::string MESSAGE_ADDED;
+	static const std::string MESSAGE_DELETED;
+	static const std::string MESSAGE_MARK_DONE;
+	static const std::string MESSAGE_ERROR_TASK_NOT_EXIST;
+	static const std::string MESSAGE_EDITED;
+	static const std::string ERROR_REPEATED_TASK;
+	static const std::string ERROR_INDEX_OUT_OF_RANGE;
+	static const std::string ERROR_EMPTY_LIST;
+	static const std::string ERROR_INVALID_DESCRIPTION;
+	static const std::string ERROR_USER_COMMAND_INVALID;
+
 };
 
 #endif

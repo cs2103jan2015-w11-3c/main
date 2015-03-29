@@ -4,5 +4,13 @@ this should work
 test me!
 1
 testEdit should work
+1
+a task to mark done
+1
+this should be done later
 0
-a task to delete
+haha
+0
+hello there!
+0
+def

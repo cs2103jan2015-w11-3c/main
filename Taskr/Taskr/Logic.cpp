@@ -1,6 +1,18 @@
 #include "Logic.h"
 
 
+const std::string Logic::MESSAGE_ADDED = " has been added to Taskr!\n";
+const std::string Logic::MESSAGE_DELETED = " has been deleted from Taskr.\n";
+const std::string Logic::MESSAGE_MARK_DONE = " has been marked done!\n";
+const std::string Logic::MESSAGE_ERROR_TASK_NOT_EXIST = " does not exist.\n";
+const std::string Logic::MESSAGE_EDITED = " has been edited to ";
+const std::string Logic::ERROR_REPEATED_TASK = " is a repeated floating task.\n";
+const std::string Logic::ERROR_INDEX_OUT_OF_RANGE = " is an invalid index.\n";
+const std::string Logic::ERROR_EMPTY_LIST = "Taskr is currently empty.\n";
+const std::string Logic::ERROR_INVALID_DESCRIPTION = " is an invalid task and has not been added.\n";
+const std::string Logic::ERROR_USER_COMMAND_INVALID = " is not a valid command. Please enter a valid command.\n";
+
+
 Logic::Logic() {
 	_doneTasksCount = 0;
 }
@@ -10,9 +22,10 @@ Logic::~Logic() {
 }
 
 
-int Logic::executeCommand(std::string userInput) {
+std::string Logic::executeCommand(std::string userInput) {
 	std::string command;
 	std::string description;
+	std::ostringstream oss;
 
 	_parse = Parser(userInput);
 	command = _parse.getCommand();
@@ -22,36 +35,37 @@ int Logic::executeCommand(std::string userInput) {
 		if (command == "add") {
 			Task tempTask;
 			tempTask.setDescription(_parse.getDescription());
-			_confirmationMessageIndex = addTask(tempTask);
+			addTask(tempTask, oss);
 		}
 		else if (command == "delete") {
 			int indexToDelete;
 			indexToDelete = _parse.getIndex();
-			_confirmationMessageIndex = deleteTask(indexToDelete);
+			deleteTask(indexToDelete, oss);
 		}
 		else if (command == "display") {
-			_confirmationMessageIndex = displayList();
+			displayList(oss);
 		}
 		else if (command == "edit") {
 			Task tempTask;
 			int indexToEdit;
 			indexToEdit = _parse.getIndex();
 			tempTask.setDescription(_parse.getDescription());
-			_confirmationMessageIndex = editTask(indexToEdit, tempTask);
+			editTask(indexToEdit, tempTask, oss);
 		}
 		else if (command == "done") {
 			int indexToSet;
 			indexToSet = _parse.getIndex();
-			_confirmationMessageIndex = setDone(indexToSet);
+			setDone(indexToSet, oss);
 		}
 		else {
-			return USER_COMMAND_INVALID;
+			oss << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
-		return _confirmationMessageIndex;
+		_confirmationMessage = oss.str();
+		return _confirmationMessage;
 
 	}
 	else {
-		return USER_INPUT_EXIT;
+		return command;
 	}
 }
 
@@ -68,69 +82,75 @@ void Logic::initializeListOfTasks() {
 	}
 }
 
-int Logic::addTask(Task tempTask) {
+void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	if (isRepeated(tempTask)) {
-		return ERROR_REPEATED_TASK;
+		oss << ERROR_REPEATED_TASK;
 	}
 	else {
 		_listOfTasks.push_back(tempTask);
 		_store.addTask(tempTask);
-		return SUCCESS;
+		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
 	}
 }
 
-int Logic::editTask(int index, Task task) {
+void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 	if (!isValidIndex(index)) {
-		return ERROR_INDEX_OUT_OF_RANGE;
+		oss << ERROR_INDEX_OUT_OF_RANGE;
 	}
 
 	if (task.getDescription() == "") {
-		return ERROR_INVALID_DESCRIPTION;
+		oss << ERROR_INVALID_DESCRIPTION;
 	}
-
+	std::string oldTaskDescription;
+	std::string newTaskDescription;
+	oldTaskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
+	newTaskDescription = task.getDescription();
 	_listOfTasks[index + _doneTasksCount - 1] = task;
 	_store.saveFile(_listOfTasks);
-	return SUCCESS;
+	oss << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
 }
 
 
-int Logic::displayList() {
+void Logic::displayList(std::ostringstream& oss) {
 	if (!_listOfTasks.empty()) {
 		int displayIndex = 1;
 		for (int i = 0; i < _listOfTasks.size(); i++) {
 			if (!(_listOfTasks[i].isDone())) {
-				std::cout << displayIndex++ << ". " << _listOfTasks[i].getDescription() << std::endl;
+				oss << displayIndex++ << ". " << _listOfTasks[i].getDescription() << std::endl;
 			}
 		}
-		return SUCCESS;
 	}
 	else {
-		return ERROR_EMPTY_LIST;
+		oss << ERROR_EMPTY_LIST;
 	}
 }
 
 
-int Logic::deleteTask(int index) {
+void Logic::deleteTask(int index, std::ostringstream& oss) {
 	if (isValidIndex(index)) {
+		std::string taskDescription;
+		taskDescription = _listOfTasks[_doneTasksCount + index - 1].getDescription();
 		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + index - 1);
 		_store.saveFile(_listOfTasks);
-		return SUCCESS;
+		oss << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
 	}
 	else {
-		return ERROR_INDEX_OUT_OF_RANGE;
+		oss << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
-int Logic::setDone(int index) {
+void Logic::setDone(int index, std::ostringstream& oss) {
 	if (isValidIndex(index)) {
+		std::string taskDescription;
+		taskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
 		_listOfTasks[index + _doneTasksCount - 1].setAsDone();
 		_doneTasksCount++;
 		sortDoneTasks();
 		_store.saveFile(_listOfTasks);
-		return SUCCESS;
+		oss << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
 	}
 	else {
-		return ERROR_INDEX_OUT_OF_RANGE;
+		oss << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
