@@ -8,7 +8,7 @@ using namespace std;
 
 int main() {
 	UI ui;
-	ui.readUserInput();
+	ui.processUserInput();
 
 
 	return 0;
