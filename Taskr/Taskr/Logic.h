@@ -8,12 +8,14 @@
 #include "Task.h"
 #include "Parser.h"
 #include "Storage.h"
+#include "History.h"
 
 
 
 class Logic {
 private:
 	Parser _parse;
+	History _history;
 	Storage _store;
 	std::vector<Task> _listOfTasks;
 	std::string _confirmationMessage;
@@ -31,6 +33,7 @@ public:
 	void deleteTask(int, std::ostringstream&);
 	void editTask(int, Task, std::ostringstream&);
 	void setDone(int, std::ostringstream&);
+	void undoLastAction(std::ostringstream&);
 
 	void initializeListOfTasks();
 	bool isValidIndex(int);
@@ -48,6 +51,7 @@ public:
 	static const std::string ERROR_EMPTY_LIST;
 	static const std::string ERROR_INVALID_DESCRIPTION;
 	static const std::string ERROR_USER_COMMAND_INVALID;
+	static const std::string ERROR_NOTHING_TO_UNDO;
 
 };
 

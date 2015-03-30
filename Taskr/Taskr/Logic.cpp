@@ -11,6 +11,7 @@ const std::string Logic::ERROR_INDEX_OUT_OF_RANGE = " is an invalid index.\n";
 const std::string Logic::ERROR_EMPTY_LIST = "Taskr is currently empty.\n";
 const std::string Logic::ERROR_INVALID_DESCRIPTION = " is an invalid task and has not been added.\n";
 const std::string Logic::ERROR_USER_COMMAND_INVALID = " is not a valid command. Please enter a valid command.\n";
+const std::string Logic::ERROR_NOTHING_TO_UNDO = "There is nothing to undo.\n";
 
 
 Logic::Logic() {
@@ -57,6 +58,9 @@ std::string Logic::executeCommand(std::string userInput) {
 			indexToSet = _parse.getIndex();
 			setDone(indexToSet, oss);
 		}
+		else if (command == "undo") {
+			undoLastAction(oss);
+		}
 		else {
 			oss << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
@@ -87,6 +91,7 @@ void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 		oss << ERROR_REPEATED_TASK;
 	}
 	else {
+		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
 		_store.addTask(tempTask);
 		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
@@ -105,6 +110,7 @@ void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 	std::string newTaskDescription;
 	oldTaskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
 	newTaskDescription = task.getDescription();
+	_history.saveState(_listOfTasks);
 	_listOfTasks[index + _doneTasksCount - 1] = task;
 	_store.saveFile(_listOfTasks);
 	oss << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
@@ -130,6 +136,7 @@ void Logic::deleteTask(int index, std::ostringstream& oss) {
 	if (isValidIndex(index)) {
 		std::string taskDescription;
 		taskDescription = _listOfTasks[_doneTasksCount + index - 1].getDescription();
+		_history.saveState(_listOfTasks);
 		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + index - 1);
 		_store.saveFile(_listOfTasks);
 		oss << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
@@ -143,6 +150,7 @@ void Logic::setDone(int index, std::ostringstream& oss) {
 	if (isValidIndex(index)) {
 		std::string taskDescription;
 		taskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
+		_history.saveState(_listOfTasks);
 		_listOfTasks[index + _doneTasksCount - 1].setAsDone();
 		_doneTasksCount++;
 		sortDoneTasks();
@@ -153,6 +161,16 @@ void Logic::setDone(int index, std::ostringstream& oss) {
 		oss << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
+
+void Logic::undoLastAction(std::ostringstream& oss) {
+	if (_history.isEmpty()) {
+		oss << ERROR_NOTHING_TO_UNDO;
+	} else {
+		_listOfTasks = _history.popLastState();
+		_store.saveFile(_listOfTasks);
+	}
+}
+
 
 bool Logic::isValidIndex(int index) {
 	return index > 0 && index <= (_listOfTasks.size() - _doneTasksCount);
