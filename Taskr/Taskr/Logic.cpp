@@ -61,6 +61,9 @@ std::string Logic::executeCommand(std::string userInput) {
 		else if (command == "undo") {
 			undoLastAction(oss);
 		}
+		else if (command == "search") {
+			searchList(_parse.getDescription(), oss);
+		}
 		else {
 			oss << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
@@ -119,14 +122,8 @@ void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 
 void Logic::displayList(std::ostringstream& oss) {
 	if (!_listOfTasks.empty()) {
-		int displayIndex = 1;
-		for (int i = 0; i < _listOfTasks.size(); i++) {
-			if (!(_listOfTasks[i].isDone())) {
-				oss << displayIndex++ << ". " << _listOfTasks[i].getDescription() << std::endl;
-			}
-		}
-	}
-	else {
+		listToString(_listOfTasks, oss);
+	} else {
 		oss << ERROR_EMPTY_LIST;
 	}
 }
@@ -171,6 +168,22 @@ void Logic::undoLastAction(std::ostringstream& oss) {
 	}
 }
 
+void Logic::searchList(std::string searchString, std::ostringstream& oss) {
+	std::vector<Task> tempList;
+	if (_listOfTasks.empty()) {
+		oss << ERROR_EMPTY_LIST;
+	} else {
+		for (std::vector<Task>::iterator iter = _listOfTasks.begin(); iter != _listOfTasks.end(); iter++) {
+			std::size_t found;
+			found = iter->getDescription().find(searchString);
+			if (found != std::string::npos) {
+				tempList.push_back(*iter);
+			}
+		}
+		listToString(tempList, oss);
+	}
+}
+
 
 bool Logic::isValidIndex(int index) {
 	return index > 0 && index <= (_listOfTasks.size() - _doneTasksCount);
@@ -198,4 +211,14 @@ void Logic::sortDoneTasks() {
 		}
 	}
 	_listOfTasks = sortedDoneTaskList;
+}
+
+
+void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss) {
+	int displayIndex = 1;
+	for (int i = 0; i < listOfTasks.size(); i++) {
+		if (!(listOfTasks[i].isDone())) {
+			oss << displayIndex++ << ". " << listOfTasks[i].getDescription() << std::endl;
+		}
+	}
 }

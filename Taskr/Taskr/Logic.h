@@ -34,11 +34,13 @@ public:
 	void editTask(int, Task, std::ostringstream&);
 	void setDone(int, std::ostringstream&);
 	void undoLastAction(std::ostringstream&);
+	void searchList(std::string, std::ostringstream&);
 
 	void initializeListOfTasks();
 	bool isValidIndex(int);
 	bool isRepeated(Task);
 	void sortDoneTasks();
+	void listToString(std::vector<Task>, std::ostringstream&);
 	//_____
 
 	static const std::string MESSAGE_ADDED;
