@@ -1,5 +1,14 @@
 #include "UI.h"
 #include <sstream>
+#include <Windows.h>
+
+/*
+colour codes:
+0 => black  1 => blue 2 => green 3 => aqua 4 => red 5 => purple 6 => yellow  
+7 => light gray (default) 8 => gray 9 => light blue
+A => light green B => light aqua C => light red
+D => light purple E => light yellow F => white
+*/
 
 const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
 
@@ -13,6 +22,7 @@ UI::~UI() {
 
 void UI::processUserInput(){
 	std::cout << MESSAGE_WELCOME << std::endl;
+	//printToday();
 	_logic.initializeListOfTasks();
 	std::string feedback;
 	while (feedback != "exit") {
@@ -38,7 +48,7 @@ void UI::print(std::string feedback){
 	printSegment(doSegment(feedback));
 }
 
-//print today's tasks
+//print today's tasks, will be implemented later
 void UI::printToday(){
 
 }
