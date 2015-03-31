@@ -27,15 +27,13 @@ const std::string Parser::DEC = "dec";
 const std::string Parser::MONTH[12] = {JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC};
 
 //time strings 
-const std::string Parser::PM = "PM";
-const std::string Parser::pm = "pm";
-const std::string Parser::AM = "AM";
-const std::string Parser::am = "am";
+const std::string Parser::PM = "pm";
+const std::string Parser::AM = "am";
 const std::string Parser::NOON = "noon";
 const std::string Parser::TODAY = "today";
 const std::string Parser::TOMORROW = "tomorrow";
 const std::string Parser::TMR = "tmr";
-const std::string Parser::TimeKeyWords[10] = {PM, pm, AM, am, NOON, TODAY, TOMORROW, TMR};
+const std::string Parser::TimeKeyWords[10] = {PM, AM, NOON, TODAY, TOMORROW, TMR};
 
 const std::string Parser::FROM = "from";
 
@@ -51,13 +49,14 @@ Parser::Parser(std::string input) {
 	input = removeWhiteSpaces(input);*/
 	_userInput = input;
 	
-	std::string command = retrieveCommand();
+	std::string command = retrieveInfo(input);
 	command = convertCase(command);
 	_command = command;
 	extractParameters();
 	Date date = initializeDate();
 	Time time = intializeTime();
-	Deadline deadline = initializeDeadline(date, time);
+	date = findDate(date);
+
 }
 
 std::string Parser::trimInput(std::string input) {
@@ -86,22 +85,22 @@ std::string Parser::removeWhiteSpaces(std::string input) {   //to remove consecu
 	return input;
 }
 
-std::string Parser::retrieveCommand() {
-	std::istringstream iss(_userInput);
-	std::string tempCommand;
-	iss >> tempCommand;
-	return tempCommand;
+std::string Parser::retrieveInfo(std::string input) {
+	std::istringstream iss(input);
+	std::string tempInfo;
+	iss >> tempInfo;
+	return tempInfo;
 }
 
-std::string Parser::convertCase(std::string command) {
+std::string Parser::convertCase(std::string input) {
 	int index;
-	int commandEnd = command.length();
+	int commandEnd = input.length();
 
 	for(index = Start_Index; index < commandEnd; index++) {
-		command[index] = tolower(command[index]);
+		input[index] = tolower(input[index]);
 	}
 
-	return command;
+	return input;
 }
 
 void Parser::extractParameters() {
@@ -143,6 +142,37 @@ Deadline Parser::initializeDeadline(Date date, Time time) {
 	deadline.time = time;
 	return deadline;
 }
+
+Date Parser::findDate(Date date) {
+	if(_command == ADD || _command == EDIT) {
+		_description = convertCase(_description);
+		std::string temp = _description;
+
+		std::vector<std::string> stringList;
+		stringList.assign(MONTH, MONTH+12);
+		int foundString = findCommonString(temp,stringList);			//returns index of commmon string, -1 if not found
+	}
+
+	return date;
+}
+
+int Parser::findCommonString(std::string input, std::vector<std::string> stringList) {
+	unsigned int x;
+	int size = stringList.size();
+	for(int i = 0; i < size; i++) {
+		bool found = false;
+		x = input.find(stringList[i]);
+		if( x > 0) {
+			return x;
+		}
+		else {
+			return -1;
+		}
+
+	}
+}
+
+
 void Parser::setDescription() {
 	int temp = _userInput.find_first_of(" ");
 	_description = _userInput.substr(temp+1);

@@ -62,9 +62,7 @@ public:
 
 	//time strings 
 	static const std::string PM;
-	static const std::string pm;
 	static const std::string AM;
-	static const std::string am;
 	static const std::string NOON;
 	static const std::string TODAY;
 	static const std::string TOMORROW;
@@ -77,12 +75,14 @@ public:
 	std::string trimEnd(std::string input);
 	std::string removeWhiteSpaces(std::string input);
 
-	std::string retrieveCommand();
-	std::string convertCase(std::string command);
+	std::string retrieveInfo(std::string input);
+	std::string convertCase(std::string input);
 	void extractParameters();
 	Date initializeDate();
 	Time intializeTime();
 	Deadline initializeDeadline(Date date, Time time);
+	Date findDate(Date date);
+	int findCommonString(std::string input, std::vector<std::string> stringList);
 
 	void setDescription();
 	void setIndex();
