@@ -26,6 +26,7 @@ public:
 	void printSegment(std::vector<std::string>);
 	void print(std::string);
 	void printToday();
+	void setColour(int);
 };
 
 #endif

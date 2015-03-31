@@ -2,13 +2,6 @@
 #include <sstream>
 #include <Windows.h>
 
-/*
-colour codes:
-0 => black  1 => blue 2 => green 3 => aqua 4 => red 5 => purple 6 => yellow  
-7 => light gray (default) 8 => gray 9 => light blue
-A => light green B => light aqua C => light red
-D => light purple E => light yellow F => white
-*/
 
 const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
 
@@ -94,15 +87,46 @@ void UI::printSegment(std::vector<std::string> tokens){
             std::cout << tokens[1] << std::endl;
         }
         else if (tokens[0] == "F"){
-            std::cout << tokens[1] << "." << "[unscheduled]    " << tokens[2] << std::endl;
+			setColour(8);
+            std::cout << tokens[1] << "." << "[unscheduled]    ";
+			setColour(3);
+			std::cout << tokens[2] << std::endl;
         }
         else if (tokens[0] == "D"){
-            std::cout << tokens[1] << "." << "[" << tokens[3] << "]           " << tokens[2] << std::endl;
+			setColour(8);
+            std::cout << tokens[1] << "." << "[" << tokens[3] << "]           ";
+			setColour(3);
+			std::cout << tokens[2] << std::endl;
         }
         else if (tokens[0] == "T"){
-            std::cout << tokens[1] << "." << "[" << tokens[3] << " " << tokens[4] << "-" << tokens[5] << "] " << tokens[2] << std::endl;
+			setColour(8);
+            std::cout << tokens[1] << "." << "[" << tokens[3] << " " << tokens[4] << "-" << tokens[5] << "] ";
+			setColour(3);
+			std::cout << tokens[2] << std::endl;
         }
         tokens = removePrinted(tokens);
+		setColour(7);
     }
 }
 
+/*
+colour codes:
+1: Blue
+2: Green
+3: Cyan
+4: Red
+5: Purple
+6: Yellow (Dark)
+7: Default white
+8: Gray/Grey
+9: Bright blue
+10: Brigth green
+11: Bright cyan
+12: Bright red
+13: Pink/Magenta
+14: Yellow
+15: Bright white
+*/
+void UI::setColour(int value){
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),value);
+}
