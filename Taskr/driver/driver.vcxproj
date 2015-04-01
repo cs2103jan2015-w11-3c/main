@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D907B3FA-3866-447E-993E-7FCB072B8A49}</ProjectGuid>
-    <RootNamespace>Taskr</RootNamespace>
+    <ProjectGuid>{C3AC78B4-277B-4ECE-8B55-43EC62E972CA}</ProjectGuid>
+    <RootNamespace>driver</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -64,20 +64,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="History.h" />
-    <ClInclude Include="Logic.h" />
-    <ClInclude Include="Parser.h" />
-    <ClInclude Include="Storage.h" />
-    <ClInclude Include="Task.h" />
-    <ClInclude Include="UI.h" />
+    <ClCompile Include="..\Taskr\driver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="History.cpp" />
-    <ClCompile Include="Logic.cpp" />
-    <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="Storage.cpp" />
-    <ClCompile Include="Task.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ProjectReference Include="..\Taskr\Taskr.vcxproj">
+      <Project>{d907b3fa-3866-447e-993e-7fcb072b8a49}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
