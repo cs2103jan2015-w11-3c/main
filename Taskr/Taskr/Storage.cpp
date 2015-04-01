@@ -5,12 +5,18 @@
 
 using namespace std;
 
+const string DEFAULT_FILE_PATH = "Taskr.txt";
+
 Storage::Storage() {
-	_filename = "Taskr.txt";
+	_filename = DEFAULT_FILE_PATH;
 }
 
 Storage::~Storage() {
 }
+
+Storage::Storage(string filePath) {
+	string FilePath = filePath;
+} //v0.4
 
 vector<Task> Storage::getAllTasks() {
 	ifstream file(_filename, ifstream::in);
@@ -41,6 +47,7 @@ void Storage::saveFile(vector<Task> listOfTasks) {
 	for (int i = 0; i < listOfTasks.size(); i++) {
 		outFile << listOfTasks[i].isDone() << endl;
 		outFile << listOfTasks[i].getDescription() << endl;
+		outFile << endl;
 	}
 	outFile.close();
 }
@@ -50,5 +57,6 @@ void Storage::addTask(Task task) {
 	outFile.open(_filename, fstream::out | fstream::app);
 	outFile << task.isDone() << endl;
 	outFile << task.getDescription() << endl;
+	outFile << endl;
 	outFile.close();
 }
