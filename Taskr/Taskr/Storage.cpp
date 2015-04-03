@@ -14,9 +14,9 @@ Storage::Storage() {
 Storage::~Storage() {
 }
 
-Storage::Storage(string filePath) {
-	string FilePath = filePath;
-} //v0.4
+//Storage::Storage(string filePath) {
+//	string FilePath = filePath;
+//} //v0.4
 
 vector<Task> Storage::getAllTasks() {
 	ifstream file(_filename, ifstream::in);
