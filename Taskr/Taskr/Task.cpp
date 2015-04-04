@@ -29,6 +29,12 @@ bool Task::isDone() {
 
 std::string Task::toString() {
 	std::ostringstream oss;
-	oss << _description;
+	oss << getDescription();
 	return oss.str();
+	//to implement after polymorphism
+	//return "";
+}
+
+void Task::setTaskType(int taskType) {
+	_taskType = taskType;
 }

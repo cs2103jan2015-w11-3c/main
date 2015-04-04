@@ -6,10 +6,12 @@
 #include<string>
 #include<vector>
 #include "Task.h"
+#include "FloatingTask.h"
+#include "TimedTask.h"
+#include "DeadlineTask.h"
 #include "Parser.h"
 #include "Storage.h"
 #include "History.h"
-
 
 
 class Logic {
@@ -27,7 +29,8 @@ public:
 
 	std::string executeCommand(std::string userInput);
 	std::string getCommand();
-	//WEEK 10 ADDITIONS
+	void makeTask(Task&);
+
 	void addTask(Task, std::ostringstream&);
 	void displayList(std::ostringstream&);
 	void deleteTask(int, std::ostringstream&);
@@ -41,7 +44,6 @@ public:
 	bool isRepeated(Task);
 	void sortDoneTasks();
 	void listToString(std::vector<Task>, std::ostringstream&);
-	//_____
 
 	static const std::string MESSAGE_ADDED;
 	static const std::string MESSAGE_DELETED;
@@ -54,6 +56,11 @@ public:
 	static const std::string ERROR_INVALID_DESCRIPTION;
 	static const std::string ERROR_USER_COMMAND_INVALID;
 	static const std::string ERROR_NOTHING_TO_UNDO;
+
+	static const int FLOATING_TASK;
+	static const int TIMED_TASK;
+	static const int DEADLINE_TASK;
+
 
 };
 

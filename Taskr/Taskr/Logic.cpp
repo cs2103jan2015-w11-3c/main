@@ -13,6 +13,9 @@ const std::string Logic::ERROR_INVALID_DESCRIPTION = " is an invalid task and ha
 const std::string Logic::ERROR_USER_COMMAND_INVALID = " is not a valid command. Please enter a valid command.\n";
 const std::string Logic::ERROR_NOTHING_TO_UNDO = "There is nothing to undo.\n";
 
+const int Logic::FLOATING_TASK = 1;
+const int Logic::TIMED_TASK = 2;
+const int Logic::DEADLINE_TASK = 3;
 
 Logic::Logic() {
 	_doneTasksCount = 0;
@@ -36,6 +39,8 @@ std::string Logic::executeCommand(std::string userInput) {
 		if (command == "add") {
 			Task tempTask;
 			tempTask.setDescription(_parse.getDescription());
+			//implementing polymorphism of Tasks
+			//makeTask(tempTask);
 			addTask(tempTask, oss);
 		}
 		else if (command == "delete") {
@@ -89,6 +94,44 @@ void Logic::initializeListOfTasks() {
 	}
 }
 
+////POLYMORPHISM OF TASKS
+//void Logic::makeTask(Task& tempTask) {
+//	int taskType = _parse.getTaskType();
+//
+//	if (taskType == FLOATING_TASK) {
+//		FloatingTask tempFloatTask;
+//		tempFloatTask.setTaskType(taskType);
+//		tempFloatTask.setDescription(_parse.getDescription());
+//		tempTask = tempFloatTask;
+//	} else if (taskType == TIMED_TASK) {
+//		TimedTask tempTimedTask;
+//		tempTimedTask.setTaskType(taskType);
+//		tempTimedTask.setDescription(_parse.getDescription());
+//		tempTimedTask.setStartTimeHour(_parse.getStartTimeHour);
+//		tempTimedTask.setStartTimeMinute(_parse.getStartTimeMinute);
+//		tempTimedTask.setStartDateDay(_parse.getStartDateDay);
+//		tempTimedTask.setStartDateMonth(_parse.getStartDateMonth);
+//		
+//		tempTimedTask.setEndTimeHour(_parse.getEndTimeHour);
+//		tempTimedTask.setEndTimeMinute(_parse.getEndTimeMinute);
+//		tempTimedTask.setEndDateDay(_parse.getEndDateDay);
+//		tempTimedTask.setEndDateMonth(_parse.getEndDateMonth);
+//		tempTask = tempTimedTask;
+//	} else if (taskType == DEADLINE_TASK) {
+//		DeadlineTask tempDeadlineTask;
+//		tempDeadlineTask.setTaskType(taskType);
+//		tempDeadlineTask.setDescription(_parse.getDescription());
+//
+//		tempDeadlineTask.setDueTimeHour(_parse.getDueTimeHour);
+//		tempDeadlineTask.setDueTimeMinute(_parse.getDueTimeMinute);
+//		tempDeadlineTask.setDueDateDay(_parse.getDueDateDay);
+//		tempDeadlineTask.setDueDateMonth(_parse.getDueDateMonth);
+//		tempTask = tempDeadlineTask;
+//	} else {
+//		tempTask.setTaskType(0);
+//	}
+//}
+
 void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	if (isRepeated(tempTask)) {
 		oss << ERROR_REPEATED_TASK;
@@ -96,8 +139,9 @@ void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
+		//must change implementation of addTask in storage. save file as well. basically need to accomodate the multiple kinds of tasks.
 		_store.addTask(tempTask);
-		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
+		oss << "\"" << tempTask.toString() << "\"" << MESSAGE_ADDED;
 	}
 }
 
@@ -218,7 +262,7 @@ void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss)
 	int displayIndex = 1;
 	for (int i = 0; i < listOfTasks.size(); i++) {
 		if (!(listOfTasks[i].isDone())) {
-			oss << displayIndex++ << ". " << listOfTasks[i].getDescription() << std::endl;
+			oss << displayIndex++ << ". " << listOfTasks[i].toString() << std::endl;
 		}
 	}
 }

@@ -7,26 +7,30 @@
 #include<vector>
 #include "Parser.h"
 
+struct DateTime {
+	int date[3]; //[dd, mm, yyyy]
+	int time[2]; //[hh, mm]
+};
+
 class Task {
 private:
 	std::string _description;
 	bool _isDone;
-	//std::string category;
-	//Date dueDate;
-	//Time time;
+	int _taskType;
+	//_taskType = 1: floating
+	//_taskType = 2: timed
+	//_taskType = 3: deadline.
 
 public:
 	Task();
 	~Task();
 	void setDescription(std::string description);
 	void setAsDone();
-	
-	//WEEK 10 ADDITIONS
-	std::string toString();
-
-	//_____
 	std::string getDescription();
 	bool isDone();
+	void setTaskType(int);
+
+	virtual std::string toString();
 };
 
 #endif
