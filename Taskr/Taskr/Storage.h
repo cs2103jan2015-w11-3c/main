@@ -15,11 +15,10 @@ private:
 public:
   Storage();
   ~Storage();
-  //Storage(string filePath); //v0.4
+  Storage(std::string filename); 
   void readFile();
   void saveFile(std::vector<Task>);
   std::vector<Task> getAllTasks();
-  void addTask(Task);
 
 };
 

@@ -139,9 +139,12 @@ void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
+
 		//must change implementation of addTask in storage. save file as well. basically need to accomodate the multiple kinds of tasks.
-		_store.addTask(tempTask);
-		oss << "\"" << tempTask.toString() << "\"" << MESSAGE_ADDED;
+		//_store.addTask(tempTask);
+		//oss << "\"" << tempTask.toString() << "\"" << MESSAGE_ADDED;
+		_store.saveFile(_listOfTasks);
+		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
 	}
 }
 
