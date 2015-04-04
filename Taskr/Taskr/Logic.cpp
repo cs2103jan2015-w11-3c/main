@@ -96,7 +96,7 @@ void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
-		_store.addTask(tempTask);
+		_store.saveFile(_listOfTasks);
 		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
 	}
 }

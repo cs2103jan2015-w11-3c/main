@@ -3,6 +3,10 @@
 #include <fstream>
 #include <assert.h>
 
+#include "jsoncons/json.hpp"
+using jsoncons::json;
+using jsoncons::pretty_print;
+
 using namespace std;
 
 const string DEFAULT_FILE_PATH = "Taskr.txt";
@@ -14,49 +18,39 @@ Storage::Storage() {
 Storage::~Storage() {
 }
 
-//Storage::Storage(string filePath) {
-//	string FilePath = filePath;
-//} //v0.4
+Storage::Storage(string filename) {
+	_filename = filename;
+} 
 
 vector<Task> Storage::getAllTasks() {
-	ifstream file(_filename, ifstream::in);
 	vector<Task> tasks;
-	int index = 0;
-	while (!file.eof()) {
-		Task task;
-		string description;
-		string emptyLine;
-		bool isDone;
-		if (!(file >> isDone)) {
-			// eof
-			break;
+	try {
+		json input = json::parse_file(_filename);
+		for (int i = 0; i < input.size(); i++) {
+			Task task;
+			json &taskJson = input[i];
+			task.setDescription(taskJson["task description"].as<string>());
+			if (taskJson["isDone"].as<bool>()) {
+				task.setAsDone();
+			}
+			tasks.push_back(task);
 		}
-		getline(file, emptyLine);
-		getline(file, description);
-		task.setDescription(description);
-		if (isDone) {
-			task.setAsDone();
-		}
-		tasks.push_back(task);
+	}
+	catch (exception ex) {
+
 	}
 	return tasks;
 }
 
 void Storage::saveFile(vector<Task> listOfTasks) {
-	ofstream outFile(_filename, ofstream::out);
+	json output(json::an_array);
 	for (int i = 0; i < listOfTasks.size(); i++) {
-		outFile << listOfTasks[i].isDone() << endl;
-		outFile << listOfTasks[i].getDescription() << endl;
-		outFile << endl;
+		json taskJson;
+		taskJson["task description"] = listOfTasks[i].getDescription();
+		taskJson["isDone"] = listOfTasks[i].isDone();
+		output.add(taskJson);
 	}
-	outFile.close();
-}
-
-void Storage::addTask(Task task) {
-	fstream outFile;
-	outFile.open(_filename, fstream::out | fstream::app);
-	outFile << task.isDone() << endl;
-	outFile << task.getDescription() << endl;
-	outFile << endl;
+	ofstream outFile(_filename, ofstream::out);
+	outFile << pretty_print(output) << endl;
 	outFile.close();
 }
