@@ -9,7 +9,7 @@ const std::string Logic::MESSAGE_EDITED = " has been edited to ";
 const std::string Logic::ERROR_REPEATED_TASK = " is a repeated floating task.\n";
 const std::string Logic::ERROR_INDEX_OUT_OF_RANGE = " is an invalid index.\n";
 const std::string Logic::ERROR_EMPTY_LIST = "Taskr is currently empty.\n";
-const std::string Logic::ERROR_INVALID_DESCRIPTION = " is an invalid task and has not been added.\n";
+const std::string Logic::ERROR_INVALID_DESCRIPTION = "The input description is invalid. Please do not enter an empty task.\n";
 const std::string Logic::ERROR_USER_COMMAND_INVALID = " is not a valid command. Please enter a valid command.\n";
 const std::string Logic::ERROR_NOTHING_TO_UNDO = "There is nothing to undo.\n";
 
@@ -32,7 +32,7 @@ std::string Logic::executeCommand(std::string userInput) {
 	std::ostringstream oss;
 
 	_parse = Parser(userInput);
-	command = _parse.getCommand();
+	//command = _parse.getCommand();
 
 	if (command != "exit") {
 
@@ -135,8 +135,9 @@ void Logic::initializeListOfTasks() {
 void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	if (isRepeated(tempTask)) {
 		oss << ERROR_REPEATED_TASK;
-	}
-	else {
+	} else if (tempTask.getDescription() == "") {
+		oss << ERROR_INVALID_DESCRIPTION;
+	} else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
 
@@ -150,20 +151,19 @@ void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 
 void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 	if (!isValidIndex(index)) {
-		oss << ERROR_INDEX_OUT_OF_RANGE;
-	}
-
-	if (task.getDescription() == "") {
+		oss << index << ERROR_INDEX_OUT_OF_RANGE;
+	} else if (task.getDescription() == "") {
 		oss << ERROR_INVALID_DESCRIPTION;
+	} else {
+		std::string oldTaskDescription;
+		std::string newTaskDescription;
+		oldTaskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
+		newTaskDescription = task.getDescription();
+		_history.saveState(_listOfTasks);
+		_listOfTasks[index + _doneTasksCount - 1] = task;
+		_store.saveFile(_listOfTasks);
+		oss << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
 	}
-	std::string oldTaskDescription;
-	std::string newTaskDescription;
-	oldTaskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
-	newTaskDescription = task.getDescription();
-	_history.saveState(_listOfTasks);
-	_listOfTasks[index + _doneTasksCount - 1] = task;
-	_store.saveFile(_listOfTasks);
-	oss << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
 }
 
 
@@ -186,7 +186,7 @@ void Logic::deleteTask(int index, std::ostringstream& oss) {
 		oss << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
 	}
 	else {
-		oss << ERROR_INDEX_OUT_OF_RANGE;
+		oss << index << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
@@ -202,7 +202,7 @@ void Logic::setDone(int index, std::ostringstream& oss) {
 		oss << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
 	}
 	else {
-		oss << ERROR_INDEX_OUT_OF_RANGE;
+		oss << index << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
