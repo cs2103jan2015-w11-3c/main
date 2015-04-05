@@ -22,6 +22,11 @@ Storage::Storage(string filename) {
 	_filename = filename;
 } 
 
+void setFilePath(std::string filepath) {
+	string _filepath;
+	_filepath = filepath;
+}
+
 vector<Task> Storage::getAllTasks() {
 	vector<Task> tasks;
 	try {
