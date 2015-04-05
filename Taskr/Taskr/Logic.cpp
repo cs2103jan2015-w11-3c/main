@@ -6,9 +6,10 @@ const std::string Logic::MESSAGE_DELETED = " has been deleted from Taskr.\n";
 const std::string Logic::MESSAGE_MARK_DONE = " has been marked done!\n";
 const std::string Logic::MESSAGE_ERROR_TASK_NOT_EXIST = " does not exist.\n";
 const std::string Logic::MESSAGE_EDITED = " has been edited to ";
+const std::string Logic::MESSAGE_UNDO = "Your last action has been undone.\n";
 const std::string Logic::ERROR_REPEATED_TASK = " is a repeated floating task.\n";
 const std::string Logic::ERROR_INDEX_OUT_OF_RANGE = " is an invalid index.\n";
-const std::string Logic::ERROR_EMPTY_LIST = "Taskr is currently empty.\n";
+const std::string Logic::ERROR_EMPTY_LIST = "The list is currently empty.\n";
 const std::string Logic::ERROR_INVALID_DESCRIPTION = "The input description is invalid. Please do not enter an empty task.\n";
 const std::string Logic::ERROR_USER_COMMAND_INVALID = " is not a valid command. Please enter a valid command.\n";
 const std::string Logic::ERROR_NOTHING_TO_UNDO = "There is nothing to undo.\n";
@@ -32,7 +33,7 @@ std::string Logic::executeCommand(std::string userInput) {
 	std::ostringstream oss;
 
 	_parse = Parser(userInput);
-	//command = _parse.getCommand();
+	command = _parse.getCommand();
 
 	if (command != "exit") {
 
@@ -49,7 +50,9 @@ std::string Logic::executeCommand(std::string userInput) {
 			deleteTask(indexToDelete, oss);
 		}
 		else if (command == "display") {
-			displayList(oss);
+			std::string parameter;
+			parameter = _parse.getDescription();
+			displayList(parameter, oss);
 		}
 		else if (command == "edit") {
 			Task tempTask;
@@ -70,8 +73,9 @@ std::string Logic::executeCommand(std::string userInput) {
 			searchList(_parse.getDescription(), oss);
 		}
 		else {
-			oss << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
+			oss << "C\n" << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
+		oss << std::endl;
 		_confirmationMessage = oss.str();
 		return _confirmationMessage;
 
@@ -102,11 +106,14 @@ void Logic::initializeListOfTasks() {
 //		FloatingTask tempFloatTask;
 //		tempFloatTask.setTaskType(taskType);
 //		tempFloatTask.setDescription(_parse.getDescription());
+
 //		tempTask = tempFloatTask;
+
 //	} else if (taskType == TIMED_TASK) {
 //		TimedTask tempTimedTask;
 //		tempTimedTask.setTaskType(taskType);
 //		tempTimedTask.setDescription(_parse.getDescription());
+
 //		tempTimedTask.setStartTimeHour(_parse.getStartTimeHour);
 //		tempTimedTask.setStartTimeMinute(_parse.getStartTimeMinute);
 //		tempTimedTask.setStartDateDay(_parse.getStartDateDay);
@@ -116,7 +123,9 @@ void Logic::initializeListOfTasks() {
 //		tempTimedTask.setEndTimeMinute(_parse.getEndTimeMinute);
 //		tempTimedTask.setEndDateDay(_parse.getEndDateDay);
 //		tempTimedTask.setEndDateMonth(_parse.getEndDateMonth);
+
 //		tempTask = tempTimedTask;
+
 //	} else if (taskType == DEADLINE_TASK) {
 //		DeadlineTask tempDeadlineTask;
 //		tempDeadlineTask.setTaskType(taskType);
@@ -126,6 +135,7 @@ void Logic::initializeListOfTasks() {
 //		tempDeadlineTask.setDueTimeMinute(_parse.getDueTimeMinute);
 //		tempDeadlineTask.setDueDateDay(_parse.getDueDateDay);
 //		tempDeadlineTask.setDueDateMonth(_parse.getDueDateMonth);
+
 //		tempTask = tempDeadlineTask;
 //	} else {
 //		tempTask.setTaskType(0);
@@ -134,26 +144,24 @@ void Logic::initializeListOfTasks() {
 
 void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	if (isRepeated(tempTask)) {
-		oss << ERROR_REPEATED_TASK;
+		oss << "C\n" << ERROR_REPEATED_TASK;
 	} else if (tempTask.getDescription() == "") {
-		oss << ERROR_INVALID_DESCRIPTION;
+		oss << "C\n" << ERROR_INVALID_DESCRIPTION;
 	} else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
 
-		//must change implementation of addTask in storage. save file as well. basically need to accomodate the multiple kinds of tasks.
-		//_store.addTask(tempTask);
-		//oss << "\"" << tempTask.toString() << "\"" << MESSAGE_ADDED;
+		//must change implementation of saveFile in storage. basically need to accomodate the multiple kinds of tasks.
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
+		oss << "C\n" << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
 	}
 }
 
 void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 	if (!isValidIndex(index)) {
-		oss << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << "C\n" << index << ERROR_INDEX_OUT_OF_RANGE;
 	} else if (task.getDescription() == "") {
-		oss << ERROR_INVALID_DESCRIPTION;
+		oss << "C\n" << ERROR_INVALID_DESCRIPTION;
 	} else {
 		std::string oldTaskDescription;
 		std::string newTaskDescription;
@@ -162,16 +170,26 @@ void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 		_history.saveState(_listOfTasks);
 		_listOfTasks[index + _doneTasksCount - 1] = task;
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
+		oss << "C\n" << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
 	}
 }
 
-
-void Logic::displayList(std::ostringstream& oss) {
+void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 	if (!_listOfTasks.empty()) {
-		listToString(_listOfTasks, oss);
+		if (parameter == "done") {
+			listToString(_listOfTasks, oss);
+			for (int i = 0; i < _listOfTasks.size(); i++) {
+				if (_listOfTasks[i].isDone()) {
+					oss << _listOfTasks[i].toString() << std::endl;
+				}
+			}
+		} else if (parameter == "today") {
+			//code for "display today"
+		} else if (parameter == "") {
+			listToString(_listOfTasks, oss);
+		}
 	} else {
-		oss << ERROR_EMPTY_LIST;
+		oss << "C\n" << ERROR_EMPTY_LIST;
 	}
 }
 
@@ -183,10 +201,10 @@ void Logic::deleteTask(int index, std::ostringstream& oss) {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + index - 1);
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
+		oss << "C\n" << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
 	}
 	else {
-		oss << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << "C\n" << index << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
@@ -199,26 +217,27 @@ void Logic::setDone(int index, std::ostringstream& oss) {
 		_doneTasksCount++;
 		sortDoneTasks();
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
+		oss << "C\n" << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
 	}
 	else {
-		oss << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << "C\n" << index << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
 void Logic::undoLastAction(std::ostringstream& oss) {
 	if (_history.isEmpty()) {
-		oss << ERROR_NOTHING_TO_UNDO;
+		oss << "C\n" << ERROR_NOTHING_TO_UNDO;
 	} else {
 		_listOfTasks = _history.popLastState();
 		_store.saveFile(_listOfTasks);
+		oss << "C\n" << MESSAGE_UNDO;
 	}
 }
 
 void Logic::searchList(std::string searchString, std::ostringstream& oss) {
 	std::vector<Task> tempList;
 	if (_listOfTasks.empty()) {
-		oss << ERROR_EMPTY_LIST;
+		oss << "C\n" << ERROR_EMPTY_LIST;
 	} else {
 		for (std::vector<Task>::iterator iter = _listOfTasks.begin(); iter != _listOfTasks.end(); iter++) {
 			std::size_t found;
@@ -230,7 +249,6 @@ void Logic::searchList(std::string searchString, std::ostringstream& oss) {
 		listToString(tempList, oss);
 	}
 }
-
 
 bool Logic::isValidIndex(int index) {
 	return index > 0 && index <= (_listOfTasks.size() - _doneTasksCount);
@@ -260,12 +278,13 @@ void Logic::sortDoneTasks() {
 	_listOfTasks = sortedDoneTaskList;
 }
 
-
 void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss) {
 	int displayIndex = 1;
 	for (int i = 0; i < listOfTasks.size(); i++) {
 		if (!(listOfTasks[i].isDone())) {
 			oss << displayIndex++ << ". " << listOfTasks[i].toString() << std::endl;
+			//new implementation, depending on UI to generate index
+			//oss << listOfTasks[i].toString() << std::endl;
 		}
 	}
 }

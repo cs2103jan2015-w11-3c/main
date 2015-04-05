@@ -32,7 +32,7 @@ public:
 	void makeTask(Task&);
 
 	void addTask(Task, std::ostringstream&);
-	void displayList(std::ostringstream&);
+	void displayList(std::string, std::ostringstream&);
 	void deleteTask(int, std::ostringstream&);
 	void editTask(int, Task, std::ostringstream&);
 	void setDone(int, std::ostringstream&);
@@ -50,6 +50,8 @@ public:
 	static const std::string MESSAGE_MARK_DONE;
 	static const std::string MESSAGE_ERROR_TASK_NOT_EXIST;
 	static const std::string MESSAGE_EDITED;
+	static const std::string MESSAGE_UNDO;
+
 	static const std::string ERROR_REPEATED_TASK;
 	static const std::string ERROR_INDEX_OUT_OF_RANGE;
 	static const std::string ERROR_EMPTY_LIST;

@@ -12,5 +12,7 @@ public:
 	TimedTask();
 	~TimedTask();
 	std::string toString();
+	std::string getStart();
+	std::string getEnd();
 };
 

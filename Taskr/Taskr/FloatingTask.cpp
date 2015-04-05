@@ -11,6 +11,7 @@ FloatingTask::~FloatingTask() {
 
 std::string FloatingTask::toString() {
 	std::ostringstream oss;
-	oss << getDescription();
+	oss << "F\n";
+	oss << getDescription() << std::endl;
 	return oss.str();
 }

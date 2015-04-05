@@ -8,7 +8,7 @@
 #include "Parser.h"
 
 struct DateTime {
-	int date[3]; //[dd, mm, yyyy]
+	int date[2]; //[dd, mm]
 	int time[2]; //[hh, mm]
 };
 

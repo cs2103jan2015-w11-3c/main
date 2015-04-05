@@ -10,6 +10,13 @@ private:
 public:
 	DeadlineTask();
 	~DeadlineTask();
+
+	void setDueTimeHour(int);
+	void setDueTimeMinute(int);
+	void setDueDateDay(int);
+	void setDueDateMonth(int);
+
 	std::string toString();
+	std::string getDeadline();
 };
 
