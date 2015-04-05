@@ -16,7 +16,14 @@ public:
 	void setDueDateDay(int);
 	void setDueDateMonth(int);
 
+	int getDueTimeHour();
+	int getDueTimeMinute();
+	int getDueDateDay();
+	int getDueDateMonth();
+
 	std::string toString();
-	std::string getDeadline();
+	std::string deadlineToString();
+	bool isLessThanTen(int);
+
 };
 

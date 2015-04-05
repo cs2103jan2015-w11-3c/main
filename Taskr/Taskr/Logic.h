@@ -38,12 +38,17 @@ public:
 	void setDone(int, std::ostringstream&);
 	void undoLastAction(std::ostringstream&);
 	void searchList(std::string, std::ostringstream&);
+	void changeFilePath(std::string, std::ostringstream&);
 
 	void initializeListOfTasks();
 	bool isValidIndex(int);
 	bool isRepeated(Task);
+	bool isActionConfirmed();
 	void sortDoneTasks();
 	void listToString(std::vector<Task>, std::ostringstream&);
+	void sortTasksByTime(std::vector<Task>&);
+	int checkTiming(Task, Task);
+	void swapTasks(Task&, Task&);
 
 	static const std::string MESSAGE_ADDED;
 	static const std::string MESSAGE_DELETED;
@@ -51,6 +56,9 @@ public:
 	static const std::string MESSAGE_ERROR_TASK_NOT_EXIST;
 	static const std::string MESSAGE_EDITED;
 	static const std::string MESSAGE_UNDO;
+	static const std::string MESSAGE_FILEPATH_CHANGED;
+	static const std::string MESSAGE_OPERATION_NOT_EXECUTED;
+	static const std::string MESSAGE_CONFIRM_ACTION;
 
 	static const std::string ERROR_REPEATED_TASK;
 	static const std::string ERROR_INDEX_OUT_OF_RANGE;

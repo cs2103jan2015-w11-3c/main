@@ -7,6 +7,9 @@ const std::string Logic::MESSAGE_MARK_DONE = " has been marked done!\n";
 const std::string Logic::MESSAGE_ERROR_TASK_NOT_EXIST = " does not exist.\n";
 const std::string Logic::MESSAGE_EDITED = " has been edited to ";
 const std::string Logic::MESSAGE_UNDO = "Your last action has been undone.\n";
+const std::string Logic::MESSAGE_FILEPATH_CHANGED = "Your filepath has been changed to ";
+const std::string Logic::MESSAGE_OPERATION_NOT_EXECUTED = "Your last command was not executed.";
+const std::string Logic::MESSAGE_CONFIRM_ACTION = "This action cannot be undone. Are you sure you wish to carry on? (y/n): ";
 const std::string Logic::ERROR_REPEATED_TASK = " is a repeated floating task.\n";
 const std::string Logic::ERROR_INDEX_OUT_OF_RANGE = " is an invalid index.\n";
 const std::string Logic::ERROR_EMPTY_LIST = "The list is currently empty.\n";
@@ -38,10 +41,10 @@ std::string Logic::executeCommand(std::string userInput) {
 	if (command != "exit") {
 
 		if (command == "add") {
+			//implementing polymorphism of Tasks
+			//executeAdd(oss);
 			Task tempTask;
 			tempTask.setDescription(_parse.getDescription());
-			//implementing polymorphism of Tasks
-			//makeTask(tempTask);
 			addTask(tempTask, oss);
 		}
 		else if (command == "delete") {
@@ -72,6 +75,9 @@ std::string Logic::executeCommand(std::string userInput) {
 		else if (command == "search") {
 			searchList(_parse.getDescription(), oss);
 		}
+		else if (command == "file") {
+			changeFilePath(_parse.getDescription(), oss);
+		}
 		else {
 			oss << "C\n" << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
@@ -99,7 +105,7 @@ void Logic::initializeListOfTasks() {
 }
 
 ////POLYMORPHISM OF TASKS
-//void Logic::makeTask(Task& tempTask) {
+//void Logic::executeAdd(std::ostringstream& oss) {
 //	int taskType = _parse.getTaskType();
 //
 //	if (taskType == FLOATING_TASK) {
@@ -107,7 +113,7 @@ void Logic::initializeListOfTasks() {
 //		tempFloatTask.setTaskType(taskType);
 //		tempFloatTask.setDescription(_parse.getDescription());
 
-//		tempTask = tempFloatTask;
+//		addTask(tempFloatTask, oss);
 
 //	} else if (taskType == TIMED_TASK) {
 //		TimedTask tempTimedTask;
@@ -124,7 +130,7 @@ void Logic::initializeListOfTasks() {
 //		tempTimedTask.setEndDateDay(_parse.getEndDateDay);
 //		tempTimedTask.setEndDateMonth(_parse.getEndDateMonth);
 
-//		tempTask = tempTimedTask;
+//		addTask(tempTimedTask, oss);
 
 //	} else if (taskType == DEADLINE_TASK) {
 //		DeadlineTask tempDeadlineTask;
@@ -136,7 +142,7 @@ void Logic::initializeListOfTasks() {
 //		tempDeadlineTask.setDueDateDay(_parse.getDueDateDay);
 //		tempDeadlineTask.setDueDateMonth(_parse.getDueDateMonth);
 
-//		tempTask = tempDeadlineTask;
+//		addTask(tempDeadlineTask, oss);
 //	} else {
 //		tempTask.setTaskType(0);
 //	}
@@ -225,13 +231,21 @@ void Logic::setDone(int index, std::ostringstream& oss) {
 }
 
 void Logic::undoLastAction(std::ostringstream& oss) {
-	if (_history.isEmpty()) {
-		oss << "C\n" << ERROR_NOTHING_TO_UNDO;
-	} else {
-		_listOfTasks = _history.popLastState();
-		_store.saveFile(_listOfTasks);
-		oss << "C\n" << MESSAGE_UNDO;
+	oss << "C\n";
+	if (isActionConfirmed()) {
+		if (_history.isEmpty()) {
+			oss << ERROR_NOTHING_TO_UNDO;
+		}
+		else {
+			_listOfTasks = _history.popLastState();
+			_store.saveFile(_listOfTasks);
+			oss << MESSAGE_UNDO;
+		}
 	}
+	else {
+		oss << MESSAGE_OPERATION_NOT_EXECUTED;
+	}
+	
 }
 
 void Logic::searchList(std::string searchString, std::ostringstream& oss) {
@@ -247,6 +261,31 @@ void Logic::searchList(std::string searchString, std::ostringstream& oss) {
 			}
 		}
 		listToString(tempList, oss);
+	}
+}
+
+void Logic::changeFilePath(std::string filepath, std::ostringstream& oss) {
+	oss << "C\n";
+	if (isActionConfirmed()) {
+		//Storage class to implement a basic setter function...
+		//_store.setFilePath(filepath);
+		_store.saveFile(_listOfTasks);
+		oss << MESSAGE_FILEPATH_CHANGED << "\"" << filepath << "\".";
+	}
+	else {
+		oss << MESSAGE_OPERATION_NOT_EXECUTED;
+	}
+}
+
+bool Logic::isActionConfirmed() {
+	std::cout << MESSAGE_CONFIRM_ACTION;
+	std::string userConfirmation;
+	std::cin >> userConfirmation;
+	if (userConfirmation == "y") {
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
@@ -287,4 +326,36 @@ void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss)
 			//oss << listOfTasks[i].toString() << std::endl;
 		}
 	}
+}
+
+//precondition and usage: logic passes an unsorted vector of tasks as the parameter. this is used in
+//the "display" function, where the user should see a chronologically sorted list.
+//considerations: not all tasks have start datetime end datetime due datetime.
+//implement using if else blocks based ont _taskType of Task object, create a new vector<Task>,
+//push_back earliest timed to latest timed, followed by earliest deadline to latest deadline, 
+//followed by floating tasks. equate new vector<Task> to listOfTasks.
+void Logic::sortTasksByTime(std::vector<Task>& listOfTasks) {
+	/*for (int i = 0; i < (listOfTasks.size() - 1); i++) {
+		int minIndex = i;
+		for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
+			if (checkTiming(listOfTasks[j], listOfTasks[minIndex]) == -1) {
+				minIndex = j;
+			}
+		}
+		if (minIndex != i) {
+			swapTasks(listOfTasks[minIndex], listOfTasks[i]);
+		}
+	}*/
+}
+
+//check month then year then hour then minute, two if else blocks each ( < and then ==)
+int Logic::checkTiming(Task, Task) {
+	//to implement by monday
+	return 0;
+}
+
+void Logic::swapTasks(Task& taskA, Task& taskB) {
+	Task temp = taskA;
+	taskA = taskB;
+	taskB = temp;
 }

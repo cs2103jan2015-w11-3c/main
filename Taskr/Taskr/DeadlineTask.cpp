@@ -29,9 +29,56 @@ void DeadlineTask::setDueDateMonth(int dueDateMonth) {
 	_due.date[1] = dueDateMonth;
 }
 
-std::string DeadlineTask::getDeadline() {
+int DeadlineTask::getDueTimeHour() {
+	return _due.time[0];
+}
+
+int DeadlineTask::getDueTimeMinute() {
+	return _due.time[1];
+}
+
+int DeadlineTask::getDueDateDay() {
+	return _due.date[0];
+}
+
+int DeadlineTask::getDueDateMonth() {
+	return _due.date[1];
+}
+
+std::string DeadlineTask::deadlineToString() {
 	std::ostringstream oss;
-	oss << _due.date[0] << " " << _due.date[1] << ", " << _due.time[0] << _due.time[1];
+	if (isLessThanTen(_due.date[0])) {
+		oss << "0" << _due.date[0];
+	}
+	else {
+		oss << _due.date[0];
+	}
+
+	oss << "/";
+
+	if (isLessThanTen(_due.date[1])) {
+		oss << "0" << _due.date[1];
+	}
+	else {
+		oss << _due.date[1];
+	} 
+
+	oss << ", ";
+
+	if (isLessThanTen(_due.time[0])) {
+		oss << "0" << _due.time[0];
+	}
+	else {
+		oss << _due.time[0];
+	}
+
+	if (isLessThanTen(_due.time[1])) {
+		oss << "0" << _due.time[1];
+	}
+	else {
+		oss << _due.time[1];
+	}
+
 	return oss.str();
 }
 
@@ -39,6 +86,10 @@ std::string DeadlineTask::toString() {
 	std::ostringstream oss;
 	oss << "D\n";
 	oss << getDescription() << std::endl;
-	oss << getDeadline() << std::endl;
+	oss << deadlineToString() << std::endl;
 	return oss.str();
+}
+
+bool DeadlineTask::isLessThanTen(int value) {
+	return value < 10;
 }
