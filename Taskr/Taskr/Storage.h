@@ -16,6 +16,7 @@ public:
   Storage();
   ~Storage();
   Storage(std::string filename); 
+  void setFilePath(std::string filepath);
   void readFile();
   void saveFile(std::vector<Task>);
   std::vector<Task> getAllTasks();
