@@ -97,7 +97,7 @@ std::string Logic::getCommand() {
 
 void Logic::initializeListOfTasks() {
 	_listOfTasks = _store.getAllTasks();
-	for (int i = 0; i < _listOfTasks.size(); i++) {
+	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 		if (_listOfTasks[i].isDone()) {
 			_doneTasksCount++;
 		}
@@ -149,25 +149,27 @@ void Logic::initializeListOfTasks() {
 //}
 
 void Logic::addTask(Task tempTask, std::ostringstream& oss) {
+	oss << "C\n";
 	if (isRepeated(tempTask)) {
-		oss << "C\n" << ERROR_REPEATED_TASK;
+		oss << ERROR_REPEATED_TASK;
 	} else if (tempTask.getDescription() == "") {
-		oss << "C\n" << ERROR_INVALID_DESCRIPTION;
+		oss << ERROR_INVALID_DESCRIPTION;
 	} else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
 
 		//must change implementation of saveFile in storage. basically need to accomodate the multiple kinds of tasks.
 		_store.saveFile(_listOfTasks);
-		oss << "C\n" << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
+		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
 	}
 }
 
 void Logic::editTask(int index, Task task, std::ostringstream& oss) {
+	oss << "C\n";
 	if (!isValidIndex(index)) {
-		oss << "C\n" << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << index << ERROR_INDEX_OUT_OF_RANGE;
 	} else if (task.getDescription() == "") {
-		oss << "C\n" << ERROR_INVALID_DESCRIPTION;
+		oss << ERROR_INVALID_DESCRIPTION;
 	} else {
 		std::string oldTaskDescription;
 		std::string newTaskDescription;
@@ -176,23 +178,34 @@ void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 		_history.saveState(_listOfTasks);
 		_listOfTasks[index + _doneTasksCount - 1] = task;
 		_store.saveFile(_listOfTasks);
-		oss << "C\n" << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
+		oss << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
 	}
 }
 
 void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 	if (!_listOfTasks.empty()) {
 		if (parameter == "done") {
-			listToString(_listOfTasks, oss);
-			for (int i = 0; i < _listOfTasks.size(); i++) {
+			std::vector<Task> doneTasks;
+			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 				if (_listOfTasks[i].isDone()) {
-					oss << _listOfTasks[i].toString() << std::endl;
+					doneTasks.push_back(_listOfTasks[i]);
 				}
 			}
+			sortTasksByTime(doneTasks);
+			listToString(doneTasks, oss);
+
 		} else if (parameter == "today") {
 			//code for "display today"
+
 		} else if (parameter == "") {
-			listToString(_listOfTasks, oss);
+			std::vector<Task> undoneTasks;
+			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
+				if (!(_listOfTasks[i].isDone())) {
+					undoneTasks.push_back(_listOfTasks[i]);
+				}
+			}
+			sortTasksByTime(undoneTasks);
+			listToString(undoneTasks, oss);
 		}
 	} else {
 		oss << "C\n" << ERROR_EMPTY_LIST;
@@ -201,20 +214,22 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 
 
 void Logic::deleteTask(int index, std::ostringstream& oss) {
+	oss << "C\n";
 	if (isValidIndex(index)) {
 		std::string taskDescription;
 		taskDescription = _listOfTasks[_doneTasksCount + index - 1].getDescription();
 		_history.saveState(_listOfTasks);
 		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + index - 1);
 		_store.saveFile(_listOfTasks);
-		oss << "C\n" << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
+		oss << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
 	}
 	else {
-		oss << "C\n" << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << index << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
 void Logic::setDone(int index, std::ostringstream& oss) {
+	oss << "C\n";
 	if (isValidIndex(index)) {
 		std::string taskDescription;
 		taskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
@@ -223,10 +238,10 @@ void Logic::setDone(int index, std::ostringstream& oss) {
 		_doneTasksCount++;
 		sortDoneTasks();
 		_store.saveFile(_listOfTasks);
-		oss << "C\n" << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
+		oss << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
 	}
 	else {
-		oss << "C\n" << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << index << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
@@ -290,11 +305,11 @@ bool Logic::isActionConfirmed() {
 }
 
 bool Logic::isValidIndex(int index) {
-	return index > 0 && index <= (_listOfTasks.size() - _doneTasksCount);
+	return index > 0 && index <= (unsigned)(_listOfTasks.size() - _doneTasksCount);
 }
 
 bool Logic::isRepeated(Task task) {
-	for (int i = 0; i < _listOfTasks.size(); i++) {
+	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 		if (task.getDescription() == _listOfTasks[i].getDescription()) {
 			return true;
 		}
@@ -304,12 +319,12 @@ bool Logic::isRepeated(Task task) {
 
 void Logic::sortDoneTasks() {
 	std::vector<Task> sortedDoneTaskList;
-	for (int i = 0; i < _listOfTasks.size(); i++) {
+	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 		if (_listOfTasks[i].isDone()) {
 			sortedDoneTaskList.push_back(_listOfTasks[i]);
 		}
 	}
-	for (int i = 0; i < _listOfTasks.size(); i++) {
+	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 		if (!(_listOfTasks[i].isDone())) {
 			sortedDoneTaskList.push_back(_listOfTasks[i]);
 		}
@@ -319,10 +334,10 @@ void Logic::sortDoneTasks() {
 
 void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss) {
 	int displayIndex = 1;
-	for (int i = 0; i < listOfTasks.size(); i++) {
+	for (unsigned int i = 0; i < listOfTasks.size(); i++) {
 		if (!(listOfTasks[i].isDone())) {
 			oss << displayIndex++ << ". " << listOfTasks[i].toString() << std::endl;
-			//new implementation, depending on UI to generate index
+			//new implementation, depending on UI to generate index, no need to check if task isDone. to be done in top layer.
 			//oss << listOfTasks[i].toString() << std::endl;
 		}
 	}

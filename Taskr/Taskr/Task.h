@@ -7,16 +7,16 @@
 #include<vector>
 #include "Parser.h"
 
-struct DateTime {
-	int date[2]; //[dd, mm]
-	int time[2]; //[hh, mm]
-};
+//struct DateTime {
+//	int date[2]; //[dd, mm]
+//	int time[2]; //[hh, mm]
+//};
 
 class Task {
 private:
 	std::string _description;
 	bool _isDone;
-	int _taskType;
+	//int _taskType;
 	//_taskType = 1: floating
 	//_taskType = 2: timed
 	//_taskType = 3: deadline.
