@@ -7,15 +7,10 @@
 class DateTime			//assumes use input of dates: <day><month>
 {
 private:
-	int _StartMonth;
-	int _StartDay;
-	int _StartHour;
-	int _StartMinute;
-
-	int _EndMonth;
-	int _EndDay;
-	int _EndHour;
-	int _EndMinute;
+	int _month;
+	int _day;
+	int _hour;
+	int _minute;
 
 public:
 	
@@ -68,15 +63,10 @@ public:
 	int retrieveMonth(std::string input);
 
 	//getters
-	int getStartMonth();
-	int getStartDay();
-	int getStartHour();
-	int getStartMinute();
-
-	int getEndMonth();
-	int getEndDay();
-	int getEndHour();
-	int getEndMinute();
+	int getMonth();
+	int getDay();
+	int getHour();
+	int getMinute();
 	
 };
 

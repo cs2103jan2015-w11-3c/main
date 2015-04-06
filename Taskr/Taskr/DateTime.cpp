@@ -44,15 +44,10 @@ const std::string DateTime::HOURS[12] =
 {HOUR_1, HOUR_2, HOUR_3, HOUR_4, HOUR_5,HOUR_6, HOUR_7, HOUR_8, HOUR_9, HOUR_10, HOUR_11, HOUR_12};
 
 DateTime::DateTime() {	
-	_StartMonth = NEGATIVE_1;
-	_StartDay = NEGATIVE_1;
-	_StartHour = NEGATIVE_1;
-	_StartMinute = NEGATIVE_1;
-
-	_EndMonth = NEGATIVE_1;
-	_EndDay = NEGATIVE_1;
-	_EndHour = NEGATIVE_1;
-	_EndMinute = NEGATIVE_1;
+	_month = NEGATIVE_1;
+	_day = NEGATIVE_1;
+	_hour = NEGATIVE_1;
+	_minute = NEGATIVE_1;
 }
 
 DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string> &TimeTokens) {
@@ -63,10 +58,10 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 				std::string temp = DateTokens[i];
 				int x = identifyDayMonth(temp);
 				if(x <= 11) {
-					_EndMonth = x;
+					_month = x;
 				}
 				else {
-					_EndDay = x;
+					_day = x;
 				}
 			}
 		}
@@ -82,20 +77,20 @@ bool DateTime::isEmpty(std::vector<std::string> tokens) {
 	return (tokens.empty());
 }
 
-int DateTime::getStartMonth() {
-	return _StartMonth;
+int DateTime::getMonth() {
+	return _month;
 }
 
-int DateTime::getStartDay() {
-	return _StartDay;
+int DateTime::getDay() {
+	return _day;
 }
 
-int DateTime::getStartHour() {
-	return _StartHour;
+int DateTime::getHour() {
+	return _hour;
 }
 
-int DateTime::getStartMinute() {
-	return _StartMinute;
+int DateTime::getMinute() {
+	return _minute;
 }
 
 int DateTime::getEndMonth() {
