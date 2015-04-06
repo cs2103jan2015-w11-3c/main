@@ -7,10 +7,6 @@
 #include<vector>
 #include "Parser.h"
 
-//struct DateTime {
-//	int date[2]; //[dd, mm]
-//	int time[2]; //[hh, mm]
-//};
 
 class Task {
 private:

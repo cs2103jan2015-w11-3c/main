@@ -73,6 +73,15 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 	}
 }
 
+DateTime::~DateTime() {
+}
+
+//temp definition, Joseph to change
+int DateTime::identifyDayMonth(std::string input) {
+	return 0;
+}
+
+
 bool DateTime::isEmpty(std::vector<std::string> tokens) {
 	return (tokens.empty());
 }
@@ -93,18 +102,18 @@ int DateTime::getMinute() {
 	return _minute;
 }
 
-int DateTime::getEndMonth() {
-	return _EndMonth;
+void DateTime::setMonth(int month) {
+	_month = month;
 }
 
-int DateTime::getEndDay() {
-	return _EndDay;
+void DateTime::setDay(int day) {
+	_day = day;
 }
 
-int DateTime::getEndHour() {
-	return _EndHour;
+void DateTime::setHour(int hour) {
+	_hour = hour;
 }
 
-int DateTime::getEndMinute() {
-	return _EndMinute;
+void DateTime::setMinute(int minute) {
+	_minute = minute;
 }

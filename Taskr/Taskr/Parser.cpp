@@ -20,6 +20,9 @@ const std::string Parser::EMPTY_STRING = "";
 Parser::Parser() {
 }
 
+Parser::~Parser() {
+}
+
 Parser::Parser(std::string input) {
 	input = trimInput(input);
 	input = removeWhiteSpaces(input);
@@ -230,8 +233,6 @@ void Parser::retrieveIndex() {
 	_index = temp;
 }
 
-Parser::~Parser() {
-}
 
 std::string Parser::getCommand() {
 	return _command;

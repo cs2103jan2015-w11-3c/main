@@ -36,5 +36,5 @@ std::string Task::toString() {
 }
 
 void Task::setTaskType(int taskType) {
-	_taskType = taskType;
+	//_taskType = taskType;
 }

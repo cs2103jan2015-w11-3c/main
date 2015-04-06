@@ -282,8 +282,7 @@ void Logic::searchList(std::string searchString, std::ostringstream& oss) {
 void Logic::changeFilePath(std::string filepath, std::ostringstream& oss) {
 	oss << "C\n";
 	if (isActionConfirmed()) {
-		//Storage class to implement a basic setter function...
-		//_store.setFilePath(filepath);
+		_store.setFilePath(filepath);
 		_store.saveFile(_listOfTasks);
 		oss << MESSAGE_FILEPATH_CHANGED << "\"" << filepath << "\".";
 	}

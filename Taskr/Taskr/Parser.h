@@ -24,8 +24,6 @@ public:
 	Parser();
 	Parser(std::string input);
 	~Parser();
-
-	//command strings
 	static const std::string CommandArray[10];
 	static const std::string ADD;
 	static const std::string DELETE;

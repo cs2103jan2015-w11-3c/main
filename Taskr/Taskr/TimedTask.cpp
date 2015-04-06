@@ -3,14 +3,14 @@
 
 TimedTask::TimedTask() {
 	_taskType = 2;
-	_start.date[0] = 0;
-	_start.date[1] = 0;
-	_start.time[0] = 0;
-	_start.time[1] = 0;
-	_end.date[0] = 0;
-	_end.date[1] = 0;
-	_end.time[0] = 0;
-	_end.time[1] = 0;
+	_start.setMonth(0);
+	_start.setDay(0);
+	_start.setHour(0);
+	_start.setMinute(0);
+	_end.setMonth(0);
+	_end.setDay(0);
+	_end.setHour(0);
+	_end.setMinute(0);
 }
 
 
@@ -18,67 +18,67 @@ TimedTask::~TimedTask() {
 }
 
 int TimedTask::getStartTimeHour() {
-	return _start.time[0];
+	return _start.getHour();
 }
 
 int TimedTask::getStartTimeMinute() {
-	return _start.time[1];
+	return _start.getMinute();
 }
 
 int TimedTask::getStartDateDay() {
-	return _start.date[0];
+	return _start.getDay();
 }
 
 int TimedTask::getStartDateMonth() {
-	return _start.date[1];
+	return _start.getMonth();
 }
 
 void TimedTask::setStartTimeHour(int startTimeHour) {
-	_start.time[0] = startTimeHour;
+	_start.setHour(startTimeHour);
 }
 
 void TimedTask::setStartTimeMinute(int startTimeMinute) {
-	_start.time[1] = startTimeMinute;
+	_start.setMinute(startTimeMinute);
 }
 
 void TimedTask::setStartDateDay(int startDateDay) {
-	_start.date[0] = startDateDay;
+	_start.setDay(startDateDay);
 }
 
 void TimedTask::setStartDateMonth(int startDateMonth) {
-	_start.date[1] = startDateMonth;
+	_start.setMonth(startDateMonth);
 }
 
 int TimedTask::getEndTimeHour() {
-	return _end.time[0];
+	return _end.getHour();
 }
 
 int TimedTask::getEndTimeMinute() {
-	return _end.time[1];
+	return _end.getMinute();
 }
 
 int TimedTask::getEndDateDay() {
-	return _end.date[0];
+	return _end.getDay();
 }
 
 int TimedTask::getEndDateMonth() {
-	return _end.date[1];
+	return _end.getMonth();
 }
 
 void TimedTask::setEndTimeHour(int endTimeHour) {
-	_end.time[0] = endTimeHour;
+	_end.setHour(endTimeHour);
 }
 
 void TimedTask::setEndTimeMinute(int endTimeMinute) {
-	_end.time[1] = endTimeMinute;
+	_end.setMinute(endTimeMinute);
 }
 
 void TimedTask::setEndDateDay(int endDateDay) {
-	_end.date[0] = endDateDay;
+	_end.setDay(endDateDay);
 }
 
 void TimedTask::setEndDateMonth(int endDateMonth) {
-	_end.date[1] = endDateMonth;
+	_end.setMonth(endDateMonth);
 }
 
 std::string TimedTask::startToString() {
@@ -86,36 +86,36 @@ std::string TimedTask::startToString() {
 	//oss << _start.date[0] << "/" << _start.date[1] << std::endl;
 	//oss << _start.time[0] << _start.time[1] << std::endl;
 
-	if (isLessThanTen(_start.date[0])) {
-		oss << "0" << _start.date[0];
+	if (isLessThanTen(_start.getDay())) {
+		oss << "0" << _start.getDay();
 	}
 	else {
-		oss << _start.date[0];
+		oss << _start.getDay();
 	}
 
 	oss << "/";
 
-	if (isLessThanTen(_start.date[1])) {
-		oss << "0" << _start.date[1];
+	if (isLessThanTen(_start.getMonth())) {
+		oss << "0" << _start.getMonth();
 	}
 	else {
-		oss << _start.date[1];
+		oss << _start.getMonth();
 	}
 
 	oss << std::endl;
 
-	if (isLessThanTen(_start.time[0])) {
-		oss << "0" << _start.time[0];
+	if (isLessThanTen(_start.getHour())) {
+		oss << "0" << _start.getHour();
 	}
 	else {
-		oss << _start.time[0];
+		oss << _start.getHour();
 	}
 
-	if (isLessThanTen(_start.time[1])) {
-		oss << "0" << _start.time[1];
+	if (isLessThanTen(_start.getMinute())) {
+		oss << "0" << _start.getMinute();
 	}
 	else {
-		oss << _start.time[1];
+		oss << _start.getMinute();
 	}
 
 	return oss.str();
@@ -126,36 +126,36 @@ std::string TimedTask::endToString() {
 	//oss << _end.date[0] << "/" << _end.date[1] << std::endl;
 	//oss << _end.time[0] << _end.time[1] << std::endl;
 
-	if (isLessThanTen(_end.date[0])) {
-		oss << "0" << _end.date[0];
+	if (isLessThanTen(_end.getDay())) {
+		oss << "0" << _end.getDay();
 	}
 	else {
-		oss << _end.date[0];
+		oss << _end.getDay();
 	}
 
 	oss << "/";
 
-	if (isLessThanTen(_end.date[1])) {
-		oss << "0" << _end.date[1];
+	if (isLessThanTen(_end.getMonth())) {
+		oss << "0" << _end.getMonth();
 	}
 	else {
-		oss << _end.date[1];
+		oss << _end.getMonth();
 	}
 
 	oss << std::endl;
 
-	if (isLessThanTen(_end.time[0])) {
-		oss << "0" << _end.time[0];
+	if (isLessThanTen(_end.getHour())) {
+		oss << "0" << _end.getHour();
 	}
 	else {
-		oss << _end.time[0];
+		oss << _end.getHour();
 	}
 
-	if (isLessThanTen(_end.time[1])) {
-		oss << "0" << _end.time[1];
+	if (isLessThanTen(_end.getMinute())) {
+		oss << "0" << _end.getMinute();
 	}
 	else {
-		oss << _end.time[1];
+		oss << _end.getMinute();
 	}
 
 	return oss.str();
