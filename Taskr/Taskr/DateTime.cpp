@@ -78,7 +78,16 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 
 //temp definition, Joseph to change
 int DateTime::identifyDayMonth(std::string input) {
-	return 0;
+	int index;
+	for(int i = 0; i < 15; i++) {
+		int x = input.find(DAY_MONTH[i]);
+		if(x != std::string::npos) {
+			index = i;
+			break;
+		}
+	}
+
+	return index;
 }
 
 

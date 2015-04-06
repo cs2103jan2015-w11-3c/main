@@ -52,10 +52,10 @@ public:
 	std::string convertLowerCase(std::string input);
 	void extractParameters();
 	void extractDateTimeTokens();
+	void assignDateTime(std::vector<std::string> DateTokens, std::vector<std::string> TimeTokens);
 	
 	bool isTimedTask(std::string input, int &matchindex, int &foundIndex);
 	bool isDeadlineTask(std::string input, int &index, int &foundIndex);
-
 	std::string extractDate(int DateIndex, int foundIndex);
 	std::string extractTime(int TimeIndex, int foundIndex);
 
@@ -69,6 +69,9 @@ public:
 	int getIndex();
 
 	int getTaskType();
+	DateTime getEnd();
+	DateTime getStart();
+
 	int getStartDateMonth();
 	int getStartDateDay();
 	int getStartTimeHour();

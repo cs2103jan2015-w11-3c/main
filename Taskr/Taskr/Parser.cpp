@@ -171,11 +171,11 @@ void Parser::extractDateTimeTokens() {
 			temp = convertLowerCase(temp);
 
 		} while((isTimedTask(temp, matchTime, foundTime)) || (isDeadlineTask(temp, matchDate, foundDate)));
-
-		DateTime end(DateTokens, TimeTokens);
-		_end = end;
+		
+		 assignDateTime(DateTokens, TimeTokens);
 	}	
 }
+
 bool Parser::isTimedTask(std::string input, int &matchIndex, int &foundIndex) {
 	std::vector<std::string> Time;
 	for(int i = 0; i < 3; i++) {
@@ -240,6 +240,12 @@ std::string Parser::extractTime(int TimeIndex, int foundIndex) {
 	return timeToken;
 }
 
+void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std::string> TimeTokens) {
+	if(DateTokens.size() == 1) {
+		
+	}
+}
+
 std::string Parser::getCommand() {
 	return _command;
 }
@@ -254,6 +260,14 @@ int Parser::getIndex() {
 
 int Parser::getTaskType() {
 	return _TaskType;
+}
+
+DateTime Parser::getEnd() {
+	return _end;
+}
+
+DateTime Parser::getStart() {
+	return _start;
 }
 
 int Parser::getEndDateMonth() {
