@@ -65,6 +65,12 @@ public:
 	int identifyDayMonth(std::string input);
 	int retrieveMonth(std::string input);
 
+	//setters
+	void setMonth(int month);
+	void setDay(int day);
+	void setHour(int hour);
+	void setMinute(int minute);
+
 	//getters
 	int getMonth();
 	int getDay();
