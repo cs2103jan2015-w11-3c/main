@@ -225,3 +225,12 @@ std::string TimedTask::toString() {
 bool TimedTask::isLessThanTen(int value) {
 	return value < 10;
 }
+
+int TimedTask::checkTodayDay() {
+	return getStartDateDay();
+}
+
+int TimedTask::checkTodayMonth() {
+	return getStartDateMonth();
+}
+

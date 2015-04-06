@@ -139,3 +139,11 @@ std::string DeadlineTask::toString() {
 bool DeadlineTask::isLessThanTen(int value) {
 	return value < 10;
 }
+
+int DeadlineTask::checkTodayDay() {
+	return getDueDateDay();
+}
+
+int DeadlineTask::checkTodayMonth() {
+	return getDueDateMonth();
+}

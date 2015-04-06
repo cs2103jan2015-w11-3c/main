@@ -5,6 +5,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<ctime>
 #include "Task.h"
 #include "FloatingTask.h"
 #include "TimedTask.h"

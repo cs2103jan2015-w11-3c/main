@@ -46,3 +46,12 @@ std::string Task::toString() {
 int Task::getTaskType() {
 	return _taskType;
 }
+
+int Task::checkTodayDay() {
+	return -1;
+}
+
+int Task::checkTodayMonth() {
+	return -1;
+}
+

@@ -27,6 +27,8 @@ public:
 	int getTaskType();
 	
 	virtual std::string toString();
+	virtual int checkTodayDay();
+	virtual int checkTodayMonth();
 
 	//virtual std::string getDateString();
 	//virtual std::string getTimeString();

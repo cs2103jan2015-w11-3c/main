@@ -39,6 +39,9 @@ public:
 	std::string startToString();
 	std::string endToString();
 	bool isLessThanTen(int);
+	int checkTodayDay();
+	int checkTodayMonth();
+
 
 	//std::string getDateString();
 	//std::string getTimeString();

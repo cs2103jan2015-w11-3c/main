@@ -195,12 +195,22 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 			listToString(doneTasks, oss);
 
 		} else if (parameter == "today") {
+			time_t currentTime;
+			struct tm localTime;
+			time(&currentTime);                   // Get the current time
+			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
+
 			std::vector<Task> doneTasks;
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 				if (!(_listOfTasks[i].isDone()) && ((_listOfTasks[i].getTaskType()) == 1)) {
 					doneTasks.push_back(_listOfTasks[i]);
 				}
-				//if (_listOfTasks[i].getDateString() == )
+				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 2 && _listOfTasks[i].checkTodayMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkTodayDay() == localTime.tm_mday) {
+					doneTasks.push_back(_listOfTasks[i]);
+				}
+				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 3 && _listOfTasks[i].checkTodayMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkTodayDay() == localTime.tm_mday) {
+					doneTasks.push_back(_listOfTasks[i]);
+				}
 			}
 			sortTasksByTime(doneTasks);
 			listToString(doneTasks, oss);
@@ -356,22 +366,24 @@ void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss)
 //push_back earliest timed to latest timed, followed by earliest deadline to latest deadline, 
 //followed by floating tasks. equate new vector<Task> to listOfTasks.
 void Logic::sortTasksByTime(std::vector<Task>& listOfTasks) {
-	/*for (int i = 0; i < (listOfTasks.size() - 1); i++) {
-		int minIndex = i;
-		for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
-			if (checkTiming(listOfTasks[j], listOfTasks[minIndex]) == -1) {
-				minIndex = j;
-			}
-		}
-		if (minIndex != i) {
-			swapTasks(listOfTasks[minIndex], listOfTasks[i]);
-		}
-	}*/
+	//for (int i = 0; i < (listOfTasks.size() - 1); i++) {
+	//	int minIndex = i;
+	//	for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
+	//		if (listOfTasks[i].getTaskType == 2 || listOfTasks[i].getTaskType == 3) {
+	//			if (checkTiming(listOfTasks[j], listOfTasks[minIndex]) == -1) {
+	//				minIndex = j;
+	//			}
+	//		}
+	//	}
+	//	if (minIndex != i) {
+	//		swapTasks(listOfTasks[minIndex], listOfTasks[i]);
+	//	}
+	//}
 }
 
-//check month then year then hour then minute, two if else blocks each ( < and then ==)
+//check month then day then hour then minute, two if else blocks each ( < and then ==)
 int Logic::checkTiming(Task, Task) {
-	//to implement by monday
+
 	return 0;
 }
 
