@@ -195,7 +195,15 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 			listToString(doneTasks, oss);
 
 		} else if (parameter == "today") {
-			//code for "display today"
+			std::vector<Task> doneTasks;
+			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
+				if (!(_listOfTasks[i].isDone()) && ((_listOfTasks[i].getTaskType()) == 1)) {
+					doneTasks.push_back(_listOfTasks[i]);
+				}
+				//if (_listOfTasks[i].getDateString() == )
+			}
+			sortTasksByTime(doneTasks);
+			listToString(doneTasks, oss);
 
 		} else if (parameter == "") {
 			std::vector<Task> undoneTasks;
@@ -295,7 +303,7 @@ bool Logic::isActionConfirmed() {
 	std::cout << MESSAGE_CONFIRM_ACTION;
 	std::string userConfirmation;
 	std::cin >> userConfirmation;
-	if (userConfirmation == "y") {
+	if (userConfirmation == "y" || userConfirmation == "Y" || userConfirmation == "yes" || userConfirmation == "Yes" || userConfirmation == "YES") {
 		return true;
 	}
 	else {
@@ -334,11 +342,10 @@ void Logic::sortDoneTasks() {
 void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss) {
 	int displayIndex = 1;
 	for (unsigned int i = 0; i < listOfTasks.size(); i++) {
-		if (!(listOfTasks[i].isDone())) {
-			oss << displayIndex++ << ". " << listOfTasks[i].toString() << std::endl;
-			//new implementation, depending on UI to generate index, no need to check if task isDone. to be done in top layer.
-			//oss << listOfTasks[i].toString() << std::endl;
-		}
+		oss << listOfTasks[i].toString() << std::endl;
+		//if (!(listOfTasks[i].isDone())) {
+		//	oss << displayIndex++ << ". " << listOfTasks[i].toString() << std::endl;
+		//}
 	}
 }
 

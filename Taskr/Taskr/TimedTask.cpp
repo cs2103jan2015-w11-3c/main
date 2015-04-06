@@ -17,6 +17,14 @@ TimedTask::TimedTask() {
 TimedTask::~TimedTask() {
 }
 
+void TimedTask::setStart(DateTime start) {
+	_start = start;
+}
+
+void TimedTask::setEnd(DateTime end) {
+	_end = end;
+}
+
 int TimedTask::getStartTimeHour() {
 	return _start.getHour();
 }
@@ -81,11 +89,48 @@ void TimedTask::setEndDateMonth(int endDateMonth) {
 	_end.setMonth(endDateMonth);
 }
 
-std::string TimedTask::startToString() {
-	std::ostringstream oss;
-	//oss << _start.date[0] << "/" << _start.date[1] << std::endl;
-	//oss << _start.time[0] << _start.time[1] << std::endl;
+//std::string TimedTask::getDateString() {
+//	std::ostringstream oss;
+//	if (isLessThanTen(_start.getDay())) {
+//		oss << "0" << _start.getDay();
+//	}
+//	else {
+//		oss << _start.getDay();
+//	}
+//
+//	oss << "/";
+//
+//	if (isLessThanTen(_start.getMonth())) {
+//		oss << "0" << _start.getMonth();
+//	}
+//	else {
+//		oss << _start.getMonth();
+//	}
+//	return oss.str();
+//}
+//
+//std::string TimedTask::getTimeString() {
+//	std::ostringstream oss;
+//	if (isLessThanTen(_start.getHour())) {
+//		oss << "0" << _start.getHour();
+//	}
+//	else {
+//		oss << _start.getHour();
+//	}
+//
+//	if (isLessThanTen(_start.getMinute())) {
+//		oss << "0" << _start.getMinute();
+//	}
+//	else {
+//		oss << _start.getMinute();
+//	}
+//	return oss.str();
+//}
 
+std::string TimedTask::startToString() {
+	//std::ostringstream oss;
+	//oss << getDateString() << "\n" << getTimeString();
+	std::ostringstream oss;
 	if (isLessThanTen(_start.getDay())) {
 		oss << "0" << _start.getDay();
 	}

@@ -9,10 +9,10 @@
 
 
 class Task {
-private:
+protected:
 	std::string _description;
 	bool _isDone;
-	//int _taskType;
+	int _taskType;
 	//_taskType = 1: floating
 	//_taskType = 2: timed
 	//_taskType = 3: deadline.
@@ -24,9 +24,12 @@ public:
 	void setAsDone();
 	std::string getDescription();
 	bool isDone();
-	void setTaskType(int);
-
+	int getTaskType();
+	
 	virtual std::string toString();
+
+	//virtual std::string getDateString();
+	//virtual std::string getTimeString();
 };
 
 #endif

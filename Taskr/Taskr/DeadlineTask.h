@@ -4,13 +4,14 @@
 
 class DeadlineTask : public Task {
 private:
-	int _taskType;
 	DateTime _due;
 
 public:
 	DeadlineTask();
 	~DeadlineTask();
-
+	//to replace individual setters
+	void setDue(DateTime);
+	
 	void setDueTimeHour(int);
 	void setDueTimeMinute(int);
 	void setDueDateDay(int);
@@ -25,5 +26,7 @@ public:
 	std::string deadlineToString();
 	bool isLessThanTen(int);
 
+	//std::string getDateString();
+	//std::string getTimeString();
 };
 

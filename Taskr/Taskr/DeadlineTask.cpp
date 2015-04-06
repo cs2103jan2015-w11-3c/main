@@ -9,6 +9,9 @@ DeadlineTask::DeadlineTask() {
 	_due.setMinute(0);
 }
 
+void DeadlineTask::setDue(DateTime due) {
+	_due = due;
+}
 
 DeadlineTask::~DeadlineTask() {
 }
@@ -45,7 +48,50 @@ int DeadlineTask::getDueDateMonth() {
 	return _due.getMonth();
 }
 
+//std::string DeadlineTask::getDateString() {
+//	std::ostringstream oss;
+//	if (isLessThanTen(_due.getDay())) {
+//		oss << "0" << _due.getDay();
+//	}
+//	else {
+//		oss << _due.getDay();
+//	}
+//
+//	oss << "/";
+//
+//	if (isLessThanTen(_due.getMonth())) {
+//		oss << "0" << _due.getMonth();
+//	}
+//	else {
+//		oss << _due.getMonth();
+//	}
+//
+//	return oss.str();
+//}
+//
+//std::string DeadlineTask::getTimeString() {
+//	std::ostringstream oss;
+//	if (isLessThanTen(_due.getHour())) {
+//		oss << "0" << _due.getHour();
+//	}
+//	else {
+//		oss << _due.getHour();
+//	}
+//
+//	if (isLessThanTen(_due.getMinute())) {
+//		oss << "0" << _due.getMinute();
+//	}
+//	else {
+//		oss << _due.getMinute();
+//	}
+//
+//	return oss.str();
+//}
+
 std::string DeadlineTask::deadlineToString() {
+	//std::ostringstream oss;
+	//oss << getDateString() << "\n" << getTimeString();
+
 	std::ostringstream oss;
 	if (isLessThanTen(_due.getDay())) {
 		oss << "0" << _due.getDay();
@@ -61,9 +107,9 @@ std::string DeadlineTask::deadlineToString() {
 	}
 	else {
 		oss << _due.getMonth();
-	} 
+	}
 
-	oss << ", ";
+	oss << std::endl;
 
 	if (isLessThanTen(_due.getHour())) {
 		oss << "0" << _due.getHour();

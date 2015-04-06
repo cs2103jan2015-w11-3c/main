@@ -209,7 +209,7 @@ std::string Parser::extractTime(int TimeIndex, int foundIndex) {
 
 	return timeToken;
 }
-
+//edit this to try to fix a bug where leading space is not removed
 void Parser::removeCommand() {
 	int commandSize = _command.length();
 	_userInput.erase(Start_Index, commandSize);

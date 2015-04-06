@@ -4,13 +4,16 @@
 
 class TimedTask : public Task {
 private:
-	int _taskType;
 	DateTime _start;
 	DateTime _end;
 
 public:
 	TimedTask();
 	~TimedTask();
+
+	//to replace individual setters
+	void setStart(DateTime);
+	void setEnd(DateTime);
 
 	int getStartTimeHour();
 	int getStartTimeMinute();
@@ -36,6 +39,9 @@ public:
 	std::string startToString();
 	std::string endToString();
 	bool isLessThanTen(int);
+
+	//std::string getDateString();
+	//std::string getTimeString();
 
 };
 

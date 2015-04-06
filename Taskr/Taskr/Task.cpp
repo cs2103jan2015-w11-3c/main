@@ -35,6 +35,14 @@ std::string Task::toString() {
 	//return "";
 }
 
-void Task::setTaskType(int taskType) {
-	//_taskType = taskType;
+//std::string Task::getDateString() {
+//	return "";
+//}
+//
+//std::string Task::getTimeString() {
+//	return "";
+//}
+
+int Task::getTaskType() {
+	return _taskType;
 }
