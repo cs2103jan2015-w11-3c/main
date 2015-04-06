@@ -1,7 +1,7 @@
 #include "UI.h"
 #include <sstream>
 #include <Windows.h>
-
+#include <iomanip>
 
 const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
 
@@ -14,15 +14,14 @@ UI::~UI() {
 
 
 void UI::processUserInput(){
-	std::cout << MESSAGE_WELCOME << std::endl;
-	//printToday();
+	std::cout << MESSAGE_WELCOME << std::endl;//printWelcome()
 	_logic.initializeListOfTasks();
 	std::string feedback;
 	while (feedback != "exit") {
 		std::cout << "command: ";
 		std::string userInput = getUserInput();
 		feedback = _logic.executeCommand(userInput);
-		printConfirmationMessage(feedback);
+		printConfirmationMessage(feedback);//will be replaced by printWholeString(feedback);
 	}
 }
 
@@ -37,13 +36,26 @@ void UI::printConfirmationMessage(std::string feedback) {
 	std::cout << feedback << std::endl;
 }
 
-void UI::print(std::string feedback){
-	printSegment(doSegment(feedback));
+void UI::printWholeString(std::string feedback){
+	std::vector<std::string> tokens;
+    tokens = doSegment(feedback);
+    int number = getNumberOfTasks(tokens);
+    std::string date = getDate(tokens);
+    std::cout << "[ " << date << " ]=======================================================" << std::endl;
+    while (!tokens.empty()){
+        for (int i=1; i<=number; i++){
+            std::cout << i << ". ";
+            printSegment(tokens);
+            tokens = removePrinted(tokens);
+			setColour(7);
+        }
+    }
 }
 
-//print today's tasks, will be implemented later
-void UI::printToday(){
 
+void UI::printWelcome(){
+	std::cout << MESSAGE_WELCOME << std::endl;
+	printWholeString(_logic.executeCommand("display today"));
 }
 
 //store string feedback into vector<string> tokens line by line
@@ -76,37 +88,56 @@ std::vector<std::string> UI::removePrinted(std::vector<std::string> tokens){
     return tokens;
 }
 
+int UI::getNumberOfTasks(std::vector<std::string> tokens){
+    int number=0;
+    for (int i=0; i<tokens.size(); i++){
+        if (tokens[i] == "")
+            number++;
+    }
+    return number;
+}
+
+std::string UI::getDate(std::vector<std::string> tokens){
+	std::string date;
+	if (tokens[0] == "D"){
+        date = tokens[2];
+        return date;
+    }
+    else if (tokens[0] == "T"){
+        date = tokens[4];
+        return date;
+    }
+    
+    return date;
+}
 
 //C:confirmation message
 //F:floating tasks
 //D:deadline tasks
 //T:timed tasks
 void UI::printSegment(std::vector<std::string> tokens){
-    while (!tokens.empty()){
-        if (tokens[0] == "C"){
-            std::cout << tokens[1] << std::endl;
-        }
-        else if (tokens[0] == "F"){
-			setColour(8);
-            std::cout << tokens[1] << "." << "[unscheduled]    ";
-			setColour(3);
-			std::cout << tokens[2] << std::endl;
-        }
-        else if (tokens[0] == "D"){
-			setColour(8);
-            std::cout << tokens[1] << "." << "[" << tokens[3] << "]           ";
-			setColour(3);
-			std::cout << tokens[2] << std::endl;
-        }
-        else if (tokens[0] == "T"){
-			setColour(8);
-            std::cout << tokens[1] << "." << "[" << tokens[3] << " " << tokens[4] << "-" << tokens[5] << "] ";
-			setColour(3);
-			std::cout << tokens[2] << std::endl;
-        }
-        tokens = removePrinted(tokens);
-		setColour(7);
+	if (tokens[0] == "C"){
+		std::cout << tokens[1] << std::endl;
     }
+    else if (tokens[0] == "F"){
+		setColour(8);
+        std::cout << "[unscheduled] " << std::setw(10);
+		setColour(3);
+		std::cout << tokens[1] << std::endl;
+    }
+    else if (tokens[0] == "D"){
+		setColour(8);
+        std::cout << "[ by " << tokens[3] << "   ] " << std::setw(10);
+		setColour(3);
+		std::cout << tokens[1] << std::endl;
+    }
+    else if (tokens[0] == "T"){
+		setColour(8);
+        std::cout << "[" << tokens[3] << "-" << tokens[5] << "] " << std::setw(10);
+		setColour(3);
+		std::cout << tokens[1] << std::endl;
+    }
+	//setColour(7);
 }
 
 /*
@@ -130,3 +161,4 @@ colour codes:
 void UI::setColour(int value){
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),value);
 }
+

@@ -24,8 +24,10 @@ public:
 	int findFirstEmptyIndex(std::vector<std::string>);
 	std::vector<std::string> removePrinted(std::vector<std::string>);
 	void printSegment(std::vector<std::string>);
-	void print(std::string);
-	void printToday();
+	void printWholeString(std::string);
+	int getNumberOfTasks(std::vector<std::string>);
+	std::string getDate(std::vector<std::string>);
+	void printWelcome();
 	void setColour(int);
 };
 
