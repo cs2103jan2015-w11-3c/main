@@ -50,6 +50,9 @@ DateTime::DateTime() {
 	_minute = NEGATIVE_1;
 }
 
+DateTime::~DateTime() {
+}
+
 DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string> &TimeTokens) {
 	if(!isEmpty(DateTokens)) {
 		
@@ -71,9 +74,6 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 			//input into start, then erase start from string, input into end
 		}
 	}
-}
-
-DateTime::~DateTime() {
 }
 
 //temp definition, Joseph to change

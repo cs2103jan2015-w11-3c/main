@@ -24,6 +24,8 @@ public:
 	Parser();
 	Parser(std::string input);
 	~Parser();
+
+	//command strings
 	static const std::string CommandArray[10];
 	static const std::string ADD;
 	static const std::string DELETE;
@@ -43,12 +45,13 @@ public:
 	std::string trimStart(std::string input);
 	std::string trimEnd(std::string input);
 	std::string removeWhiteSpaces(std::string input);
+	void removeCommand();
+	void retrieveIndex();
 
 	std::string retrieveInfo(std::string input);
 	std::string convertLowerCase(std::string input);
 	void extractParameters();
-	void removeCommand();
-	void retrieveIndex();
+	void extractDateTimeTokens();
 	
 	bool isTimedTask(std::string input, int &matchindex, int &foundIndex);
 	bool isDeadlineTask(std::string input, int &index, int &foundIndex);

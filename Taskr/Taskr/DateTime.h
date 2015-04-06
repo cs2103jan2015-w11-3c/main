@@ -4,7 +4,9 @@
 #include <string>
 #include <vector>
 
-class DateTime			//assumes use input of dates: <day><month>
+class DateTime			
+	//assumes user input of dates: <day><month>
+	//assumes user input to be according to 12 hour clock format
 {
 private:
 	int _month;
@@ -38,6 +40,7 @@ public:
 	static const std::string PM;
 	static const std::string AM;
 	static const std::string NOON;
+	
 	static const std::string TimeKeyWords[3];
 
 	static const std::string HOUR_1;
@@ -61,12 +64,6 @@ public:
 	bool isEmpty(std::vector<std::string> tokens);
 	int identifyDayMonth(std::string input);
 	int retrieveMonth(std::string input);
-
-	//setters
-	void setMonth(int);
-	void setDay(int);
-	void setHour(int);
-	void setMinute(int);
 
 	//getters
 	int getMonth();

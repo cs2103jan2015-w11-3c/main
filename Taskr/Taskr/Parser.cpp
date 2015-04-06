@@ -12,7 +12,6 @@ const std::string Parser::EXIT = "exit";
 const std::string Parser::SEARCH = "search";
 const std::string Parser::UNDO = "undo";
 
-
 const char Parser::WhiteSpace = ' ';
 const int Parser::Start_Index = 0;
 const std::string Parser::EMPTY_STRING = "";
@@ -32,47 +31,7 @@ Parser::Parser(std::string input) {
 	command = convertLowerCase(command);
 	_command = command;
 	extractParameters();
-
-	if(_command == ADD || _command == EDIT) {
-
-		std::vector<std::string> DateTokens;
-		std::vector<std::string> TimeTokens;
-		std::string temp = _description;
-		temp = convertLowerCase(temp);
-		int matchTime;
-		int matchDate;
-		int foundTime;
-		int foundDate;
-		 {	
-			
-			 if(!isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {			//check if float task
-			_TaskType = 1;
-			}
-
-			else if(isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {		//check if timed task due today
-				_TaskType = 2;
-				TimeTokens.push_back(extractTime(matchTime, foundTime));
-			}
-			
-			else if(isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {		//check if timed task with deadline
-				_TaskType = 2;
-				TimeTokens.push_back(extractTime(matchTime, foundTime));
-				DateTokens.push_back(extractDate(matchDate, foundDate));
-			}
-			
-			else if(!isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {		//check if only deadline task
-				_TaskType = 3;
-				DateTokens.push_back(extractDate(matchDate, foundDate));
-			}
-
-			temp = _description;
-			temp = convertLowerCase(temp);
-
-		} while((isTimedTask(temp, matchTime, foundTime)) || (isDeadlineTask(temp, matchDate, foundDate)));
-
-		DateTime END(DateTokens, TimeTokens);
-	}	
-	
+	extractDateTimeTokens();
 	
 }
 
@@ -146,6 +105,77 @@ void Parser::extractParameters() {
 	}
 }
 
+void Parser::removeCommand() {
+	int x = _userInput.find(_command);
+	if(x != std::string::npos) {
+		int commandSize = _command.length();
+		_userInput.erase(Start_Index, commandSize);
+	}
+	
+}
+
+void Parser::setDescription() {
+	removeCommand();
+	trimStart(_userInput);
+	_description = _userInput;
+	
+}
+
+void Parser::setIndex() {
+	 removeCommand();
+	 trimStart(_userInput);
+	 retrieveIndex();
+}
+
+void Parser::retrieveIndex() {
+	std::istringstream iss(_userInput);
+	int temp;
+	iss >> temp;
+	_index = temp;
+}
+
+void Parser::extractDateTimeTokens() {
+	if(_command == ADD || _command == EDIT) {
+
+		std::vector<std::string> DateTokens;
+		std::vector<std::string> TimeTokens;
+		std::string temp = _description;
+		temp = convertLowerCase(temp);
+		int matchTime;
+		int matchDate;
+		int foundTime;
+		int foundDate;
+		 {	
+			
+			 if(!isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {			//check if float task
+			_TaskType = 1;
+			}
+
+			else if(isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {		//check if timed task due today
+				_TaskType = 2;
+				TimeTokens.push_back(extractTime(matchTime, foundTime));
+			}
+			
+			else if(isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {		//check if timed task with deadline
+				_TaskType = 2;
+				TimeTokens.push_back(extractTime(matchTime, foundTime));
+				DateTokens.push_back(extractDate(matchDate, foundDate));
+			}
+			
+			else if(!isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {		//check if only deadline task
+				_TaskType = 3;
+				DateTokens.push_back(extractDate(matchDate, foundDate));
+			}
+
+			temp = _description;
+			temp = convertLowerCase(temp);
+
+		} while((isTimedTask(temp, matchTime, foundTime)) || (isDeadlineTask(temp, matchDate, foundDate)));
+
+		DateTime end(DateTokens, TimeTokens);
+		_end = end;
+	}	
+}
 bool Parser::isTimedTask(std::string input, int &matchIndex, int &foundIndex) {
 	std::vector<std::string> Time;
 	for(int i = 0; i < 3; i++) {
@@ -209,30 +239,6 @@ std::string Parser::extractTime(int TimeIndex, int foundIndex) {
 
 	return timeToken;
 }
-//edit this to try to fix a bug where leading space is not removed
-void Parser::removeCommand() {
-	int commandSize = _command.length();
-	_userInput.erase(Start_Index, commandSize);
-}
-
-void Parser::setDescription() {
-	removeCommand();
-	_description = _userInput;
-	
-}
-
-void Parser::setIndex() {
-	 removeCommand();
-	 retrieveIndex();
-}
-
-void Parser::retrieveIndex() {
-	std::istringstream iss(_userInput);
-	int temp;
-	iss >> temp;
-	_index = temp;
-}
-
 
 std::string Parser::getCommand() {
 	return _command;
