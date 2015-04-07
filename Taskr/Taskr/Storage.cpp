@@ -18,9 +18,9 @@ Storage::Storage() {
 Storage::~Storage() {
 }
 
-Storage::Storage(string filename) {
-	_filename = filename;
-} 
+//Storage::Storage(string filename) {
+	//_filename = filename;
+//} 
 
 void Storage::setFilePath(std::string filepath) {
 	_filename = filepath;
