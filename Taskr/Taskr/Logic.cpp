@@ -42,10 +42,10 @@ std::string Logic::executeCommand(std::string userInput) {
 
 		if (command == "add") {
 			//implementing polymorphism of Tasks
-			//executeAdd(oss);
-			Task tempTask;
-			tempTask.setDescription(_parse.getDescription());
-			addTask(tempTask, oss);
+			executeAdd(oss);
+			//Task tempTask;
+			//tempTask.setDescription(_parse.getDescription());
+			//addTask(tempTask, oss);
 		}
 		else if (command == "delete") {
 			int indexToDelete;

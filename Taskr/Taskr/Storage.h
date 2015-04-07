@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 #include "Task.h"
+#include "FloatingTask.h"
+#include "TimedTask.h"
+#include "DeadlineTask.h"
 
 
 class Storage {

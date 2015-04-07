@@ -67,3 +67,50 @@ int Task::checkMinute() {
 	return -1;
 }
 
+int Task::getDueTimeHour() {
+	return -1;
+}
+
+int Task::getDueTimeMinute() {
+	return -1;
+}
+
+int Task::getDueDateDay() {
+	return -1;
+}
+
+int Task::getDueDateMonth() {
+	return -1;
+}
+
+int Task::getStartTimeHour() {
+	return -1;
+}
+
+int Task::getStartTimeMinute() {
+	return -1;
+}
+
+int Task::getStartDateDay() {
+	return -1;
+}
+
+int Task::getStartDateMonth() {
+	return -1;
+}
+
+int Task::getEndTimeHour() {
+	return -1;
+}
+
+int Task::getEndTimeMinute() {
+	return -1;
+}
+
+int Task::getEndDateDay() {
+	return -1;
+}
+
+int Task::getEndDateMonth() {
+	return -1;
+}

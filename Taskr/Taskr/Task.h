@@ -33,8 +33,19 @@ public:
 	virtual int checkHour();
 	virtual int checkMinute();
 
-	//virtual std::string getDateString();
-	//virtual std::string getTimeString();
+	virtual int getDueTimeHour();
+	virtual int getDueTimeMinute();
+	virtual int getDueDateDay();
+	virtual int getDueDateMonth();
+
+	virtual int getStartTimeHour();
+	virtual int getStartTimeMinute();
+	virtual int getStartDateDay();
+	virtual int getStartDateMonth();
+	virtual int getEndTimeHour();
+	virtual int getEndTimeMinute();
+	virtual int getEndDateDay();
+	virtual int getEndDateMonth();
 };
 
 #endif
