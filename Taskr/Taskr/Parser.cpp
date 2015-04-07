@@ -1,7 +1,7 @@
 #include "Parser.h"
 
 const std::string Parser::CommandArray[10] = 
-{ADD, DELETE, DEL, EDIT, DISPLAY, DONE, EXIT, SEARCH, UNDO};
+{ADD, DELETE, DEL, EDIT, DISPLAY, DONE, EXIT, SEARCH, UNDO, FILE};
 const std::string Parser::ADD = "add";
 const std::string Parser::DELETE = "delete";
 const std::string Parser::DEL = "del";
@@ -190,6 +190,8 @@ bool Parser::isTimedTask(std::string input, int &matchIndex, int &foundIndex) {
 		int TimeFound = input.find(Time[index]);
 		if(TimeFound > 0) {
 			isTimed = true;
+			matchIndex = index;
+			foundIndex = TimeFound;
 			break;
 		}
 	}
@@ -208,6 +210,8 @@ bool Parser::isDeadlineTask(std::string input, int &matchIndex, int &foundIndex)
 		int FoundDeadline = input.find(Deadline[index]);
 		if(FoundDeadline > 0) {
 			isDeadline = true;
+			matchIndex = index;
+			foundIndex = FoundDeadline;
 			break;
 		}
 	}
@@ -260,7 +264,64 @@ void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std
 }
 
 void Parser::compareDateTime() {
-		
+	int endMonth = _end.getMonth();
+	int endHour = _end.getHour();
+	int endDay = _end.getDay();
+	int startMonth = _start.getMonth();
+
+	if(endMonth != -1 && endHour != -1 && startMonth == -1) {	//when end has date and time, start no date
+		_start.setMonth(endMonth);
+		_start.setDay(endDay);
+	}
+
+	checkStartBeforeEnd();
+}
+
+void Parser::checkStartBeforeEnd() {
+	if(checkStartMonthBeforeEndMonth()) {
+		swapDateTime();
+	}
+
+	else {
+		if(checkStartDayBeforeEndDay()) {
+			swapDateTime();
+		}
+
+		else {
+			if(checkStartHourBeforeEndHour()) {
+				swapDateTime();
+			}
+
+			else {
+				if(checkStartMinuteBeforeEndMinute()) {
+					swapDateTime();
+				}
+			}
+		}
+	}
+}
+
+bool Parser::checkStartMonthBeforeEndMonth() {
+	return (_start.getMonth() > _end.getMonth());
+}
+
+bool Parser::checkStartDayBeforeEndDay() {
+	return (_start.getDay() > _end.getDay());
+}
+
+bool Parser::checkStartHourBeforeEndHour() {
+	return (_start.getHour() > _end.getHour());
+}
+
+bool Parser::checkStartMinuteBeforeEndMinute() {
+	return (_start.getMinute() > _end.getMinute());
+}
+
+void Parser::swapDateTime() {
+	DateTime temp;
+	temp = _end;
+	_end = _start;
+	_start = temp;
 }
 
 std::string Parser::getCommand() {

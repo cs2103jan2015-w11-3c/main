@@ -56,11 +56,18 @@ public:
 	void extractDateTimeTokens();
 	void assignDateTime(std::vector<std::string> DateTokens, std::vector<std::string> TimeTokens);
 	void compareDateTime();
+	void checkStartBeforeEnd();
 	
 	bool isTimedTask(std::string input, int &matchindex, int &foundIndex);
 	bool isDeadlineTask(std::string input, int &index, int &foundIndex);
 	std::string extractDate(int DateIndex, int foundIndex);
 	std::string extractTime(int TimeIndex, int foundIndex);
+
+	bool checkStartMonthBeforeEndMonth();
+	bool checkStartDayBeforeEndDay();
+	bool checkStartHourBeforeEndHour();
+	bool checkStartMinuteBeforeEndMinute();
+	void swapDateTime();
 
 	//setters
 	void setDescription();

@@ -49,7 +49,6 @@ public:
 	static const std::string PM;
 	static const std::string AM;
 	static const std::string NOON;
-	
 	static const std::string TimeKeyWords[3];
 
 	static const std::string HOUR_1;

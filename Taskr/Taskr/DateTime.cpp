@@ -73,7 +73,7 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 			setLocalTime();
 		}
 
-		else if(x == 13 || x == 14) {
+		else if(x == 13 || x == 14) {	//when user input "tomorrow" or "tmr"
 			setLocalTime();
 			checkIfNextMonth();
 		}
@@ -92,6 +92,7 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 			int timeLenth = time.length();
 			if(timeLenth == 1) {
 				_hour = convertDigits(temp);
+				_minute = INDEX_ZERO;
 			}
 
 			else if(timeLenth == 3) {
