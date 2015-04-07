@@ -204,9 +204,9 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
 
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-				if (!(_listOfTasks[i].isDone()) && ((_listOfTasks[i].getTaskType()) == 1)) {
-					tempTaskList.push_back(_listOfTasks[i]);
-				}
+				//if (!(_listOfTasks[i].isDone()) && ((_listOfTasks[i].getTaskType()) == 1)) {
+				//	tempTaskList.push_back(_listOfTasks[i]);
+				//}
 				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 2 && _listOfTasks[i].checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkDay() == localTime.tm_mday) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
@@ -368,26 +368,41 @@ void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss)
 //push_back earliest timed to latest timed, followed by earliest deadline to latest deadline, 
 //followed by floating tasks. equate new vector<Task> to listOfTasks.
 void Logic::sortTasksByTime(std::vector<Task>& listOfTasks) {
-	//for (int i = 0; i < (listOfTasks.size() - 1); i++) {
-	//	int minIndex = i;
-	//	for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
-	//		if (listOfTasks[i].getTaskType == 2 || listOfTasks[i].getTaskType == 3) {
-	//			if (checkTiming(listOfTasks[j], listOfTasks[minIndex]) == -1) {
-	//				minIndex = j;
-	//			}
-	//		}
-	//	}
-	//	if (minIndex != i) {
-	//		swapTasks(listOfTasks[minIndex], listOfTasks[i]);
-	//	}
-	//}
+	for (int i = 0; i < (listOfTasks.size() - 1); i++) {
+		int minIndex = i;
+		for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
+			if (checkTiming(listOfTasks[j], listOfTasks[minIndex])) {
+				minIndex = j;
+			}
+		}
+		if (minIndex != i) {
+			swapTasks(listOfTasks[minIndex], listOfTasks[i]);
+		}
+	}
 }
 
-//check month then day then hour then minute, two if else blocks each ( < and then ==)
-int Logic::checkTiming(Task, Task) {
 
-	return 0;
+bool Logic::checkTiming(Task taskA, Task taskB) {
+	if (taskA.checkMonth() < taskB.checkMonth()) {
+		return true;
+	} else if (taskA.checkMonth() == taskB.checkMonth()) {
+		if (taskA.checkDay() < taskB.checkDay()) {
+			return true;
+		} else if (taskA.checkDay() == taskB.checkDay()) {
+			if (taskA.checkHour() < taskB.checkHour()) {
+				return true;
+			} else if (taskA.checkHour() == taskB.checkHour()) {
+				if (taskA.checkMinute() < taskB.checkMinute()) {
+					return true;
+				} else if (taskA.checkMinute() == taskB.checkMinute()) {
+					return false;
+				}
+			}
+		}
+	}	
+	return false;
 }
+
 
 void Logic::swapTasks(Task& taskA, Task& taskB) {
 	Task temp = taskA;

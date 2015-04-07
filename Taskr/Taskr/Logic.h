@@ -48,7 +48,7 @@ public:
 	void sortDoneTasks();
 	void listToString(std::vector<Task>, std::ostringstream&);
 	void sortTasksByTime(std::vector<Task>&);
-	int checkTiming(Task, Task);
+	bool checkTiming(Task, Task);
 	void swapTasks(Task&, Task&);
 
 	static const std::string MESSAGE_ADDED;
