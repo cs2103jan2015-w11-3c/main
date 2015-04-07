@@ -46,6 +46,8 @@ std::string Parser::trimStart(std::string input) {
 	while(input[StartInput] == WhiteSpace) {
 		StartInput++;
 	}
+	std::string temp = input; 
+	temp = input.substr(StartInput);
 
 	return input.substr(StartInput);
 }
