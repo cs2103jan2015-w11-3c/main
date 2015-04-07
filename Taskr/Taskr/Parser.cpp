@@ -127,7 +127,7 @@ void Parser::setIndex() {
 }
 
 void Parser::retrieveIndex() {
-	int temp = _userInput[Start_Index];
+	int temp = _userInput[Start_Index] - '0';
 	_index = temp;
 
 }
