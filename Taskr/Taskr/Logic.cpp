@@ -104,49 +104,53 @@ void Logic::initializeListOfTasks() {
 	}
 }
 
-////POLYMORPHISM OF TASKS
-//void Logic::executeAdd(std::ostringstream& oss) {
-//	int taskType = _parse.getTaskType();
-//
-//	if (taskType == FLOATING_TASK) {
-//		FloatingTask tempFloatTask;
-//		tempFloatTask.setTaskType(taskType);
-//		tempFloatTask.setDescription(_parse.getDescription());
+//POLYMORPHISM OF TASKS
+void Logic::executeAdd(std::ostringstream& oss) {
+	int taskType = _parse.getTaskType();
 
-//		addTask(tempFloatTask, oss);
+	if (taskType == FLOATING_TASK) {
+		FloatingTask tempFloatTask;
+		tempFloatTask.setTaskType(taskType);
+		tempFloatTask.setDescription(_parse.getDescription());
 
-//	} else if (taskType == TIMED_TASK) {
-//		TimedTask tempTimedTask;
-//		tempTimedTask.setTaskType(taskType);
-//		tempTimedTask.setDescription(_parse.getDescription());
+		addTask(tempFloatTask, oss);
 
-//		tempTimedTask.setStartTimeHour(_parse.getStartTimeHour);
-//		tempTimedTask.setStartTimeMinute(_parse.getStartTimeMinute);
-//		tempTimedTask.setStartDateDay(_parse.getStartDateDay);
-//		tempTimedTask.setStartDateMonth(_parse.getStartDateMonth);
-//		
-//		tempTimedTask.setEndTimeHour(_parse.getEndTimeHour);
-//		tempTimedTask.setEndTimeMinute(_parse.getEndTimeMinute);
-//		tempTimedTask.setEndDateDay(_parse.getEndDateDay);
-//		tempTimedTask.setEndDateMonth(_parse.getEndDateMonth);
+	} else if (taskType == TIMED_TASK) {
+		TimedTask tempTimedTask;
+		tempTimedTask.setTaskType(taskType);
+		tempTimedTask.setDescription(_parse.getDescription());
 
-//		addTask(tempTimedTask, oss);
+		tempTimedTask.setStart(_parse.getStart);
+		tempTimedTask.setEnd(_parse.getEnd);
+/*
+		tempTimedTask.setStartTimeHour(_parse.getStartTimeHour);
+		tempTimedTask.setStartTimeMinute(_parse.getStartTimeMinute);
+		tempTimedTask.setStartDateDay(_parse.getStartDateDay);
+		tempTimedTask.setStartDateMonth(_parse.getStartDateMonth);
+		tempTimedTask.setEndTimeHour(_parse.getEndTimeHour);
+		tempTimedTask.setEndTimeMinute(_parse.getEndTimeMinute);
+		tempTimedTask.setEndDateDay(_parse.getEndDateDay);
+		tempTimedTask.setEndDateMonth(_parse.getEndDateMonth);
+*/
+		addTask(tempTimedTask, oss);
 
-//	} else if (taskType == DEADLINE_TASK) {
-//		DeadlineTask tempDeadlineTask;
-//		tempDeadlineTask.setTaskType(taskType);
-//		tempDeadlineTask.setDescription(_parse.getDescription());
-//
-//		tempDeadlineTask.setDueTimeHour(_parse.getDueTimeHour);
-//		tempDeadlineTask.setDueTimeMinute(_parse.getDueTimeMinute);
-//		tempDeadlineTask.setDueDateDay(_parse.getDueDateDay);
-//		tempDeadlineTask.setDueDateMonth(_parse.getDueDateMonth);
+	} else if (taskType == DEADLINE_TASK) {
+		DeadlineTask tempDeadlineTask;
+		tempDeadlineTask.setTaskType(taskType);
+		tempDeadlineTask.setDescription(_parse.getDescription());
 
-//		addTask(tempDeadlineTask, oss);
-//	} else {
-//		tempTask.setTaskType(0);
-//	}
-//}
+		tempDeadlineTask.setDue(_parse.getEnd);
+/*
+		tempDeadlineTask.setDueTimeHour(_parse.getDueTimeHour);
+		tempDeadlineTask.setDueTimeMinute(_parse.getDueTimeMinute);
+		tempDeadlineTask.setDueDateDay(_parse.getDueDateDay);
+		tempDeadlineTask.setDueDateMonth(_parse.getDueDateMonth);
+*/
+		addTask(tempDeadlineTask, oss);
+	} else {
+		oss << "C\n" << ERROR_INVALID_DESCRIPTION;
+	}
+}
 
 void Logic::addTask(Task tempTask, std::ostringstream& oss) {
 	oss << "C\n";
@@ -184,15 +188,14 @@ void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 
 void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 	if (!_listOfTasks.empty()) {
+		std::vector<Task> tempTaskList;
 		if (parameter == "done") {
 			std::vector<Task> doneTasks;
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 				if (_listOfTasks[i].isDone()) {
-					doneTasks.push_back(_listOfTasks[i]);
+					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
-			sortTasksByTime(doneTasks);
-			listToString(doneTasks, oss);
 
 		} else if (parameter == "today") {
 			time_t currentTime;
@@ -200,31 +203,29 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 			time(&currentTime);                   // Get the current time
 			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
 
-			std::vector<Task> doneTasks;
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 				if (!(_listOfTasks[i].isDone()) && ((_listOfTasks[i].getTaskType()) == 1)) {
-					doneTasks.push_back(_listOfTasks[i]);
+					tempTaskList.push_back(_listOfTasks[i]);
 				}
-				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 2 && _listOfTasks[i].checkTodayMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkTodayDay() == localTime.tm_mday) {
-					doneTasks.push_back(_listOfTasks[i]);
+				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 2 && _listOfTasks[i].checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkDay() == localTime.tm_mday) {
+					tempTaskList.push_back(_listOfTasks[i]);
 				}
-				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 3 && _listOfTasks[i].checkTodayMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkTodayDay() == localTime.tm_mday) {
-					doneTasks.push_back(_listOfTasks[i]);
+				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 3 && _listOfTasks[i].checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkDay() == localTime.tm_mday) {
+					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
-			sortTasksByTime(doneTasks);
-			listToString(doneTasks, oss);
 
-		} else if (parameter == "") {
-			std::vector<Task> undoneTasks;
+		} else {
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 				if (!(_listOfTasks[i].isDone())) {
-					undoneTasks.push_back(_listOfTasks[i]);
+					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
-			sortTasksByTime(undoneTasks);
-			listToString(undoneTasks, oss);
 		}
+		
+		sortTasksByTime(tempTaskList);
+		listToString(tempTaskList, oss);
+
 	} else {
 		oss << "C\n" << ERROR_EMPTY_LIST;
 	}
@@ -281,6 +282,7 @@ void Logic::undoLastAction(std::ostringstream& oss) {
 	
 }
 
+//search done also?
 void Logic::searchList(std::string searchString, std::ostringstream& oss) {
 	std::vector<Task> tempList;
 	if (_listOfTasks.empty()) {

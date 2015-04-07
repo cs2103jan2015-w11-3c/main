@@ -30,7 +30,7 @@ public:
 
 	std::string executeCommand(std::string userInput);
 	std::string getCommand();
-	void makeTask(Task&);
+	void executeAdd(std::ostringstream&);
 
 	void addTask(Task, std::ostringstream&);
 	void displayList(std::string, std::ostringstream&);

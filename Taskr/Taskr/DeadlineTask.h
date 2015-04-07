@@ -25,8 +25,10 @@ public:
 	std::string toString();
 	std::string deadlineToString();
 	bool isLessThanTen(int);
-	int checkTodayDay();
-	int checkTodayMonth();
+	int checkDay();
+	int checkMonth();
+	int checkHour();
+	int checkMinute();
 
 	//std::string getDateString();
 	//std::string getTimeString();

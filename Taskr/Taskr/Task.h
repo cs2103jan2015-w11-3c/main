@@ -22,13 +22,16 @@ public:
 	~Task();
 	void setDescription(std::string description);
 	void setAsDone();
+	void setTaskType(int);
 	std::string getDescription();
 	bool isDone();
 	int getTaskType();
 	
 	virtual std::string toString();
-	virtual int checkTodayDay();
-	virtual int checkTodayMonth();
+	virtual int checkDay();
+	virtual int checkMonth();
+	virtual int checkHour();
+	virtual int checkMinute();
 
 	//virtual std::string getDateString();
 	//virtual std::string getTimeString();

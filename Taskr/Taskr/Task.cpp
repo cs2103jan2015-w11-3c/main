@@ -47,11 +47,23 @@ int Task::getTaskType() {
 	return _taskType;
 }
 
-int Task::checkTodayDay() {
+void Task::setTaskType(int taskType) {
+	_taskType = taskType;
+}
+
+int Task::checkDay() {
 	return -1;
 }
 
-int Task::checkTodayMonth() {
+int Task::checkMonth() {
+	return -1;
+}
+
+int Task::checkHour() {
+	return -1;
+}
+
+int Task::checkMinute() {
 	return -1;
 }
 

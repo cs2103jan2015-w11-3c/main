@@ -140,10 +140,18 @@ bool DeadlineTask::isLessThanTen(int value) {
 	return value < 10;
 }
 
-int DeadlineTask::checkTodayDay() {
+int DeadlineTask::checkDay() {
 	return getDueDateDay();
 }
 
-int DeadlineTask::checkTodayMonth() {
+int DeadlineTask::checkMonth() {
 	return getDueDateMonth();
+}
+
+int DeadlineTask::checkHour() {
+	return getDueTimeHour();
+}
+
+int DeadlineTask::checkMinute() {
+	return getDueTimeMinute();
 }

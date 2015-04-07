@@ -226,11 +226,18 @@ bool TimedTask::isLessThanTen(int value) {
 	return value < 10;
 }
 
-int TimedTask::checkTodayDay() {
+int TimedTask::checkDay() {
 	return getStartDateDay();
 }
 
-int TimedTask::checkTodayMonth() {
+int TimedTask::checkMonth() {
 	return getStartDateMonth();
 }
 
+int TimedTask::checkHour() {
+	return getStartTimeHour();
+}
+
+int TimedTask::checkMinute() {
+	return getStartTimeMinute();
+}
