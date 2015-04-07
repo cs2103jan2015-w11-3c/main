@@ -1,7 +1,8 @@
 #include "DateTime.h"
 
 const int DateTime::NEGATIVE_1 = -1;
-const int DateTime::ZERO_INDEX = 0;
+const int DateTime::INDEX_ZERO = 0;
+const std::string DateTime::TIME_DASH = "-";
 
 //date constants
 const std::string DateTime::JAN = "jan";
@@ -60,7 +61,7 @@ DateTime::~DateTime() {
 
 DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string> &TimeTokens) {
 	if(!isEmpty(DateTokens)) {
-		std::string temp = DateTokens[ZERO_INDEX];
+		std::string temp = DateTokens[INDEX_ZERO];
 		DateTokens.erase(DateTokens.begin());
 		int x = identifyDayMonth(temp);
 		if(x <= 11) {			//when user input is <day><month> or <month><day>
@@ -79,8 +80,26 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 	}
 	
 	if(!isEmpty(TimeTokens)) {
-		std::string temp = TimeTokens[ZERO_INDEX];			//if statement to ensure that both times are not in same token
+		std::string temp = TimeTokens[INDEX_ZERO];
+		TimeTokens.erase(TimeTokens.begin());
 
+		if(checkDash(temp)) {
+			std::string startTime = splitTime(temp);
+		}
+
+		else {
+			std::string time = extractTime(temp);
+			int timeLenth = time.length();
+			if(timeLenth == 1) {
+				_hour = convertDigits(temp);
+			}
+
+			else if(timeLenth == 3) {
+				int time = convertDigits(temp);
+				_hour = extractHour(time);
+				_minute = extractMinute(time);
+			}
+		}
 	}
 }
 
@@ -131,6 +150,62 @@ void DateTime::checkIfNextMonth() {			//check if tomorrow is first day of next m
 	if(_month == FEB_28DAYS && _day == 28) {
 		changeMonth();
 	}
+}
+
+bool DateTime::checkDash(std::string input) {		//ensure both times are not in same token
+	bool foundDash = false;
+	int x = findDash(input);
+	if(x != std::string::npos) {
+		foundDash = true;
+	}
+
+	return foundDash;
+}
+
+int DateTime::findDash(std::string input) {		//returns index of dash
+	int x = input.find(TIME_DASH);
+	return x;
+}
+
+std::string DateTime::splitTime(std::string &input) {
+	int dashIndex = findDash(input);
+	std::string startTime = input.substr(INDEX_ZERO, dashIndex - INDEX_ZERO- 1);
+	input.erase(INDEX_ZERO, dashIndex);
+}
+
+std::string DateTime::extractTime(std::string input) {
+	int index;
+	for(int i = 0; i < 3; i++) {
+		int x = input.find(DAY_MONTH[i]);
+		if(x != std::string::npos) {
+			index = i;
+			break;
+		}
+
+		std::string temp = input.substr(INDEX_ZERO, index - INDEX_ZERO);
+	}	
+}
+
+int DateTime::convertDigits(std::string input) {
+	std::istringstream iss(input);
+	int number;
+	iss >> number;
+	return number;
+}
+
+int DateTime::extractHour(int time) {
+	int hour = 0;
+	while(time/100 > 0) {
+		time = time/100;
+		hour++;
+	}
+
+	return hour;
+}
+
+int DateTime::extractMinute(int time) {
+	int minute = time%100;
+	return minute;
 }
 
 void DateTime::changeMonth() {

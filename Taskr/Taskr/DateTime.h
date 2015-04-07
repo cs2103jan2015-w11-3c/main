@@ -9,6 +9,8 @@
 class DateTime			
 	//assumes user input of dates: <day><month>
 	//assumes user input to be according to 12 hour clock format
+	//assumes user to input the date if start time and end time are on different days
+	//if non exact hour, need to separate different time i.e 515pm - 615pm (not 515-6pm)
 {
 private:
 	int _month;
@@ -19,7 +21,8 @@ private:
 public:
 	
 	static const int NEGATIVE_1;
-	static const int ZERO_INDEX;
+	static const int INDEX_ZERO;
+	static const std::string TIME_DASH;
 
 	//date strings
 	static const std::string JAN;
@@ -75,6 +78,13 @@ public:
 	void setLocalTime();
 	void checkIfNextMonth();
 	void changeMonth();
+	bool checkDash(std::string input);
+	int findDash(std::string input);
+	std::string splitTime(std::string &input);
+	std::string extractTime(std::string input);
+	int convertDigits(std::string input);
+	int extractHour(int time);
+	int extractMinute(int time);
 
 	//setters
 	void setMonth(int month);
