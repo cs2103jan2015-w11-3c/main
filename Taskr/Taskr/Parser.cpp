@@ -11,6 +11,7 @@ const std::string Parser::DONE = "done";
 const std::string Parser::EXIT = "exit";
 const std::string Parser::SEARCH = "search";
 const std::string Parser::UNDO = "undo";
+const std::string Parser::FILE = "file";
 
 const char Parser::WhiteSpace = ' ';
 const int Parser::Start_Index = 0;
@@ -89,7 +90,7 @@ std::string Parser::convertLowerCase(std::string input) {
 }
 
 void Parser::extractParameters() {
-	if(_command == ADD || _command == SEARCH || _command == DISPLAY) {
+	if(_command == ADD || _command == SEARCH || _command == DISPLAY || _command == FILE) {
 		setDescription();
 	}
 

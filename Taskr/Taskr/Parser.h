@@ -36,6 +36,7 @@ public:
 	static const std::string EXIT;
 	static const std::string SEARCH;
 	static const std::string UNDO;
+	static const std::string FILE;
 
 	static const char WhiteSpace;
 	static const int Start_Index;
