@@ -120,8 +120,8 @@ void Logic::executeAdd(std::ostringstream& oss) {
 		tempTimedTask.setTaskType(taskType);
 		tempTimedTask.setDescription(_parse.getDescription());
 
-		tempTimedTask.setStart(_parse.getStart);
-		tempTimedTask.setEnd(_parse.getEnd);
+		tempTimedTask.setStart(_parse.getStart());
+		tempTimedTask.setEnd(_parse.getEnd());
 /*
 		tempTimedTask.setStartTimeHour(_parse.getStartTimeHour);
 		tempTimedTask.setStartTimeMinute(_parse.getStartTimeMinute);
@@ -139,7 +139,7 @@ void Logic::executeAdd(std::ostringstream& oss) {
 		tempDeadlineTask.setTaskType(taskType);
 		tempDeadlineTask.setDescription(_parse.getDescription());
 
-		tempDeadlineTask.setDue(_parse.getEnd);
+		tempDeadlineTask.setDue(_parse.getEnd());
 /*
 		tempDeadlineTask.setDueTimeHour(_parse.getDueTimeHour);
 		tempDeadlineTask.setDueTimeMinute(_parse.getDueTimeMinute);
