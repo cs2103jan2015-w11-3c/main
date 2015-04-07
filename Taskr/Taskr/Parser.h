@@ -47,12 +47,14 @@ public:
 	std::string removeWhiteSpaces(std::string input);
 	void removeCommand();
 	void retrieveIndex();
+	void removeIndex();
 
 	std::string retrieveInfo(std::string input);
 	std::string convertLowerCase(std::string input);
 	void extractParameters();
 	void extractDateTimeTokens();
 	void assignDateTime(std::vector<std::string> DateTokens, std::vector<std::string> TimeTokens);
+	void compareDateTime();
 	
 	bool isTimedTask(std::string input, int &matchindex, int &foundIndex);
 	bool isDeadlineTask(std::string input, int &index, int &foundIndex);

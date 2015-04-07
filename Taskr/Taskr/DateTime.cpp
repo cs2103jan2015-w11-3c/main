@@ -1,6 +1,7 @@
 #include "DateTime.h"
 
 const int DateTime::NEGATIVE_1 = -1;
+const int DateTime::ZERO_INDEX = 0;
 
 //date strings
 const std::string DateTime::JAN = "jan";
@@ -55,28 +56,34 @@ DateTime::~DateTime() {
 
 DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string> &TimeTokens) {
 	if(!isEmpty(DateTokens)) {
-		
-		if(DateTokens.size() == 1) {		//means single date is due date
-			for(int i = 0; i < DateTokens.size(); i++) {
-				std::string temp = DateTokens[i];
-				int x = identifyDayMonth(temp);
-				if(x <= 11) {
-					_month = x;
-				}
-				else {
-					_day = x;
-				}
-			}
+		std::string temp = DateTokens[ZERO_INDEX];
+		DateTokens.erase(DateTokens.begin());
+		int x = identifyDayMonth(temp);
+		if(x <= 11) {
+			_month = x;
+			_day = identifyDayoftheMonth(temp);
 		}
 
-		else if(DateTokens.size() == 2) {	//means there is start date and end date
-
-			//input into start, then erase start from string, input into end
+		else if(x == 12) {
+			time_t currentTime;
+			struct tm localTime;
+			time(&currentTime);                   // Get the current time
+			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
+			_month = localTime.tm_mon;
+			_day = localTime.tm_mday;
 		}
+
+		else if(x == 13 || x == 14) {
+			//consider refactoring when x == 12
+			//consider when tomorrow is the next month
+		}
+	}
+	
+	if(!isEmpty(TimeTokens)) {
+		std::string temp = TimeTokens[ZERO_INDEX];			//if statement to ensure that both times are not in same token
 	}
 }
 
-//temp definition, Joseph to change
 int DateTime::identifyDayMonth(std::string input) {
 	int index;
 	for(int i = 0; i < 15; i++) {
@@ -90,6 +97,12 @@ int DateTime::identifyDayMonth(std::string input) {
 	return index;
 }
 
+int DateTime::identifyDayoftheMonth(std::string input) {
+	std::istringstream iss(input);
+	int day;
+	iss >> day;
+	return day;
+}
 
 bool DateTime::isEmpty(std::vector<std::string> tokens) {
 	return (tokens.empty());

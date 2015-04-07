@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <ctime>
+#include <sstream>
 
 class DateTime			
 	//assumes user input of dates: <day><month>
@@ -17,6 +19,7 @@ private:
 public:
 	
 	static const int NEGATIVE_1;
+	static const int ZERO_INDEX;
 
 	//date strings
 	static const std::string JAN;
@@ -63,6 +66,7 @@ public:
 
 	bool isEmpty(std::vector<std::string> tokens);
 	int identifyDayMonth(std::string input);
+	int identifyDayoftheMonth(std::string temp);
 	int retrieveMonth(std::string input);
 
 	//setters

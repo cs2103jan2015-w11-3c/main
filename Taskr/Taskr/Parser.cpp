@@ -101,6 +101,7 @@ void Parser::extractParameters() {
 
 	else if(_command == EDIT) {
 		setIndex();
+		removeIndex();
 		setDescription();
 	}
 }
@@ -109,9 +110,8 @@ void Parser::removeCommand() {
 	int x = _userInput.find(_command);
 	if(x != std::string::npos) {
 		int commandSize = _command.length();
-		_userInput.erase(Start_Index, commandSize);
+		_userInput.erase(x, commandSize);
 	}
-	
 }
 
 void Parser::setDescription() {
@@ -128,10 +128,14 @@ void Parser::setIndex() {
 }
 
 void Parser::retrieveIndex() {
-	std::istringstream iss(_userInput);
-	int temp;
-	iss >> temp;
+	int temp = _userInput[Start_Index];
 	_index = temp;
+
+}
+
+void Parser::removeIndex() {
+	_userInput.erase(Start_Index, 1);
+	trimStart(_userInput);
 }
 
 void Parser::extractDateTimeTokens() {
@@ -241,9 +245,22 @@ std::string Parser::extractTime(int TimeIndex, int foundIndex) {
 }
 
 void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std::string> TimeTokens) {
-	if(DateTokens.size() == 1) {
-		
+	if(DateTokens.size() == 1  || TimeTokens.size() == 1){
+		DateTime End(DateTokens, TimeTokens);
+		_end = End;
 	}
+
+	else if(DateTokens.size() == 2 || TimeTokens.size() == 2) {
+		DateTime End(DateTokens, TimeTokens);
+		DateTime Start(DateTokens, TimeTokens);
+		_end = End;
+		_start = Start;
+		compareDateTime();
+	}
+}
+
+void Parser::compareDateTime() {
+		
 }
 
 std::string Parser::getCommand() {
