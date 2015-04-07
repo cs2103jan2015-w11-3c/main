@@ -18,7 +18,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="DeadlineTask.cpp" />
+    <ClCompile Include="driver.cpp" />
     <ClCompile Include="FloatingTask.cpp" />
     <ClCompile Include="History.cpp" />
     <ClCompile Include="Logic.cpp" />

@@ -171,6 +171,8 @@ std::string DateTime::splitTime(std::string &input) {
 	int dashIndex = findDash(input);
 	std::string startTime = input.substr(INDEX_ZERO, dashIndex - INDEX_ZERO- 1);
 	input.erase(INDEX_ZERO, dashIndex);
+
+	return startTime;
 }
 
 std::string DateTime::extractTime(std::string input) {
@@ -181,9 +183,9 @@ std::string DateTime::extractTime(std::string input) {
 			index = i;
 			break;
 		}
-
-		std::string temp = input.substr(INDEX_ZERO, index - INDEX_ZERO);
 	}	
+	std::string temp = input.substr(INDEX_ZERO, index - INDEX_ZERO);
+	return temp;
 }
 
 int DateTime::convertDigits(std::string input) {
