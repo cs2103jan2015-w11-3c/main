@@ -22,6 +22,7 @@ void UI::processUserInput(){
 		std::string userInput = getUserInput();
 		feedback = _logic.executeCommand(userInput);
 		printConfirmationMessage(feedback);//will be replaced by printWholeString(feedback);
+		//printWholeString(feedback);
 	}
 }
 
@@ -39,17 +40,22 @@ void UI::printConfirmationMessage(std::string feedback) {
 void UI::printWholeString(std::string feedback){
 	std::vector<std::string> tokens;
     tokens = doSegment(feedback);
-    int number = getNumberOfTasks(tokens);
-    std::string date = getDate(tokens);
-    std::cout << "[ " << date << " ]=======================================================" << std::endl;
-    while (!tokens.empty()){
-        for (int i=1; i<=number; i++){
-            std::cout << i << ". ";
-            printSegment(tokens);
-            tokens = removePrinted(tokens);
-			setColour(7);
-        }
-    }
+	if (tokens[0] == "C"){
+		std::cout << tokens[1] << std::endl;
+	}
+	else{
+		int number = getNumberOfTasks(tokens);
+		std::string date = getDate(tokens);
+		std::cout << "[ " << date << " ]=======================================================" << std::endl;
+		while (!tokens.empty()){
+			for (int i=1; i<=number; i++){
+				std::cout << i << ". ";
+				printSegment(tokens);
+				tokens = removePrinted(tokens);
+				setColour(7);
+			}
+		}
+	}
 }
 
 
@@ -107,8 +113,8 @@ std::string UI::getDate(std::vector<std::string> tokens){
         date = tokens[4];
         return date;
     }
-    
-    return date;
+	else
+		return date;
 }
 
 //C:confirmation message
@@ -116,10 +122,7 @@ std::string UI::getDate(std::vector<std::string> tokens){
 //D:deadline tasks
 //T:timed tasks
 void UI::printSegment(std::vector<std::string> tokens){
-	if (tokens[0] == "C"){
-		std::cout << tokens[1] << std::endl;
-    }
-    else if (tokens[0] == "F"){
+	if (tokens[0] == "F"){
 		setColour(8);
         std::cout << "[unscheduled] " << std::setw(10);
 		setColour(3);
