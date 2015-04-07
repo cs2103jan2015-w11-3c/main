@@ -23,8 +23,8 @@ Parser::~Parser() {
 }
 
 Parser::Parser(std::string input) {
-	input = trimInput(input);
-	input = removeWhiteSpaces(input);
+	trimInput(input);
+	removeWhiteSpaces(input);
 	_userInput = input;
 	
 	std::string command = retrieveInfo(input);
@@ -35,32 +35,30 @@ Parser::Parser(std::string input) {
 	
 }
 
-std::string Parser::trimInput(std::string input) {
-	input = trimStart(input);
-	input = trimEnd(input);
-	return input;
+void Parser::trimInput(std::string &input) {
+	trimStart(input);
+	trimEnd(input);
+	
 }
 
-std::string Parser::trimStart(std::string input) {
+void Parser::trimStart(std::string &input) {
 	int StartInput = Start_Index;
 	while(input[StartInput] == WhiteSpace) {
 		StartInput++;
 	}
-	std::string temp = input; 
-	temp = input.substr(StartInput);
 
-	return input.substr(StartInput);
+	input = input.substr(StartInput);
 }
 
-std::string Parser::trimEnd(std::string input) {
+void Parser::trimEnd(std::string &input) {
 	int endInput = input.length();
 	while((endInput > 0) && input[endInput] == WhiteSpace) {
 		endInput--;
 	}
 
-	return input.substr(Start_Index, endInput);
+	input = input.substr(Start_Index, endInput);
 }
-std::string Parser::removeWhiteSpaces(std::string input) {   //to remove consecutive white spaces
+void Parser::removeWhiteSpaces(std::string &input) {   //to remove consecutive white spaces
 	int index;
 	int end = input.length();
 
@@ -70,8 +68,6 @@ std::string Parser::removeWhiteSpaces(std::string input) {   //to remove consecu
 			index--;
 		}
 	}
-
-	return input;
 }
 
 std::string Parser::retrieveInfo(std::string input) {
@@ -226,7 +222,7 @@ std::string Parser::extractDate(int DateIndex, int foundIndex) {
 	int dateEndIndex = DateIndex + dateStringSize - 1;
 
 	std::string dateToken = _description.substr(dateStartIndex, dateEndIndex);
-	_description.erase(dateStartIndex, dateEndIndex - dateStartIndex);
+	_description.erase(dateStartIndex, dateEndIndex - dateStartIndex);		//removes the token from description
 
 	return dateToken;
 }
@@ -243,6 +239,7 @@ std::string Parser::extractTime(int TimeIndex, int foundIndex) {
 		timeToken.erase(checkSpace, 1);
 	}
 
+	_description.erase(timeStartIndex, timeEndIndex - timeStartIndex);		//removes the token from description
 	return timeToken;
 }
 

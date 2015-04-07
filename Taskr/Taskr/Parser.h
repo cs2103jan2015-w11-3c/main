@@ -41,10 +41,10 @@ public:
 	static const int Start_Index;
 	static const std::string EMPTY_STRING;
 
-	std::string trimInput(std::string input);
-	std::string trimStart(std::string input);
-	std::string trimEnd(std::string input);
-	std::string removeWhiteSpaces(std::string input);
+	void trimInput(std::string &input);
+	void trimStart(std::string &input);
+	void trimEnd(std::string &input);
+	void removeWhiteSpaces(std::string &input);
 	void removeCommand();
 	void retrieveIndex();
 	void removeIndex();

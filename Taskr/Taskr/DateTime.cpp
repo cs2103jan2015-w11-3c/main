@@ -3,7 +3,7 @@
 const int DateTime::NEGATIVE_1 = -1;
 const int DateTime::ZERO_INDEX = 0;
 
-//date strings
+//date constants
 const std::string DateTime::JAN = "jan";
 const std::string DateTime::FEB = "feb";
 const std::string DateTime::MAR = "mar";
@@ -22,7 +22,11 @@ const std::string DateTime::TMR = "tmr";
 const std::string DateTime::DAY_MONTH[15] = 
 {JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, TODAY, TOMORROW, TMR};
 
-//time strings 
+const int DateTime::MONTHS_31DAYS[7] = {0,2,4,6,7,9,11};
+const int DateTime::MONTHS_30DAYS[5] = {3,5,8,10};
+const int DateTime::FEB_28DAYS = 1;
+
+//time constants 
 const std::string DateTime::PM = "pm";
 const std::string DateTime::AM = "am";
 const std::string DateTime::NOON = "noon";
@@ -59,28 +63,24 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 		std::string temp = DateTokens[ZERO_INDEX];
 		DateTokens.erase(DateTokens.begin());
 		int x = identifyDayMonth(temp);
-		if(x <= 11) {
+		if(x <= 11) {			//when user input is <day><month> or <month><day>
 			_month = x;
 			_day = identifyDayoftheMonth(temp);
 		}
 
-		else if(x == 12) {
-			time_t currentTime;
-			struct tm localTime;
-			time(&currentTime);                   // Get the current time
-			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
-			_month = localTime.tm_mon;
-			_day = localTime.tm_mday;
+		else if(x == 12) {		//when user input "today"
+			setLocalTime();
 		}
 
 		else if(x == 13 || x == 14) {
-			//consider refactoring when x == 12
-			//consider when tomorrow is the next month
+			setLocalTime();
+			checkIfNextMonth();
 		}
 	}
 	
 	if(!isEmpty(TimeTokens)) {
 		std::string temp = TimeTokens[ZERO_INDEX];			//if statement to ensure that both times are not in same token
+
 	}
 }
 
@@ -102,6 +102,40 @@ int DateTime::identifyDayoftheMonth(std::string input) {
 	int day;
 	iss >> day;
 	return day;
+}
+
+void DateTime::setLocalTime() {
+	time_t currentTime;
+	struct tm localTime;
+	time(&currentTime);                  
+	localtime_s(&localTime, &currentTime);
+	_month = localTime.tm_mon;
+	_day = localTime.tm_mday;
+	_hour = localTime.tm_hour;
+	
+}
+
+void DateTime::checkIfNextMonth() {			//check if tomorrow is first day of next month
+	for(int i = 0; i < 7; i++) {
+		if(_month == MONTHS_31DAYS[i] && _day == 31) {
+			changeMonth();
+		}
+	}
+
+	for(int j = 0; j < 4; j++) {
+		if(_month == MONTHS_30DAYS[j] && _day == 30) {
+			changeMonth();
+		}
+	}
+
+	if(_month == FEB_28DAYS && _day == 28) {
+		changeMonth();
+	}
+}
+
+void DateTime::changeMonth() {
+	_month += 1;
+	_day = 1;
 }
 
 bool DateTime::isEmpty(std::vector<std::string> tokens) {

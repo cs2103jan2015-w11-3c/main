@@ -38,8 +38,11 @@ public:
 	static const std::string TOMORROW;
 	static const std::string TMR;
 	static const std::string DAY_MONTH[15];
+	static const int MONTHS_31DAYS[7];
+	static const int MONTHS_30DAYS[5];
+	static const int FEB_28DAYS;
 
-	//time strings 
+	//time constants 
 	static const std::string PM;
 	static const std::string AM;
 	static const std::string NOON;
@@ -68,6 +71,10 @@ public:
 	int identifyDayMonth(std::string input);
 	int identifyDayoftheMonth(std::string temp);
 	int retrieveMonth(std::string input);
+
+	void setLocalTime();
+	void checkIfNextMonth();
+	void changeMonth();
 
 	//setters
 	void setMonth(int month);
