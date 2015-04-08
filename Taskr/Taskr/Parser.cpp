@@ -106,11 +106,8 @@ void Parser::extractParameters() {
 }
 
 void Parser::removeCommand() {
-	int x = _userInput.find(_command);
-	if(x != std::string::npos) {
-		int commandSize = _command.length();
-		_userInput.erase(x, commandSize);
-	}
+	int commandLength = _command.length();
+	_userInput = _userInput.substr(Start_Index, commandLength);
 }
 
 void Parser::setDescription() {
