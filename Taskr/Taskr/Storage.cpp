@@ -60,8 +60,8 @@ void Storage::setFilePath(std::string filepath) {
 //}
 
 
-vector<Task> Storage::getAllTasks() {
-	vector<Task> tasks;
+vector<Task*> Storage::getAllTasks() {
+	vector<Task*> tasks;
 	try {
 		json input = json::parse_file(_filename);
 		for (int i = 0; i < input.size(); i++) {
@@ -69,46 +69,46 @@ vector<Task> Storage::getAllTasks() {
 			int taskType = taskJson["task type"].as<int>();
 
 			if (taskType == 1) {
-				FloatingTask floatingTask;
-				floatingTask.setTaskType(taskJson["task type"].as<int>());
-				floatingTask.setDescription(taskJson["task description"].as<string>());
+				FloatingTask* floatingTask = new FloatingTask;
+				floatingTask->setTaskType(taskJson["task type"].as<int>());
+				floatingTask->setDescription(taskJson["task description"].as<string>());
 				if (taskJson["isDone"].as<bool>()) {
-					floatingTask.setAsDone();
+					floatingTask->setAsDone();
 				}
 
 				tasks.push_back(floatingTask);
 			}
 
 			if (taskType == 2) {
-				TimedTask timedTask;
-				timedTask.setTaskType(taskJson["task type"].as<int>());
-				timedTask.setDescription(taskJson["task description"].as<string>());
+				TimedTask* timedTask = new TimedTask;
+				timedTask->setTaskType(taskJson["task type"].as<int>());
+				timedTask->setDescription(taskJson["task description"].as<string>());
 				if (taskJson["isDone"].as<bool>()) {
-					timedTask.setAsDone();
+					timedTask->setAsDone();
 				}
-				timedTask.setStartDateMonth(taskJson["start date month"].as<int>());
-				timedTask.setStartDateDay(taskJson["start date day"].as<int>());
-				timedTask.setStartTimeHour(taskJson["start time hour"].as<int>());
-				timedTask.setStartTimeMinute(taskJson["start date minute"].as<int>());
-				timedTask.setEndDateMonth(taskJson["end date month"].as<int>());
-				timedTask.setEndDateMonth(taskJson["end date day"].as<int>());
-				timedTask.setEndDateMonth(taskJson["end time hour"].as<int>());
-				timedTask.setEndDateMonth(taskJson["end time minute"].as<int>());
+				timedTask->setStartDateMonth(taskJson["start date month"].as<int>());
+				timedTask->setStartDateDay(taskJson["start date day"].as<int>());
+				timedTask->setStartTimeHour(taskJson["start time hour"].as<int>());
+				timedTask->setStartTimeMinute(taskJson["start date minute"].as<int>());
+				timedTask->setEndDateMonth(taskJson["end date month"].as<int>());
+				timedTask->setEndDateMonth(taskJson["end date day"].as<int>());
+				timedTask->setEndDateMonth(taskJson["end time hour"].as<int>());
+				timedTask->setEndDateMonth(taskJson["end time minute"].as<int>());
 
 				tasks.push_back(timedTask);
 			}
 
 			if (taskType == 3) {
-				DeadlineTask deadlineTask;
-				deadlineTask.setTaskType(taskJson["task type"].as<int>());
-				deadlineTask.setDescription(taskJson["task description"].as<string>());
+				DeadlineTask* deadlineTask = new DeadlineTask;
+				deadlineTask->setTaskType(taskJson["task type"].as<int>());
+				deadlineTask->setDescription(taskJson["task description"].as<string>());
 				if (taskJson["isDone"].as<bool>()) {
-					deadlineTask.setAsDone();
+					deadlineTask->setAsDone();
 				}
-				deadlineTask.setDueDateMonth(taskJson["due date month"].as<int>());
-				deadlineTask.setDueDateDay(taskJson["due date day"].as<int>());
-				deadlineTask.setDueTimeHour(taskJson["due time hour"].as<int>());
-				deadlineTask.setDueTimeMinute(taskJson["due date minute"].as<int>());
+				deadlineTask->setDueDateMonth(taskJson["due date month"].as<int>());
+				deadlineTask->setDueDateDay(taskJson["due date day"].as<int>());
+				deadlineTask->setDueTimeHour(taskJson["due time hour"].as<int>());
+				deadlineTask->setDueTimeMinute(taskJson["due date minute"].as<int>());
 
 				tasks.push_back(deadlineTask);
 			}
@@ -125,38 +125,38 @@ vector<Task> Storage::getAllTasks() {
 
 
 
-void Storage::saveFile(vector<Task> listOfTasks) {
+void Storage::saveFile(vector<Task*> listOfTasks) {
 	json output(json::an_array);
 	for (int i = 0; i < listOfTasks.size(); i++) {
 		json taskJson;
-		if (listOfTasks[i].getTaskType() == 1) {   //floating tasks
-			taskJson["task type"] = listOfTasks[i].getTaskType();
-			taskJson["task description"] = listOfTasks[i].getDescription();
-			taskJson["isDone"] = listOfTasks[i].isDone();
+		if (listOfTasks[i]->getTaskType() == 1) {   //floating tasks
+			taskJson["task type"] = listOfTasks[i]->getTaskType();
+			taskJson["task description"] = listOfTasks[i]->getDescription();
+			taskJson["isDone"] = listOfTasks[i]->isDone();
 		}
 
-		if (listOfTasks[i].getTaskType() == 2) {   //timed tasks
-			taskJson["task type"] = listOfTasks[i].getTaskType();
-			taskJson["task description"] = listOfTasks[i].getDescription();
-			taskJson["isDone"] = listOfTasks[i].isDone();
-			taskJson["start date month"] = listOfTasks[i].getStartDateMonth();
-			taskJson["start date day"] = listOfTasks[i].getStartDateDay();
-			taskJson["start time hour"] = listOfTasks[i].getStartTimeHour();
-			taskJson["start time minute"] = listOfTasks[i].getStartTimeMinute();
-			taskJson["end date month"] = listOfTasks[i].getEndDateMonth();
-			taskJson["end date day"] = listOfTasks[i].getEndDateDay();
-			taskJson["end time hour"] = listOfTasks[i].getEndTimeHour();
-			taskJson["end time minute"] = listOfTasks[i].getEndTimeMinute();
+		if (listOfTasks[i]->getTaskType() == 2) {   //timed tasks
+			taskJson["task type"] = listOfTasks[i]->getTaskType();
+			taskJson["task description"] = listOfTasks[i]->getDescription();
+			taskJson["isDone"] = listOfTasks[i]->isDone();
+			taskJson["start date month"] = listOfTasks[i]->getStartDateMonth();
+			taskJson["start date day"] = listOfTasks[i]->getStartDateDay();
+			taskJson["start time hour"] = listOfTasks[i]->getStartTimeHour();
+			taskJson["start time minute"] = listOfTasks[i]->getStartTimeMinute();
+			taskJson["end date month"] = listOfTasks[i]->getEndDateMonth();
+			taskJson["end date day"] = listOfTasks[i]->getEndDateDay();
+			taskJson["end time hour"] = listOfTasks[i]->getEndTimeHour();
+			taskJson["end time minute"] = listOfTasks[i]->getEndTimeMinute();
 		}
 
-		if (listOfTasks[i].getTaskType() == 3) {   //deadline tasks
-			taskJson["task type"] = listOfTasks[i].getTaskType();
-			taskJson["task description"] = listOfTasks[i].getDescription();
-			taskJson["isDone"] = listOfTasks[i].isDone();
-			taskJson["due date month"] = listOfTasks[i].getDueDateMonth();
-			taskJson["due date day"] = listOfTasks[i].getDueDateDay();
-			taskJson["due time hour"] = listOfTasks[i].getDueTimeHour();
-			taskJson["due time minute"] = listOfTasks[i].getDueTimeMinute();
+		if (listOfTasks[i]->getTaskType() == 3) {   //deadline tasks
+			taskJson["task type"] = listOfTasks[i]->getTaskType();
+			taskJson["task description"] = listOfTasks[i]->getDescription();
+			taskJson["isDone"] = listOfTasks[i]->isDone();
+			taskJson["due date month"] = listOfTasks[i]->getDueDateMonth();
+			taskJson["due date day"] = listOfTasks[i]->getDueDateDay();
+			taskJson["due time hour"] = listOfTasks[i]->getDueTimeHour();
+			taskJson["due time minute"] = listOfTasks[i]->getDueTimeMinute();
 		}
 		output.add(taskJson);
 	}

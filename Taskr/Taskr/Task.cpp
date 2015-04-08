@@ -28,11 +28,11 @@ bool Task::isDone() {
 }
 
 std::string Task::toString() {
-	std::ostringstream oss;
-	oss << getDescription();
-	return oss.str();
+	//std::ostringstream oss;
+	//oss << getDescription();
+	//return oss.str();
 	//to implement after polymorphism
-	//return "";
+	return "";
 }
 
 //std::string Task::getDateString() {
