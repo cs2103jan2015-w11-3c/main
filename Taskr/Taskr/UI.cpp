@@ -14,15 +14,17 @@ UI::~UI() {
 
 
 void UI::processUserInput(){
-	std::cout << MESSAGE_WELCOME << std::endl;//printWelcome()
+	//std::cout << MESSAGE_WELCOME << std::endl;
+	printWelcome();
 	_logic.initializeListOfTasks();
 	std::string feedback;
 	while (feedback != "exit") {
 		std::cout << "command: ";
 		std::string userInput = getUserInput();
 		feedback = _logic.executeCommand(userInput);
-		//printConfirmationMessage(feedback);//will be replaced by printWholeString(feedback);
-		printWholeString(feedback);
+		if (feedback!="exit"){
+			printWholeString(feedback);
+		}
 	}
 }
 
@@ -32,16 +34,21 @@ std::string UI::getUserInput(){
 	return userInput;
 }
 
-//will be replaced by print(std::string feedback)
+/*
 void UI::printConfirmationMessage(std::string feedback) {
 	std::cout << feedback << std::endl;
 }
+*/
 
 void UI::printWholeString(std::string feedback){
 	std::vector<std::string> tokens;
+	//std::string buffer;
+	//std::vector<std::string> temp;
     tokens = doSegment(feedback);
 	if (tokens[0] == "C"){
 		std::cout << tokens[1] << std::endl;
+		//buffer += tokens[1];
+		//temp.push_back(buffer);
 	}
 	else{
 		int number = getNumberOfTasks(tokens);
@@ -77,6 +84,7 @@ std::vector<std::string> UI::doSegment(std::string feedback)
             tokens.push_back(line);
         }
     }
+	tokens.pop_back();
     return tokens;
 }
 
@@ -124,20 +132,20 @@ std::string UI::getDate(std::vector<std::string> tokens){
 void UI::printSegment(std::vector<std::string> tokens){
 	if (tokens[0] == "F"){
 		setColour(8);
-        std::cout << "[unscheduled] " << std::setw(10);
+        std::cout <<"[ unscheduled ] ";
 		setColour(3);
 		std::cout << tokens[1] << std::endl;
     }
     else if (tokens[0] == "D"){
 		setColour(8);
-        std::cout << "[ by " << tokens[3] << "   ] " << std::setw(10);
-		setColour(3);
+        std::cout << "[ by " << std::left << std::setw(9) << tokens[3] << "] ";
+		setColour(13);
 		std::cout << tokens[1] << std::endl;
     }
     else if (tokens[0] == "T"){
 		setColour(8);
-        std::cout << "[" << tokens[3] << "-" << tokens[5] << "] " << std::setw(10);
-		setColour(3);
+		std::cout << "[" << std::right << std::setw(6) << tokens[3] << "-" << std::left << std::setw(6) << tokens[5] << "] ";
+		setColour(6);
 		std::cout << tokens[1] << std::endl;
     }
 	//setColour(7);
