@@ -20,7 +20,7 @@ private:
 	Parser _parse;
 	History _history;
 	Storage _store;
-	std::vector<Task> _listOfTasks;
+	std::vector<Task*> _listOfTasks;
 	std::string _confirmationMessage;
 	int _doneTasksCount;
 
@@ -32,10 +32,10 @@ public:
 	std::string getCommand();
 	void executeAdd(std::ostringstream&);
 
-	void addTask(Task, std::ostringstream&);
+	void addTask(Task*, std::ostringstream&);
 	void displayList(std::string, std::ostringstream&);
 	void deleteTask(int, std::ostringstream&);
-	void editTask(int, Task, std::ostringstream&);
+	void editTask(int, Task*, std::ostringstream&);
 	void setDone(int, std::ostringstream&);
 	void undoLastAction(std::ostringstream&);
 	void searchList(std::string, std::ostringstream&);
@@ -43,13 +43,13 @@ public:
 
 	void initializeListOfTasks();
 	bool isValidIndex(int);
-	bool isRepeated(Task);
+	bool isRepeated(Task*);
 	bool isActionConfirmed();
 	void sortDoneTasks();
-	void listToString(std::vector<Task>, std::ostringstream&);
-	void sortTasksByTime(std::vector<Task>&);
-	bool checkTiming(Task, Task);
-	void swapTasks(Task&, Task&);
+	void listToString(std::vector<Task*>, std::ostringstream&);
+	void sortTasksByTime(std::vector<Task*>);
+	bool checkTiming(Task*, Task*);
+	void swapTasks(Task*, Task*);
 
 	static const std::string MESSAGE_ADDED;
 	static const std::string MESSAGE_DELETED;

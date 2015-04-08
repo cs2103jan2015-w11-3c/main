@@ -10,7 +10,7 @@ History::~History() {
 
 
 void History::_deleteOldestState() {
-	std::queue< std::vector<Task> > tempQueue;
+	std::queue< std::vector<Task*> > tempQueue;
 
 	while (!_lastThreeStates.empty()) {
 		tempQueue.push(_lastThreeStates.top());
@@ -28,7 +28,7 @@ void History::_deleteOldestState() {
 }
 
 
-void History::saveState(std::vector<Task> listOfTasks) {
+void History::saveState(std::vector<Task*> listOfTasks) {
 	if (_lastThreeStates.size() == 3) {
 		_deleteOldestState();
 		_lastThreeStates.push(listOfTasks);
@@ -38,8 +38,8 @@ void History::saveState(std::vector<Task> listOfTasks) {
 }
 
 
-std::vector<Task> History::popLastState() {
-	std::vector<Task> lastState = _lastThreeStates.top();
+std::vector<Task*> History::popLastState() {
+	std::vector<Task*> lastState = _lastThreeStates.top();
 	_lastThreeStates.pop();
 	return lastState;
 }

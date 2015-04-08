@@ -21,8 +21,8 @@ void UI::processUserInput(){
 		std::cout << "command: ";
 		std::string userInput = getUserInput();
 		feedback = _logic.executeCommand(userInput);
-		printConfirmationMessage(feedback);//will be replaced by printWholeString(feedback);
-		//printWholeString(feedback);
+		//printConfirmationMessage(feedback);//will be replaced by printWholeString(feedback);
+		printWholeString(feedback);
 	}
 }
 

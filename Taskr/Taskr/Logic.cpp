@@ -58,10 +58,10 @@ std::string Logic::executeCommand(std::string userInput) {
 			displayList(parameter, oss);
 		}
 		else if (command == "edit") {
-			Task tempTask;
+			Task* tempTask = new Task;
 			int indexToEdit;
 			indexToEdit = _parse.getIndex();
-			tempTask.setDescription(_parse.getDescription());
+			tempTask->setDescription(_parse.getDescription());
 			editTask(indexToEdit, tempTask, oss);
 		}
 		else if (command == "done") {
@@ -98,7 +98,7 @@ std::string Logic::getCommand() {
 void Logic::initializeListOfTasks() {
 	_listOfTasks = _store.getAllTasks();
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-		if (_listOfTasks[i].isDone()) {
+		if (_listOfTasks[i]->isDone()) {
 			_doneTasksCount++;
 		}
 	}
@@ -109,19 +109,19 @@ void Logic::executeAdd(std::ostringstream& oss) {
 	int taskType = _parse.getTaskType();
 
 	if (taskType == FLOATING_TASK) {
-		FloatingTask tempFloatTask;
-		tempFloatTask.setTaskType(taskType);
-		tempFloatTask.setDescription(_parse.getDescription());
+		FloatingTask* tempFloatTask = new FloatingTask;
+		tempFloatTask->setTaskType(taskType);
+		tempFloatTask->setDescription(_parse.getDescription());
 
 		addTask(tempFloatTask, oss);
 
 	} else if (taskType == TIMED_TASK) {
-		TimedTask tempTimedTask;
-		tempTimedTask.setTaskType(taskType);
-		tempTimedTask.setDescription(_parse.getDescription());
+		TimedTask* tempTimedTask = new TimedTask;
+		tempTimedTask->setTaskType(taskType);
+		tempTimedTask->setDescription(_parse.getDescription());
 
-		tempTimedTask.setStart(_parse.getStart());
-		tempTimedTask.setEnd(_parse.getEnd());
+		tempTimedTask->setStart(_parse.getStart());
+		tempTimedTask->setEnd(_parse.getEnd());
 /*
 		tempTimedTask.setStartTimeHour(_parse.getStartTimeHour);
 		tempTimedTask.setStartTimeMinute(_parse.getStartTimeMinute);
@@ -135,11 +135,11 @@ void Logic::executeAdd(std::ostringstream& oss) {
 		addTask(tempTimedTask, oss);
 
 	} else if (taskType == DEADLINE_TASK) {
-		DeadlineTask tempDeadlineTask;
-		tempDeadlineTask.setTaskType(taskType);
-		tempDeadlineTask.setDescription(_parse.getDescription());
+		DeadlineTask* tempDeadlineTask = new DeadlineTask;
+		tempDeadlineTask->setTaskType(taskType);
+		tempDeadlineTask->setDescription(_parse.getDescription());
 
-		tempDeadlineTask.setDue(_parse.getEnd());
+		tempDeadlineTask->setDue(_parse.getEnd());
 /*
 		tempDeadlineTask.setDueTimeHour(_parse.getDueTimeHour);
 		tempDeadlineTask.setDueTimeMinute(_parse.getDueTimeMinute);
@@ -152,33 +152,31 @@ void Logic::executeAdd(std::ostringstream& oss) {
 	}
 }
 
-void Logic::addTask(Task tempTask, std::ostringstream& oss) {
+void Logic::addTask(Task* tempTask, std::ostringstream& oss) {
 	oss << "C\n";
 	if (isRepeated(tempTask)) {
 		oss << ERROR_REPEATED_TASK;
-	} else if (tempTask.getDescription() == "") {
+	} else if (tempTask->getDescription() == "") {
 		oss << ERROR_INVALID_DESCRIPTION;
 	} else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
-
-		//must change implementation of saveFile in storage. basically need to accomodate the multiple kinds of tasks.
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << tempTask.getDescription() << "\"" << MESSAGE_ADDED;
+		oss << "\"" << tempTask->getDescription() << "\"" << MESSAGE_ADDED;
 	}
 }
 
-void Logic::editTask(int index, Task task, std::ostringstream& oss) {
+void Logic::editTask(int index, Task* task, std::ostringstream& oss) {
 	oss << "C\n";
 	if (!isValidIndex(index)) {
 		oss << index << ERROR_INDEX_OUT_OF_RANGE;
-	} else if (task.getDescription() == "") {
+	} else if (task->getDescription() == "") {
 		oss << ERROR_INVALID_DESCRIPTION;
 	} else {
 		std::string oldTaskDescription;
 		std::string newTaskDescription;
-		oldTaskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
-		newTaskDescription = task.getDescription();
+		oldTaskDescription = _listOfTasks[index + _doneTasksCount - 1]->getDescription();
+		newTaskDescription = task->getDescription();
 		_history.saveState(_listOfTasks);
 		_listOfTasks[index + _doneTasksCount - 1] = task;
 		_store.saveFile(_listOfTasks);
@@ -188,11 +186,11 @@ void Logic::editTask(int index, Task task, std::ostringstream& oss) {
 
 void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 	if (!_listOfTasks.empty()) {
-		std::vector<Task> tempTaskList;
+		std::vector<Task*> tempTaskList;
 		if (parameter == "done") {
 			std::vector<Task> doneTasks;
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-				if (_listOfTasks[i].isDone()) {
+				if (_listOfTasks[i]->isDone()) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
@@ -204,20 +202,20 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
 
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-				//if (!(_listOfTasks[i].isDone()) && ((_listOfTasks[i].getTaskType()) == 1)) {
+				//if (!(_listOfTasks[i]->isDone()) && ((_listOfTasks[i]->getTaskType()) == 1)) {
 				//	tempTaskList.push_back(_listOfTasks[i]);
 				//}
-				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 2 && _listOfTasks[i].checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkDay() == localTime.tm_mday) {
+				if (!(_listOfTasks[i]->isDone()) && _listOfTasks[i]->getTaskType() == 2 && _listOfTasks[i]->checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i]->checkDay() == localTime.tm_mday) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
-				if (!(_listOfTasks[i].isDone()) && _listOfTasks[i].getTaskType() == 3 && _listOfTasks[i].checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i].checkDay() == localTime.tm_mday) {
+				if (!(_listOfTasks[i]->isDone()) && _listOfTasks[i]->getTaskType() == 3 && _listOfTasks[i]->checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i]->checkDay() == localTime.tm_mday) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
 
 		} else {
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-				if (!(_listOfTasks[i].isDone())) {
+				if (!(_listOfTasks[i]->isDone())) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
@@ -236,7 +234,7 @@ void Logic::deleteTask(int index, std::ostringstream& oss) {
 	oss << "C\n";
 	if (isValidIndex(index)) {
 		std::string taskDescription;
-		taskDescription = _listOfTasks[_doneTasksCount + index - 1].getDescription();
+		taskDescription = _listOfTasks[_doneTasksCount + index - 1]->getDescription();
 		_history.saveState(_listOfTasks);
 		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + index - 1);
 		_store.saveFile(_listOfTasks);
@@ -251,9 +249,9 @@ void Logic::setDone(int index, std::ostringstream& oss) {
 	oss << "C\n";
 	if (isValidIndex(index)) {
 		std::string taskDescription;
-		taskDescription = _listOfTasks[index + _doneTasksCount - 1].getDescription();
+		taskDescription = _listOfTasks[index + _doneTasksCount - 1]->getDescription();
 		_history.saveState(_listOfTasks);
-		_listOfTasks[index + _doneTasksCount - 1].setAsDone();
+		_listOfTasks[index + _doneTasksCount - 1]->setAsDone();
 		_doneTasksCount++;
 		sortDoneTasks();
 		_store.saveFile(_listOfTasks);
@@ -284,13 +282,13 @@ void Logic::undoLastAction(std::ostringstream& oss) {
 
 //search done also?
 void Logic::searchList(std::string searchString, std::ostringstream& oss) {
-	std::vector<Task> tempList;
+	std::vector<Task*> tempList;
 	if (_listOfTasks.empty()) {
 		oss << "C\n" << ERROR_EMPTY_LIST;
 	} else {
-		for (std::vector<Task>::iterator iter = _listOfTasks.begin(); iter != _listOfTasks.end(); iter++) {
+		for (std::vector<Task*>::iterator iter = _listOfTasks.begin(); iter != _listOfTasks.end(); iter++) {
 			std::size_t found;
-			found = iter->getDescription().find(searchString);
+			found = (*iter)->getDescription().find(searchString);
 			if (found != std::string::npos) {
 				tempList.push_back(*iter);
 			}
@@ -327,9 +325,9 @@ bool Logic::isValidIndex(int index) {
 	return index > 0 && index <= (unsigned)(_listOfTasks.size() - _doneTasksCount);
 }
 
-bool Logic::isRepeated(Task task) {
+bool Logic::isRepeated(Task* task) {
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-		if (task.getDescription() == _listOfTasks[i].getDescription()) {
+		if (task->getDescription() == _listOfTasks[i]->getDescription()) {
 			return true;
 		}
 	}
@@ -337,24 +335,24 @@ bool Logic::isRepeated(Task task) {
 }
 
 void Logic::sortDoneTasks() {
-	std::vector<Task> sortedDoneTaskList;
+	std::vector<Task*> sortedDoneTaskList;
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-		if (_listOfTasks[i].isDone()) {
+		if (_listOfTasks[i]->isDone()) {
 			sortedDoneTaskList.push_back(_listOfTasks[i]);
 		}
 	}
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-		if (!(_listOfTasks[i].isDone())) {
+		if (!(_listOfTasks[i]->isDone())) {
 			sortedDoneTaskList.push_back(_listOfTasks[i]);
 		}
 	}
 	_listOfTasks = sortedDoneTaskList;
 }
 
-void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss) {
+void Logic::listToString(std::vector<Task*> listOfTasks, std::ostringstream& oss) {
 	int displayIndex = 1;
 	for (unsigned int i = 0; i < listOfTasks.size(); i++) {
-		oss << listOfTasks[i].toString() << std::endl;
+		oss << listOfTasks[i]->toString() << std::endl;
 		//if (!(listOfTasks[i].isDone())) {
 		//	oss << displayIndex++ << ". " << listOfTasks[i].toString() << std::endl;
 		//}
@@ -367,7 +365,7 @@ void Logic::listToString(std::vector<Task> listOfTasks, std::ostringstream& oss)
 //implement using if else blocks based ont _taskType of Task object, create a new vector<Task>,
 //push_back earliest timed to latest timed, followed by earliest deadline to latest deadline, 
 //followed by floating tasks. equate new vector<Task> to listOfTasks.
-void Logic::sortTasksByTime(std::vector<Task>& listOfTasks) {
+void Logic::sortTasksByTime(std::vector<Task*> listOfTasks) {
 	for (int i = 0; i < (listOfTasks.size() - 1); i++) {
 		int minIndex = i;
 		for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
@@ -382,19 +380,19 @@ void Logic::sortTasksByTime(std::vector<Task>& listOfTasks) {
 }
 
 
-bool Logic::checkTiming(Task taskA, Task taskB) {
-	if (taskA.checkMonth() < taskB.checkMonth()) {
+bool Logic::checkTiming(Task* taskA, Task* taskB) {
+	if (taskA->checkMonth() < taskB->checkMonth()) {
 		return true;
-	} else if (taskA.checkMonth() == taskB.checkMonth()) {
-		if (taskA.checkDay() < taskB.checkDay()) {
+	} else if (taskA->checkMonth() == taskB->checkMonth()) {
+		if (taskA->checkDay() < taskB->checkDay()) {
 			return true;
-		} else if (taskA.checkDay() == taskB.checkDay()) {
-			if (taskA.checkHour() < taskB.checkHour()) {
+		} else if (taskA->checkDay() == taskB->checkDay()) {
+			if (taskA->checkHour() < taskB->checkHour()) {
 				return true;
-			} else if (taskA.checkHour() == taskB.checkHour()) {
-				if (taskA.checkMinute() < taskB.checkMinute()) {
+			} else if (taskA->checkHour() == taskB->checkHour()) {
+				if (taskA->checkMinute() < taskB->checkMinute()) {
 					return true;
-				} else if (taskA.checkMinute() == taskB.checkMinute()) {
+				} else if (taskA->checkMinute() == taskB->checkMinute()) {
 					return false;
 				}
 			}
@@ -404,8 +402,8 @@ bool Logic::checkTiming(Task taskA, Task taskB) {
 }
 
 
-void Logic::swapTasks(Task& taskA, Task& taskB) {
-	Task temp = taskA;
+void Logic::swapTasks(Task* taskA, Task* taskB) {
+	Task* temp = taskA;
 	taskA = taskB;
 	taskB = temp;
 }

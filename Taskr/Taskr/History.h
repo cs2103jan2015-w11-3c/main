@@ -10,15 +10,15 @@
 
 class History {
 private:
-	std::stack< std::vector<Task> > _lastThreeStates;
+	std::stack< std::vector<Task*> > _lastThreeStates;
 	void _deleteOldestState();
 
 public:
 	History();
 	~History();
 
-	void saveState(std::vector<Task>);
-	std::vector<Task> popLastState();
+	void saveState(std::vector<Task*>);
+	std::vector<Task*> popLastState();
 	bool isEmpty();
 
 };
