@@ -33,10 +33,10 @@ public:
 	void executeAdd(std::ostringstream&);
 
 	void addTask(Task*, std::ostringstream&);
-	void displayList(std::string, std::ostringstream&);
-	void deleteTask(int, std::ostringstream&);
+	void displayList(std::ostringstream&);
+	void deleteTask(std::ostringstream&);
 	void editTask(int, Task*, std::ostringstream&);
-	void setDone(int, std::ostringstream&);
+	void setDone(std::ostringstream&);
 	void undoLastAction(std::ostringstream&);
 	void searchList(std::string, std::ostringstream&);
 	void changeFilePath(std::string, std::ostringstream&);

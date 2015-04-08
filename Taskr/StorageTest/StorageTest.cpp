@@ -11,7 +11,7 @@ namespace StorageTest
 		
 		TEST_METHOD(getAllTasksTest) {
 			Storage testtask1, testtask2, testtask3;
-			vector<Task*> testtask;
+			std::vector<Task*> testtask;
 
 
 

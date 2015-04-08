@@ -41,44 +41,26 @@ std::string Logic::executeCommand(std::string userInput) {
 	if (command != "exit") {
 
 		if (command == "add") {
-			//implementing polymorphism of Tasks
 			executeAdd(oss);
-			//Task tempTask;
-			//tempTask.setDescription(_parse.getDescription());
-			//addTask(tempTask, oss);
-		}
-		else if (command == "delete") {
-			int indexToDelete;
-			indexToDelete = _parse.getIndex();
-			deleteTask(indexToDelete, oss);
-		}
-		else if (command == "display") {
-			std::string parameter;
-			parameter = _parse.getDescription();
-			displayList(parameter, oss);
-		}
-		else if (command == "edit") {
+		} else if (command == "delete") {
+			deleteTask(oss);
+		} else if (command == "display") {
+			displayList(oss);
+		} else if (command == "edit") {		//BIG LOGIC PROBLEM HERE.
 			Task* tempTask = new Task;
 			int indexToEdit;
 			indexToEdit = _parse.getIndex();
 			tempTask->setDescription(_parse.getDescription());
 			editTask(indexToEdit, tempTask, oss);
-		}
-		else if (command == "done") {
-			int indexToSet;
-			indexToSet = _parse.getIndex();
-			setDone(indexToSet, oss);
-		}
-		else if (command == "undo") {
+		} else if (command == "done") {
+			setDone(oss);
+		} else if (command == "undo") {
 			undoLastAction(oss);
-		}
-		else if (command == "search") {
+		} else if (command == "search") {
 			searchList(_parse.getDescription(), oss);
-		}
-		else if (command == "file") {
+		} else if (command == "file") {
 			changeFilePath(_parse.getDescription(), oss);
-		}
-		else {
+		} else {
 			oss << "C\n" << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
 		oss << std::endl;
@@ -104,7 +86,6 @@ void Logic::initializeListOfTasks() {
 	}
 }
 
-//POLYMORPHISM OF TASKS
 void Logic::executeAdd(std::ostringstream& oss) {
 	int taskType = _parse.getTaskType();
 
@@ -184,9 +165,13 @@ void Logic::editTask(int index, Task* task, std::ostringstream& oss) {
 	}
 }
 
-void Logic::displayList(std::string parameter, std::ostringstream& oss) {
+void Logic::displayList(std::ostringstream& oss) {
+	std::string parameter;
+	parameter = _parse.getDescription();
 	if (!_listOfTasks.empty()) {
 		std::vector<Task*> tempTaskList;
+		
+		//display all done tasks
 		if (parameter == "done") {
 			std::vector<Task> doneTasks;
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
@@ -194,7 +179,7 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
-
+		//display all tasks for today	
 		} else if (parameter == "today") {
 			time_t currentTime;
 			struct tm localTime;
@@ -202,9 +187,6 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
 
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-				//if (!(_listOfTasks[i]->isDone()) && ((_listOfTasks[i]->getTaskType()) == 1)) {
-				//	tempTaskList.push_back(_listOfTasks[i]);
-				//}
 				if (!(_listOfTasks[i]->isDone()) && _listOfTasks[i]->getTaskType() == 2 && _listOfTasks[i]->checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i]->checkDay() == localTime.tm_mday) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
@@ -212,7 +194,7 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
-
+		//display all undone tasks
 		} else {
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 				if (!(_listOfTasks[i]->isDone())) {
@@ -230,35 +212,39 @@ void Logic::displayList(std::string parameter, std::ostringstream& oss) {
 }
 
 
-void Logic::deleteTask(int index, std::ostringstream& oss) {
+void Logic::deleteTask(std::ostringstream& oss) {
+	int indexToDelete;
+	indexToDelete = _parse.getIndex();
 	oss << "C\n";
-	if (isValidIndex(index)) {
+	if (isValidIndex(indexToDelete)) {
 		std::string taskDescription;
-		taskDescription = _listOfTasks[_doneTasksCount + index - 1]->getDescription();
+		taskDescription = _listOfTasks[_doneTasksCount + indexToDelete - 1]->getDescription();
 		_history.saveState(_listOfTasks);
-		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + index - 1);
+		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + indexToDelete - 1);
 		_store.saveFile(_listOfTasks);
 		oss << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
 	}
 	else {
-		oss << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << indexToDelete << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
-void Logic::setDone(int index, std::ostringstream& oss) {
+void Logic::setDone(std::ostringstream& oss) {
+	int indexToSet;
+	indexToSet = _parse.getIndex();
 	oss << "C\n";
-	if (isValidIndex(index)) {
+	if (isValidIndex(indexToSet)) {
 		std::string taskDescription;
-		taskDescription = _listOfTasks[index + _doneTasksCount - 1]->getDescription();
+		taskDescription = _listOfTasks[indexToSet + _doneTasksCount - 1]->getDescription();
 		_history.saveState(_listOfTasks);
-		_listOfTasks[index + _doneTasksCount - 1]->setAsDone();
+		_listOfTasks[indexToSet + _doneTasksCount - 1]->setAsDone();
 		_doneTasksCount++;
 		sortDoneTasks();
 		_store.saveFile(_listOfTasks);
 		oss << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
 	}
 	else {
-		oss << index << ERROR_INDEX_OUT_OF_RANGE;
+		oss << indexToSet << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
@@ -267,17 +253,14 @@ void Logic::undoLastAction(std::ostringstream& oss) {
 	if (isActionConfirmed()) {
 		if (_history.isEmpty()) {
 			oss << ERROR_NOTHING_TO_UNDO;
-		}
-		else {
+		} else {
 			_listOfTasks = _history.popLastState();
 			_store.saveFile(_listOfTasks);
 			oss << MESSAGE_UNDO;
 		}
-	}
-	else {
+	} else {
 		oss << MESSAGE_OPERATION_NOT_EXECUTED;
 	}
-	
 }
 
 //search done also?
@@ -353,9 +336,6 @@ void Logic::listToString(std::vector<Task*> listOfTasks, std::ostringstream& oss
 	int displayIndex = 1;
 	for (unsigned int i = 0; i < listOfTasks.size(); i++) {
 		oss << listOfTasks[i]->toString() << std::endl;
-		//if (!(listOfTasks[i].isDone())) {
-		//	oss << displayIndex++ << ". " << listOfTasks[i].toString() << std::endl;
-		//}
 	}
 }
 
@@ -379,7 +359,6 @@ void Logic::sortTasksByTime(std::vector<Task*> listOfTasks) {
 	}
 }
 
-
 bool Logic::checkTiming(Task* taskA, Task* taskB) {
 	if (taskA->checkMonth() < taskB->checkMonth()) {
 		return true;
@@ -400,7 +379,6 @@ bool Logic::checkTiming(Task* taskA, Task* taskB) {
 	}	
 	return false;
 }
-
 
 void Logic::swapTasks(Task* taskA, Task* taskB) {
 	Task* temp = taskA;
