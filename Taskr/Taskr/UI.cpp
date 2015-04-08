@@ -42,29 +42,48 @@ void UI::printConfirmationMessage(std::string feedback) {
 
 void UI::printWholeString(std::string feedback){
 	std::vector<std::string> tokens;
-	//std::string buffer;
-	//std::vector<std::string> temp;
     tokens = doSegment(feedback);
 	if (tokens[0] == "C"){
 		std::cout << tokens[1] << std::endl;
-		//buffer += tokens[1];
-		//temp.push_back(buffer);
-	}
-	else{
+	}else{
 		int number = getNumberOfTasks(tokens);
 		std::string date = getDate(tokens);
-		std::cout << "[ " << date << " ]=======================================================" << std::endl;
+		printDate(date);
 		while (!tokens.empty()){
 			for (int i=1; i<=number; i++){
-				std::cout << i << ". ";
-				printSegment(tokens);
-				tokens = removePrinted(tokens);
-				setColour(7);
+				if ((tokens[0] == "D" && tokens[2] == date)||
+					(tokens[0] == "T" && tokens[4] == date)||
+					(tokens[0] == "F" && date == "unscheduled")){
+					std::cout << i << ".";
+					printSegment(tokens);
+					tokens = removePrinted(tokens);
+					setColour(7);
+				}else if((tokens[0] == "D" && tokens[2] != date)||
+					(tokens[0] == "T" && tokens[4] != date)||
+					(tokens[0] == "F" && date != "unscheduled")){
+					std::cout << std::endl;
+					date = getDate(tokens);
+					printDate(date);
+					std::cout << i << ".";
+					printSegment(tokens);
+					tokens = removePrinted(tokens);
+					setColour(7);
+				}
 			}
 		}
 	}
 }
 
+void UI::printDate(std::string date){
+	if (date == ""){
+		setColour(15);
+		std::cout << "[unscheduled]=================================================" << std::endl;
+	}else{
+		setColour(15);
+		std::cout << "[ " << date << " ]=========================================================" << std::endl;
+	}
+	setColour(7);
+}
 
 void UI::printWelcome(){
 	std::cout << MESSAGE_WELCOME << std::endl;
@@ -121,8 +140,10 @@ std::string UI::getDate(std::vector<std::string> tokens){
         date = tokens[4];
         return date;
     }
-	else
-		return date;
+	else if (tokens[0] == "F"){
+		return "unscheduled";
+	}
+    return date;
 }
 
 //C:confirmation message
@@ -131,21 +152,21 @@ std::string UI::getDate(std::vector<std::string> tokens){
 //T:timed tasks
 void UI::printSegment(std::vector<std::string> tokens){
 	if (tokens[0] == "F"){
-		setColour(8);
-        std::cout <<"[ unscheduled ] ";
-		setColour(3);
-		std::cout << tokens[1] << std::endl;
+		//setColour(8);
+        //std::cout <<"[ unscheduled ] ";
+		setColour(6);
+		std::cout << " " << tokens[1] << std::endl;
     }
     else if (tokens[0] == "D"){
-		setColour(8);
+		setColour(13);
         std::cout << "[ by " << std::left << std::setw(9) << tokens[3] << "] ";
 		setColour(13);
 		std::cout << tokens[1] << std::endl;
     }
     else if (tokens[0] == "T"){
-		setColour(8);
+		setColour(3);
 		std::cout << "[" << std::right << std::setw(6) << tokens[3] << "-" << std::left << std::setw(6) << tokens[5] << "] ";
-		setColour(6);
+		setColour(3);
 		std::cout << tokens[1] << std::endl;
     }
 	//setColour(7);

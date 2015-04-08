@@ -29,6 +29,7 @@ public:
 	std::string getDate(std::vector<std::string>);
 	void printWelcome();
 	void setColour(int);
+	void printDate(std::string);
 };
 
 #endif
