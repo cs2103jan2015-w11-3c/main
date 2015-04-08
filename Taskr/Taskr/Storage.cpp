@@ -130,15 +130,12 @@ void Storage::saveFile(vector<Task> listOfTasks) {
 	for (int i = 0; i < listOfTasks.size(); i++) {
 		json taskJson;
 		if (listOfTasks[i].getTaskType() == 1) {   //floating tasks
-			//json taskJson;
 			taskJson["task type"] = listOfTasks[i].getTaskType();
 			taskJson["task description"] = listOfTasks[i].getDescription();
 			taskJson["isDone"] = listOfTasks[i].isDone();
-			//output.add(taskJson);
 		}
 
 		if (listOfTasks[i].getTaskType() == 2) {   //timed tasks
-			//json taskJson;
 			taskJson["task type"] = listOfTasks[i].getTaskType();
 			taskJson["task description"] = listOfTasks[i].getDescription();
 			taskJson["isDone"] = listOfTasks[i].isDone();
@@ -150,11 +147,9 @@ void Storage::saveFile(vector<Task> listOfTasks) {
 			taskJson["end date day"] = listOfTasks[i].getEndDateDay();
 			taskJson["end time hour"] = listOfTasks[i].getEndTimeHour();
 			taskJson["end time minute"] = listOfTasks[i].getEndTimeMinute();
-			//output.add(taskJson);
 		}
 
 		if (listOfTasks[i].getTaskType() == 3) {   //deadline tasks
-			//json taskJson;
 			taskJson["task type"] = listOfTasks[i].getTaskType();
 			taskJson["task description"] = listOfTasks[i].getDescription();
 			taskJson["isDone"] = listOfTasks[i].isDone();
@@ -162,7 +157,6 @@ void Storage::saveFile(vector<Task> listOfTasks) {
 			taskJson["due date day"] = listOfTasks[i].getDueDateDay();
 			taskJson["due time hour"] = listOfTasks[i].getDueTimeHour();
 			taskJson["due time minute"] = listOfTasks[i].getDueTimeMinute();
-			//output.add(taskJson);
 		}
 		output.add(taskJson);
 	}
