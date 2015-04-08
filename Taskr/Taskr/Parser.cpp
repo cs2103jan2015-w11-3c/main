@@ -107,7 +107,7 @@ void Parser::extractParameters() {
 
 void Parser::removeCommand() {
 	int commandLength = _command.length();
-	_userInput = _userInput.substr(Start_Index, commandLength);
+	_userInput = _userInput.substr(commandLength);
 }
 
 void Parser::setDescription() {
