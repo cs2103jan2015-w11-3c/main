@@ -9,18 +9,14 @@ namespace StorageTest
 	{
 	public:
 		
-		TEST_METHOD(ConstructorTest)
-		{
-			Storage storageObject;
-			//Assert::AreEqual(true, storageObject.);
-
-		}
-
 		TEST_METHOD(getAllTasksTest) {
-			Storage storageObject;
-			std::ostringstream oss;
-			std::ostringstream confirmationMassage;
-			std::string userInput = "test getAllTasks";
+			Storage testtask1, testtask2, testtask3;
+			vector<Task*> testtask;
+
+
+
+
+
 
 		}
 

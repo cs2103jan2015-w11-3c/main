@@ -19,7 +19,7 @@ public:
   Storage();
   ~Storage(); 
   void setFilePath(std::string filepath);
-  void readFile();
+  //void readFile();
   void saveFile(std::vector<Task*>);
   std::vector<Task*> getAllTasks();
 
