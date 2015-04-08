@@ -70,7 +70,7 @@ public:
 	~DateTime();
 
 	bool isEmpty(std::vector<std::string> tokens);
-	int identifyDayMonth(std::string input);
+	bool identifyDayMonth(std::string input,int &x);
 	int identifyDayoftheMonth(std::string temp);
 	int retrieveMonth(std::string input);
 

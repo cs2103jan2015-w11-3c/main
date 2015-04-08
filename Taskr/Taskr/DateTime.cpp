@@ -63,21 +63,24 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 	if(!isEmpty(DateTokens)) {
 		std::string temp = DateTokens[INDEX_ZERO];
 		DateTokens.erase(DateTokens.begin());
-		int x = identifyDayMonth(temp);
-		if(x <= 11) {			//when user input is <day><month> or <month><day>
-			_month = x;
-			_day = identifyDayoftheMonth(temp);
-		}
+		int x;
+		if(identifyDayMonth(temp,x)) {
+			if(x <= 11) {			//when user input is <day><month> or <month><day>
+				_month = x;
+				_day = identifyDayoftheMonth(temp);
+			}
 
-		else if(x == 12) {		//when user input "today"
-			setLocalTime();
-		}
+			else if(x == 12) {		//when user input "today"
+				setLocalTime();
+			}
 
-		else if(x == 13 || x == 14) {	//when user input "tomorrow" or "tmr"
-			setLocalTime();
-			checkIfNextMonth();
+			else if(x == 13 || x == 14) {	//when user input "tomorrow" or "tmr"
+				setLocalTime();
+				checkIfNextMonth();
+			}
 		}
-	}
+		}
+		
 	
 	if(!isEmpty(TimeTokens)) {
 		std::string temp = TimeTokens[INDEX_ZERO];
@@ -104,17 +107,17 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 	}
 }
 
-int DateTime::identifyDayMonth(std::string input) {
-	int index;
+bool DateTime::identifyDayMonth(std::string input, int &x) {
+	bool DayMonthFound = false;
 	for(int i = 0; i < 15; i++) {
 		int x = input.find(DAY_MONTH[i]);
 		if(x != std::string::npos) {
-			index = i;
+			x = i;
 			break;
 		}
 	}
 
-	return index;
+	return DayMonthFound;
 }
 
 int DateTime::identifyDayoftheMonth(std::string input) {

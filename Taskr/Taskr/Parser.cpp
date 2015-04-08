@@ -91,14 +91,17 @@ std::string Parser::convertLowerCase(std::string input) {
 
 void Parser::extractParameters() {
 	if(_command == ADD || _command == SEARCH || _command == DISPLAY || _command == FILE) {
+		removeCommand();
 		setDescription();
 	}
 
 	else if(_command == DELETE || _command == DONE) {
+		removeCommand();
 		setIndex();
 	}
 
 	else if(_command == EDIT) {
+		removeCommand();
 		setIndex();
 		removeIndex();
 		setDescription();
@@ -111,14 +114,12 @@ void Parser::removeCommand() {
 }
 
 void Parser::setDescription() {
-	removeCommand();
 	trimStart(_userInput);
 	_description = _userInput;
 	
 }
 
 void Parser::setIndex() {
-	 removeCommand();
 	 trimStart(_userInput);
 	 retrieveIndex();
 }
@@ -220,11 +221,11 @@ std::string Parser::extractDate(int DateIndex, int foundIndex) {
 	std::string dateStringFound = DateTime::DAY_MONTH[DateIndex];
 	int dateStringSize = dateStringFound.length();
 
-	int dateStartIndex = DateIndex - 3;			//assumes number is max 3 characters away from month
-	int dateEndIndex = DateIndex + dateStringSize - 1;
+	int dateStartIndex = foundIndex - 3;			//assumes number is max 3 characters away from month
+	int dateEndIndex = foundIndex + dateStringSize - 1;
 
 	std::string dateToken = _description.substr(dateStartIndex, dateEndIndex);
-	_description.erase(dateStartIndex, dateEndIndex - dateStartIndex);		//removes the token from description
+	_description.erase(dateStartIndex, dateEndIndex - dateStartIndex + 1);		//removes the token from description
 
 	return dateToken;
 }
