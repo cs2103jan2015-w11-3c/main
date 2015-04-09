@@ -40,6 +40,7 @@ public:
 	void undoLastAction(std::ostringstream&);
 	void searchList(std::string, std::ostringstream&);
 	void changeFilePath(std::string, std::ostringstream&);
+	void showHelp(std::ostringstream&);
 
 	void initializeListOfTasks();
 	bool isValidIndex(int);
@@ -60,6 +61,7 @@ public:
 	static const std::string MESSAGE_FILEPATH_CHANGED;
 	static const std::string MESSAGE_OPERATION_NOT_EXECUTED;
 	static const std::string MESSAGE_CONFIRM_ACTION;
+	static const std::string MESSAGE_HELP;
 
 	static const std::string ERROR_REPEATED_TASK;
 	static const std::string ERROR_INDEX_OUT_OF_RANGE;

@@ -10,6 +10,8 @@ const std::string Logic::MESSAGE_UNDO = "Your last action has been undone.\n";
 const std::string Logic::MESSAGE_FILEPATH_CHANGED = "Your filepath has been changed to ";
 const std::string Logic::MESSAGE_OPERATION_NOT_EXECUTED = "Your last command was not executed.";
 const std::string Logic::MESSAGE_CONFIRM_ACTION = "This action cannot be undone. Are you sure you wish to carry on? (y/n): ";
+const std::string Logic::MESSAGE_HELP = "You can use Taskr with the following commands: \n";
+
 const std::string Logic::ERROR_REPEATED_TASK = " is a repeated floating task.\n";
 const std::string Logic::ERROR_INDEX_OUT_OF_RANGE = " is an invalid index.\n";
 const std::string Logic::ERROR_EMPTY_LIST = "The list is currently empty.\n";
@@ -60,6 +62,8 @@ std::string Logic::executeCommand(std::string userInput) {
 			searchList(_parse.getDescription(), oss);
 		} else if (command == "file") {
 			changeFilePath(_parse.getDescription(), oss);
+		} else if (command == "help") {
+			showHelp(oss);
 		} else {
 			oss << "C\n" << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
@@ -291,6 +295,23 @@ void Logic::changeFilePath(std::string filepath, std::ostringstream& oss) {
 		oss << MESSAGE_OPERATION_NOT_EXECUTED;
 	}
 }
+
+void Logic::showHelp(std::ostringstream& oss) {
+	oss << "HELP\n";
+	oss << MESSAGE_HELP;
+	oss << "add floating task  ====================== enter \"add <task description>\" to add a task.\n";
+	oss << "add timed task  ====================== enter \"add <task description> <start date and time> - <end date and time>\" to add a timed task.\n";
+	oss << "add deadline task  ====================== enter \"add <task description> <due date and time>\" to add a floating task.\n";
+	oss << "display            ====================== enter \"display\" to display all the tasks being tracked.\n";
+	oss << "display ____       ====================== enter \"display <parameter>\" to display the relevant tasks being tracked. Parameter values include: today, done.\n";
+	oss << "edit               ====================== to edit a task, enter \"display\" to display all the tasks being tracked first. Using the index of the task to edit, enter \"edit <index> <edited task>\".\n";
+	oss << "delete             ====================== to delete a task, enter \"display\" to display all the tasks being tracked first. Using the index of the task to delete, enter \"edit <index>\".\n";
+	oss << "done               ====================== to mark a task as done, enter \"display\" to display all the tasks being tracked first. Using the index of the task to mark, enter \"done <index>\".\n";
+	oss << "search             ====================== to search for an undone task, enter \"search <word to search>\" to display all the tasks that contain <word to search>.\n";
+	oss << "undo               ====================== to undo your last action, enter \"undo\" and confirm your action. Undo action cannot be undon, and is capped at a maximum of 3 undos.\n";
+	oss << "file               ====================== to change the location where your file is saved, enter \"file <file path>\".\n";
+}
+
 
 bool Logic::isActionConfirmed() {
 	std::cout << MESSAGE_CONFIRM_ACTION;

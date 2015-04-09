@@ -15,8 +15,8 @@ UI::~UI() {
 
 void UI::processUserInput(){
 	//std::cout << MESSAGE_WELCOME << std::endl;
-	printWelcome();
 	_logic.initializeListOfTasks();
+	printWelcome();
 	std::string feedback;
 	while (feedback != "exit") {
 		std::cout << "command: ";

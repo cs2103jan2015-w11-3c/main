@@ -77,9 +77,8 @@ vector<Task*> Storage::getAllTasks() {
 				}
 
 				tasks.push_back(floatingTask);
-			}
 
-			if (taskType == 2) {
+			} else if (taskType == 2) {
 				TimedTask* timedTask = new TimedTask;
 				timedTask->setTaskType(taskJson["task type"].as<int>());
 				timedTask->setDescription(taskJson["task description"].as<string>());
@@ -96,9 +95,8 @@ vector<Task*> Storage::getAllTasks() {
 				timedTask->setEndDateMonth(taskJson["end time minute"].as<int>());
 
 				tasks.push_back(timedTask);
-			}
 
-			if (taskType == 3) {
+			} else if (taskType == 3) {
 				DeadlineTask* deadlineTask = new DeadlineTask;
 				deadlineTask->setTaskType(taskJson["task type"].as<int>());
 				deadlineTask->setDescription(taskJson["task description"].as<string>());
@@ -108,7 +106,7 @@ vector<Task*> Storage::getAllTasks() {
 				deadlineTask->setDueDateMonth(taskJson["due date month"].as<int>());
 				deadlineTask->setDueDateDay(taskJson["due date day"].as<int>());
 				deadlineTask->setDueTimeHour(taskJson["due time hour"].as<int>());
-				deadlineTask->setDueTimeMinute(taskJson["due date minute"].as<int>());
+				deadlineTask->setDueTimeMinute(taskJson["due time minute"].as<int>());
 
 				tasks.push_back(deadlineTask);
 			}
