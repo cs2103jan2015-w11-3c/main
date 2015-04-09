@@ -35,7 +35,7 @@ public:
 	void addTask(Task*, std::ostringstream&);
 	void displayList(std::ostringstream&);
 	void deleteTask(std::ostringstream&);
-	void editTask(int, Task*, std::ostringstream&);
+	void editTask(std::ostringstream&);
 	void setDone(std::ostringstream&);
 	void undoLastAction(std::ostringstream&);
 	void searchList(std::string, std::ostringstream&);
