@@ -29,7 +29,6 @@ void Storage::setFileConfig() {
 		updateFileConfig();
 		ifstream inFile(_fileConfig);
 	}
-	getline(inFile, _filename);
 	getline(inFile, _filepath);
 
 	inFile.close();

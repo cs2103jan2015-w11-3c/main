@@ -285,7 +285,7 @@ void Logic::changeFilePath(std::string filepath, std::ostringstream& oss) {
 	if (isActionConfirmed()) {
 		_store.setFilePath(filepath);
 		_store.saveFile(_listOfTasks);
-		oss << MESSAGE_FILEPATH_CHANGED << "\"" << filepath << "\".";
+		oss << MESSAGE_FILEPATH_CHANGED << "\"" << filepath << "\"." << std::endl;
 	}
 	else {
 		oss << MESSAGE_OPERATION_NOT_EXECUTED;
