@@ -9,57 +9,62 @@ using jsoncons::pretty_print;
 
 using namespace std;
 
-const string DEFAULT_FILE_PATH = "Taskr.txt";
+const string DEFAULT_FILE_PATH = "";
+const string DEFAULT_FILE_NAME = "Taskr.txt";
+const string DEFAULT_FILE_CONFIG = "FileConfigurations.txt";
 
 Storage::Storage() {
-	_filename = DEFAULT_FILE_PATH;
+	_filepath = DEFAULT_FILE_PATH;
+	_filename = DEFAULT_FILE_NAME;
+	_fileConfig = DEFAULT_FILE_CONFIG;
 }
 
 Storage::~Storage() {
 }
 
-void Storage::setFilePath(std::string filepath) {
-	_filename = filepath;
+void Storage::setFileConfig() {
+	ifstream inFile(_fileConfig);
+	if (!getline(inFile, _filename)) {
+		inFile.close();
+		updateFileConfig();
+		ifstream inFile(_fileConfig);
+	}
+	getline(inFile, _filename);
+	getline(inFile, _filepath);
+
+	inFile.close();
 }
 
-//vector<Task> Storage::getAllTasks() {
-//	vector<Task> tasks;
-//	try {
-//		json input = json::parse_file(_filename);
-//		for (int i = 0; i < input.size(); i++) {
-//			Task task;
-//			json &taskJson = input[i];
-//			task.setDescription(taskJson["task description"].as<string>());
-//			if (taskJson["isDone"].as<bool>()) {
-//				task.setAsDone();
-//			}
-//			tasks.push_back(task);
-//		}
-//	}
-//	catch (exception ex) {
-//
-//	}
-//	return tasks;
-//}
-//
-//void Storage::saveFile(vector<Task> listOfTasks) {
-//	json output(json::an_array);
-//	for (int i = 0; i < listOfTasks.size(); i++) {
-//		json taskJson;
-//		taskJson["task description"] = listOfTasks[i].getDescription();
-//		taskJson["isDone"] = listOfTasks[i].isDone();
-//		output.add(taskJson);
-//	}
-//	ofstream outFile(_filename, ofstream::out);
-//	outFile << pretty_print(output) << endl;
-//	outFile.close();
-//}
+
+void Storage::updateFileConfig() {
+	ofstream outFile(_fileConfig);
+	outFile << _filename << endl;
+	outFile << _filepath << endl;
+	outFile.close();
+}
+
+
+void Storage::setFilePath(std::string filepath) {
+	_filepath = filepath;
+	updateFileConfig();
+}
+
+
+string Storage::getFullFileName() {
+	if (_filepath == "") {
+		return _filename;
+	} else {
+		return (_filepath + "//" + _filename);
+	}
+}
 
 
 vector<Task*> Storage::getAllTasks() {
+	setFileConfig();
+
 	vector<Task*> tasks;
 	try {
-		json input = json::parse_file(_filename);
+		json input = json::parse_file(getFullFileName());
 		for (int i = 0; i < input.size(); i++) {
 			json &taskJson = input[i];
 			int taskType = taskJson["task type"].as<int>();
@@ -120,7 +125,6 @@ vector<Task*> Storage::getAllTasks() {
 }
 
 
-
 void Storage::saveFile(vector<Task*> listOfTasks) {
 	json output(json::an_array);
 	for (int i = 0; i < listOfTasks.size(); i++) {
@@ -156,7 +160,7 @@ void Storage::saveFile(vector<Task*> listOfTasks) {
 		}
 		output.add(taskJson);
 	}
-	ofstream outFile(_filename, ofstream::out);
+	ofstream outFile(getFullFileName(), ofstream::out);
 	outFile << pretty_print(output) << endl;
 	outFile.close();
 }

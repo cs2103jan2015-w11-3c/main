@@ -12,17 +12,21 @@
 class Storage {
 private:
   std::vector<Task> _listOfTasks;
+  std::string _fileConfig;
   std::string _filename;
+  std::string _filepath;
   
   
 public:
   Storage();
   ~Storage(); 
   void setFilePath(std::string filepath);
-  //void readFile();
   void saveFile(std::vector<Task*>);
   std::vector<Task*> getAllTasks();
-
+  std::string getFullFileName();
+  void setFileConfig();
+  void updateFileConfig();
+  
 };
 
 #endif
