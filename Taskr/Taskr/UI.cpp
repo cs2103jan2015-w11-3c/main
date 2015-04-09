@@ -2,6 +2,7 @@
 #include <sstream>
 #include <Windows.h>
 #include <iomanip>
+#include <cstdlib>
 
 const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
 
@@ -23,6 +24,7 @@ void UI::processUserInput(){
 		std::string userInput = getUserInput();
 		feedback = _logic.executeCommand(userInput);
 		if (feedback!="exit"){
+			system("cls");
 			printWholeString(feedback);
 		}
 	}
@@ -45,6 +47,8 @@ void UI::printWholeString(std::string feedback){
     tokens = doSegment(feedback);
 	if (tokens[0] == "C"){
 		std::cout << tokens[1] << std::endl;
+	}else if(tokens[0] == "HELP"){
+		printHelp();
 	}else{
 		int number = getNumberOfTasks(tokens);
 		std::string date = getDate(tokens);
@@ -88,6 +92,7 @@ void UI::printDate(std::string date){
 void UI::printWelcome(){
 	std::cout << MESSAGE_WELCOME << std::endl;
 	printWholeString(_logic.executeCommand("display today"));
+	std::cout << "Enter \"help\" to see list of possible commands! " << std::endl;
 }
 
 //store string feedback into vector<string> tokens line by line
@@ -194,3 +199,50 @@ void UI::setColour(int value){
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),value);
 }
 
+void UI::printHelp(){
+	std::cout << "You can use Taskr with the following commands: " << std::endl;
+	setColour(14);
+	std::cout << "add floating task" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"add <task description>\".\n";
+	setColour(14);
+	std::cout << "add timed task" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"add <task description> <start date and time> - <end date and time>\".\n";
+	setColour(14);
+	std::cout << "add deadline task" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"add <task description> <due date and time>\".\n";
+	setColour(14);
+	std::cout << "display" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"display\" to display all the tasks being tracked.\n";
+	setColour(14);
+	std::cout << "display ____ " << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"display <parameter>\". Parameter values include: today, done.\n";
+	setColour(14);
+	std::cout << "edit" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"display\", then enter \"edit <index> <edited task>\".\n";
+	setColour(14);
+	std::cout << "delete" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"display\", then enter \"delete <index>\".\n";
+	setColour(14);
+	std::cout << "done" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"display\", then enter \"done <index>\".\n";
+	setColour(14);
+	std::cout << "search" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"search <word to search>\".\n";
+	setColour(14);
+	std::cout << "undo" << std::endl;
+	setColour(7);
+	std::cout << "-> enter \"undo\" and confirm your action. Undo action cannot be undon, and is capped at a maximum of 3 undos.\n";
+	setColour(14);
+	std::cout << "file";
+	setColour(7);
+	std::cout << "-> enter \"file <file path>\"to change the location where your file is saved.\n";
+}

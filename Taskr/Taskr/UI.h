@@ -30,6 +30,7 @@ public:
 	void printWelcome();
 	void setColour(int);
 	void printDate(std::string);
+	void printHelp();
 };
 
 #endif
