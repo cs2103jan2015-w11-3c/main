@@ -31,17 +31,7 @@ namespace TaskUnitTest
 			Assert::IsTrue(task.isDone());
 		}
 
-		//TEST_METHOD(setGetDate_TEST)
-		//{
-			//Task task;
-			//task.checkDay();
-			//int dateday = 1;
-			//Assert::AreEqual(task.getStartDateDay(), dateday);
-			//Assert::AreEqual(task.getEndDateDay(), dateday);
 
-		//}
-
-		
 
 	};
 }

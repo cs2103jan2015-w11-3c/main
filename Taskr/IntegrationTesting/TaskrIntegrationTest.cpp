@@ -9,11 +9,11 @@ namespace IntegrationTesting
 	{
 	public:
 
-		TEST_METHOD(addTaskTest) {
-			Logic logic;
-			std::string confirmationMessage = "\"watch webcast\" has been added to Taskr!\n";
-			Assert::AreEqual(confirmationMessage, logic.executeCommand("add watch webcast"));
-		}
+		//TEST_METHOD(addTaskTest) {
+			//Logic logic;
+			//std::string confirmationMessage = "\"watch webcast\" has been added to Taskr!\n";
+			//Assert::AreEqual(confirmationMessage, logic.executeCommand("add watch webcast"));
+		//}
 
 	};
 }
