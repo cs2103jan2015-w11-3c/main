@@ -17,9 +17,9 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
@@ -93,8 +93,8 @@
     <ClCompile Include="TaskrIntegrationTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\driver\driver.vcxproj">
-      <Project>{c3ac78b4-277b-4ece-8b55-43ec62e972ca}</Project>
+    <ProjectReference Include="..\Taskr\Taskr.vcxproj">
+      <Project>{d907b3fa-3866-447e-993e-7fcb072b8a49}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -9,7 +9,7 @@ namespace StorageTest
 	{
 	public:
 		
-		TEST_METHOD(getAllTasksTest) {
+		/*TEST_METHOD(getAllTasksTest) {
 			Storage testtask1, testtask2, testtask3;
 			std::vector<Task*> testtask;
 
@@ -18,7 +18,7 @@ namespace StorageTest
 
 
 
-		}
+		}*/
 
 	};
 }
