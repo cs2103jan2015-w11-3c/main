@@ -30,7 +30,6 @@ public:
 	~Logic();
 
 	std::string executeCommand(std::string userInput);
-	std::string getCommand();
 	void executeAdd(std::ostringstream&);
 
 	void addTask(Task*, std::ostringstream&);
@@ -51,7 +50,6 @@ public:
 	void listToString(std::vector<Task*>, std::ostringstream&);
 	void sortTasksByTime(std::vector<Task*>&);
 	bool checkTiming(Task*, Task*);
-	void swapTasks(Task*, Task*);
 
 	static const std::string MESSAGE_ADDED;
 	static const std::string MESSAGE_DELETED;
@@ -67,6 +65,7 @@ public:
 	static const std::string ERROR_REPEATED_TASK;
 	static const std::string ERROR_INDEX_OUT_OF_RANGE;
 	static const std::string ERROR_EMPTY_LIST;
+	static const std::string ERROR_SEARCH_NOT_FOUND;
 	static const std::string ERROR_INVALID_DESCRIPTION;
 	static const std::string ERROR_USER_COMMAND_INVALID;
 	static const std::string ERROR_NOTHING_TO_UNDO;

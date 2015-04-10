@@ -53,20 +53,8 @@ bool Task::isDone() {
 }
 
 std::string Task::toString() {
-	//std::ostringstream oss;
-	//oss << getDescription();
-	//return oss.str();
-	//to implement after polymorphism
 	return "";
 }
-
-//std::string Task::getDateString() {
-//	return "";
-//}
-//
-//std::string Task::getTimeString() {
-//	return "";
-//}
 
 int Task::getTaskType() {
 	return _taskType;
