@@ -148,7 +148,7 @@ void Parser::extractDateTimeTokens() {
 		int matchDate;
 		int foundTime;
 		int foundDate;
-		{	
+		do {	
 			 if(!isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {		//check if float task
 			_TaskType = 1;
 			} else if(isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {	//check if timed task due today
@@ -407,7 +407,7 @@ int Parser::getStartTimeMinute() {
 }
 
 int main() {
-	Parser parse("  add  do this today ");
+	Parser parse("  add  do this today 730pm   13 apr 730am ");
 
 	return 0;
 }
