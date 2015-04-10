@@ -15,7 +15,7 @@ namespace LogicTest
 			std::ostringstream confirmationMessage;
 			std::string expected = "HELP\n";
 			logic.showHelp(confirmationMessage);
-			Assert::AreSame(expected, confirmationMessage.str());
+			Assert::AreEqual(expected, confirmationMessage.str());
 		}
 
 	};

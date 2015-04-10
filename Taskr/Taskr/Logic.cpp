@@ -13,6 +13,7 @@ const std::string Logic::MESSAGE_CONFIRM_ACTION = "This action cannot be undone.
 
 const std::string Logic::ERROR_REPEATED_TASK = " is a repeated task.\n";
 const std::string Logic::ERROR_INDEX_OUT_OF_RANGE = " is an invalid index.\n";
+const std::string Logic::ERROR_SEARCH_NOT_FOUND = "No matches were found in Taskr.\n";
 const std::string Logic::ERROR_EMPTY_LIST = "The list is currently empty.\n";
 const std::string Logic::ERROR_INVALID_DESCRIPTION = "The input description is invalid. Please do not enter an empty task.\n";
 const std::string Logic::ERROR_USER_COMMAND_INVALID = " is not a valid command. Please enter a valid command.\n";
@@ -30,11 +31,19 @@ Logic::Logic() {
 Logic::~Logic() {
 }
 
-
+//  The following function takes in the user input, parses the input and decides what command to
+//  execute. The function returns an output string for UI to display based on the command entered.
+//  UI will decide what kind of message the string contains by reading the leading token.
+//  Tokens include: 
+//  'C'    == Confirmation Message
+//  'D'    == Deadline Task
+//  'T'    == Timed Task
+//  'F'    == Floating Task
+//  'HELP' == Tells UI to display the help screen.
 std::string Logic::executeCommand(std::string userInput) {
 	std::string command;
 	std::string description;
-	std::ostringstream oss;
+	std::ostringstream ossConfirmationMessage;
 
 	_parse = Parser(userInput);
 	command = _parse.getCommand();
@@ -42,28 +51,28 @@ std::string Logic::executeCommand(std::string userInput) {
 	if (command != "exit") {
 
 		if (command == "add") {
-			executeAdd(oss);
+			executeAdd(ossConfirmationMessage);
 		} else if (command == "delete") {
-			deleteTask(oss);
+			deleteTask(ossConfirmationMessage);
 		} else if (command == "display") {
-			displayList(oss);
+			displayList(ossConfirmationMessage);
 		} else if (command == "edit") {
-			editTask(oss);
+			editTask(ossConfirmationMessage);
 		} else if (command == "done") {
-			setDone(oss);
+			setDone(ossConfirmationMessage);
 		} else if (command == "undo") {
-			undoLastAction(oss);
+			undoLastAction(ossConfirmationMessage);
 		} else if (command == "search") {
-			searchList(_parse.getDescription(), oss);
+			searchList(_parse.getDescription(), ossConfirmationMessage);
 		} else if (command == "file") {
-			changeFilePath(_parse.getDescription(), oss);
+			changeFilePath(_parse.getDescription(), ossConfirmationMessage);
 		} else if (command == "help") {
-			showHelp(oss);
+			showHelp(ossConfirmationMessage);
 		} else {
-			oss << "C\n" << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
+			ossConfirmationMessage << "C\n" << "\"" << command << "\"" << ERROR_USER_COMMAND_INVALID;
 		}
-		oss << std::endl;
-		_confirmationMessage = oss.str();
+		ossConfirmationMessage << std::endl;
+		_confirmationMessage = ossConfirmationMessage.str();
 		return _confirmationMessage;
 
 	}
@@ -72,10 +81,10 @@ std::string Logic::executeCommand(std::string userInput) {
 	}
 }
 
-std::string Logic::getCommand() {
-	return _parse.getCommand();
-}
-
+//  This function calls getAllTasks on the private _store attribute to read
+//  all the tasks from the text file in the directory that the user specified.
+//  It sets the private vector of task pointers, _listOfTasks, in the Logic object
+//  so that the users' tasks are not lost when he exits Taskr.
 void Logic::initializeListOfTasks() {
 	_listOfTasks = _store.getAllTasks();
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
@@ -85,77 +94,69 @@ void Logic::initializeListOfTasks() {
 	}
 }
 
-void Logic::executeAdd(std::ostringstream& oss) {
+//  This function decides what kind of Task the user has input, creates the correct
+//  type of task (Floating, Timed or Deadline) dynamically and pushes the child object
+//  onto the vector of Task pointers. 
+void Logic::executeAdd(std::ostringstream& ossConfirmationMessage) {
 	int taskType = _parse.getTaskType();
-
 	if (taskType == FLOATING_TASK) {
 		FloatingTask* tempFloatTask = new FloatingTask;
 		tempFloatTask->setTaskType(taskType);
 		tempFloatTask->setDescription(_parse.getDescription());
 
-		addTask(tempFloatTask, oss);
+		addTask(tempFloatTask, ossConfirmationMessage);
 
 	} else if (taskType == TIMED_TASK) {
 		TimedTask* tempTimedTask = new TimedTask;
 		tempTimedTask->setTaskType(taskType);
 		tempTimedTask->setDescription(_parse.getDescription());
-
 		tempTimedTask->setStart(_parse.getStart());
 		tempTimedTask->setEnd(_parse.getEnd());
-/*
-		tempTimedTask.setStartTimeHour(_parse.getStartTimeHour);
-		tempTimedTask.setStartTimeMinute(_parse.getStartTimeMinute);
-		tempTimedTask.setStartDateDay(_parse.getStartDateDay);
-		tempTimedTask.setStartDateMonth(_parse.getStartDateMonth);
-		tempTimedTask.setEndTimeHour(_parse.getEndTimeHour);
-		tempTimedTask.setEndTimeMinute(_parse.getEndTimeMinute);
-		tempTimedTask.setEndDateDay(_parse.getEndDateDay);
-		tempTimedTask.setEndDateMonth(_parse.getEndDateMonth);
-*/
-		addTask(tempTimedTask, oss);
+
+		addTask(tempTimedTask, ossConfirmationMessage);
 
 	} else if (taskType == DEADLINE_TASK) {
 		DeadlineTask* tempDeadlineTask = new DeadlineTask;
 		tempDeadlineTask->setTaskType(taskType);
 		tempDeadlineTask->setDescription(_parse.getDescription());
-
 		tempDeadlineTask->setDue(_parse.getEnd());
-/*
-		tempDeadlineTask.setDueTimeHour(_parse.getDueTimeHour);
-		tempDeadlineTask.setDueTimeMinute(_parse.getDueTimeMinute);
-		tempDeadlineTask.setDueDateDay(_parse.getDueDateDay);
-		tempDeadlineTask.setDueDateMonth(_parse.getDueDateMonth);
-*/
-		addTask(tempDeadlineTask, oss);
+
+		addTask(tempDeadlineTask, ossConfirmationMessage);
 	} else {
-		oss << "C\n" << ERROR_INVALID_DESCRIPTION;
+		ossConfirmationMessage << "C\n" << ERROR_INVALID_DESCRIPTION;
 	}
 }
 
-void Logic::addTask(Task* tempTask, std::ostringstream& oss) {
-	oss << "C\n";
+//  This function takes in a task to be added to the list and checks if it is valid.
+//  If it is valid, the new task will be added to the list and a confirmation message will be set.
+//  If not, the respective error message will be set.
+void Logic::addTask(Task* tempTask, std::ostringstream& ossConfirmationMessage) {
+	ossConfirmationMessage << "C\n";
 	if (isRepeated(tempTask)) {
-		oss << ERROR_REPEATED_TASK;
+		ossConfirmationMessage << ERROR_REPEATED_TASK;
 	} else if (tempTask->getDescription() == "") {
-		oss << ERROR_INVALID_DESCRIPTION;
+		ossConfirmationMessage << ERROR_INVALID_DESCRIPTION;
 	} else {
 		_history.saveState(_listOfTasks);
 		_listOfTasks.push_back(tempTask);
 		sortTasksByTime(_listOfTasks);
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << tempTask->getDescription() << "\"" << MESSAGE_ADDED;
+		ossConfirmationMessage << "\"" << tempTask->getDescription() << "\"" << MESSAGE_ADDED;
 	}
 }
 
-void Logic::editTask(std::ostringstream& oss) {
+//  This function reads the index of the task to be edited and checks if the index is valid.
+//  If it is valid, a new task will be created based on the user input and added to the list.
+//  If not, the respective error message will be set.
+void Logic::editTask(std::ostringstream& ossConfirmationMessage) {
 	int indexToEdit;
 	indexToEdit = _parse.getIndex();
 	
-	oss << "C\n";
+	ossConfirmationMessage << "C\n";
 	if (!isValidIndex(indexToEdit)) {
-		oss << indexToEdit << ERROR_INDEX_OUT_OF_RANGE;
+		ossConfirmationMessage << indexToEdit << ERROR_INDEX_OUT_OF_RANGE;
 	} else if (_parse.getDescription() == "") {
-		oss << ERROR_INVALID_DESCRIPTION;
+		ossConfirmationMessage << ERROR_INVALID_DESCRIPTION;
 	} else {
 		int typeOfTaskToEdit;
 		typeOfTaskToEdit = _listOfTasks[indexToEdit]->getTaskType();
@@ -192,11 +193,18 @@ void Logic::editTask(std::ostringstream& oss) {
 		}
 		sortTasksByTime(_listOfTasks);
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
+		ossConfirmationMessage << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
 	}
 }
 
-void Logic::displayList(std::ostringstream& oss) {
+//  This function has an option of taking in a parameter after the command "display", ie the user can enter "display <parameter>".
+//  Parameters include:
+//  1. done  == displays all tasks that are marked as done
+//  2. today == displays all tasks that are due today
+//  3. tomorrow? == displays all tasks that are due tomorrow.?
+//  
+//  If the user does not specify a parameter, this function will return all outstanding tasks that are being tracked.
+void Logic::displayList(std::ostringstream& ossConfirmationMessage) {
 	std::string parameter;
 	parameter = _parse.getDescription();
 	if (!_listOfTasks.empty()) {
@@ -218,9 +226,9 @@ void Logic::displayList(std::ostringstream& oss) {
 			localtime_s(&localTime, &currentTime);  // Convert the current time to the local time
 
 			for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
-				if (!(_listOfTasks[i]->isDone()) && _listOfTasks[i]->getTaskType() == 2 && _listOfTasks[i]->checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i]->checkDay() == localTime.tm_mday) {
+				if (!(_listOfTasks[i]->isDone()) && _listOfTasks[i]->getTaskType() == TIMED_TASK && _listOfTasks[i]->checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i]->checkDay() == localTime.tm_mday) {
 					tempTaskList.push_back(_listOfTasks[i]);
-				} else if (!(_listOfTasks[i]->isDone()) && _listOfTasks[i]->getTaskType() == 3 && _listOfTasks[i]->checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i]->checkDay() == localTime.tm_mday) {
+				} else if (!(_listOfTasks[i]->isDone()) && _listOfTasks[i]->getTaskType() == DEADLINE_TASK && _listOfTasks[i]->checkMonth() == (localTime.tm_mon + 1) && _listOfTasks[i]->checkDay() == localTime.tm_mday) {
 					tempTaskList.push_back(_listOfTasks[i]);
 				}
 			}
@@ -235,38 +243,45 @@ void Logic::displayList(std::ostringstream& oss) {
 		}
 
 		if (!tempTaskList.empty()) {
-			listToString(tempTaskList, oss);
+			listToString(tempTaskList, ossConfirmationMessage);
 		} else {
-			oss << "C\n" << ERROR_EMPTY_LIST;
+			ossConfirmationMessage << "C\n" << ERROR_EMPTY_LIST;
 		}
 
 	} else {
-		oss << "C\n" << ERROR_EMPTY_LIST;
+		ossConfirmationMessage << "C\n" << ERROR_EMPTY_LIST;
 	}
 }
 
-
-void Logic::deleteTask(std::ostringstream& oss) {
+//  This function deletes an item from Taskr, but can be undone using the "undo" command.
+//  It can take in an index after the command "delete", ie the user can enter "display <index>". Only a single index can be input at once.
+//  As such, to use this function the user must first enter the "display" function to find the index of the corresponding task to delete.
+//  A valid index (i.e. within the number of tasks that are being tracked) must be input, or the function will return an error message.
+void Logic::deleteTask(std::ostringstream& ossConfirmationMessage) {
 	int indexToDelete;
 	indexToDelete = _parse.getIndex();
-	oss << "C\n";
+	ossConfirmationMessage << "C\n";
 	if (isValidIndex(indexToDelete)) {
 		std::string taskDescription;
 		taskDescription = _listOfTasks[_doneTasksCount + indexToDelete - 1]->getDescription();
 		_history.saveState(_listOfTasks);
 		_listOfTasks.erase(_listOfTasks.begin() + _doneTasksCount + indexToDelete - 1);
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
+		ossConfirmationMessage << "\"" << taskDescription << "\"" << MESSAGE_DELETED;
 	}
 	else {
-		oss << indexToDelete << ERROR_INDEX_OUT_OF_RANGE;
+		ossConfirmationMessage << indexToDelete << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
-void Logic::setDone(std::ostringstream& oss) {
+//  This function marks an indicated task as done and removes it from the list visible to the user, but keeps a copy of it in the saved txt file.
+//  It takes in an index after the command "done", i.e. the user can enter "done <index>". Only a single index can be input at once.
+//  As such, to use this function the user must first enter the "display" function to find the index of the corresponding task to mark as done.
+//  A valid index (i.e. within the number of tasks that are being tracked) must be input, or the function will return an error message.
+void Logic::setDone(std::ostringstream& ossConfirmationMessage) {
 	int indexToSet;
 	indexToSet = _parse.getIndex();
-	oss << "C\n";
+	ossConfirmationMessage << "C\n";
 	if (isValidIndex(indexToSet)) {
 		std::string taskDescription;
 		taskDescription = _listOfTasks[indexToSet + _doneTasksCount - 1]->getDescription();
@@ -275,32 +290,38 @@ void Logic::setDone(std::ostringstream& oss) {
 		_doneTasksCount++;
 		sortDoneTasks();
 		_store.saveFile(_listOfTasks);
-		oss << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
+		ossConfirmationMessage << "\"" << taskDescription << "\"" << MESSAGE_MARK_DONE;
 	}
 	else {
-		oss << indexToSet << ERROR_INDEX_OUT_OF_RANGE;
+		ossConfirmationMessage << indexToSet << ERROR_INDEX_OUT_OF_RANGE;
 	}
 }
 
-void Logic::undoLastAction(std::ostringstream& oss) {
-	oss << "C\n";
+//  This function makes use of the History object to save up to three snapshots of the Logic object's _listOfTasks.
+//  There is a maximum of 3 undo actions, and the user CANNOT undo an undo. As such, the user must confirm his/her action before he/she can proceed.
+//  This command does not take in any parameters. When the user has made the maximum number undos, an error message will indicate that there is nothing left to undo.
+void Logic::undoLastAction(std::ostringstream& ossConfirmationMessage) {
+	ossConfirmationMessage << "C\n";
 	if (isActionConfirmed()) {
 		if (_history.isEmpty()) {
-			oss << ERROR_NOTHING_TO_UNDO;
+			ossConfirmationMessage << ERROR_NOTHING_TO_UNDO;
 		} else {
 			_listOfTasks = _history.popLastState();
 			_store.saveFile(_listOfTasks);
-			oss << MESSAGE_UNDO;
+			ossConfirmationMessage << MESSAGE_UNDO;
 		}
 	} else {
-		oss << MESSAGE_OPERATION_NOT_EXECUTED;
+		ossConfirmationMessage << MESSAGE_OPERATION_NOT_EXECUTED;
 	}
 }
 
-void Logic::searchList(std::string searchString, std::ostringstream& oss) {
+//  This function searches all the tasks being tracked for a string that the user inputs, and returns all the tasks that contain that string.
+//  This function takes in a parameter after the "search" command, i.e. "search <parameter>". Any task that contains part of the parameter in its description will be
+//  returned. If no task is found, an error message will indicate that there are no matches in Taskr.
+void Logic::searchList(std::string searchString, std::ostringstream& ossConfirmationMessage) {
 	std::vector<Task*> tempList;
 	if (_listOfTasks.empty()) {
-		oss << "C\n" << ERROR_EMPTY_LIST;
+		ossConfirmationMessage << "C\n" << ERROR_EMPTY_LIST;
 	} else {
 		for (std::vector<Task*>::iterator iter = _listOfTasks.begin(); iter != _listOfTasks.end(); iter++) {
 			std::size_t found;
@@ -309,31 +330,40 @@ void Logic::searchList(std::string searchString, std::ostringstream& oss) {
 				tempList.push_back(*iter);
 			}
 		}
-		listToString(tempList, oss);
+		if (tempList.empty()) {
+			ossConfirmationMessage << "C\n" << ERROR_EMPTY_LIST;
+		}
+		listToString(tempList, ossConfirmationMessage);
 	}
 }
 
-void Logic::changeFilePath(std::string filepath, std::ostringstream& oss) {
-	oss << "C\n";
+//  This function changes the file location where Taskr.txt is stored. As this action cannot be undone, the user is required to confirm
+//  his/her action before proceeding. The file path input MUST be a valid file path.
+void Logic::changeFilePath(std::string filepath, std::ostringstream& ossConfirmationMessage) {
+	ossConfirmationMessage << "C\n";
 	if (isActionConfirmed()) {
 		_store.setFilePath(filepath);
 		_store.saveFile(_listOfTasks);
-		oss << MESSAGE_FILEPATH_CHANGED << "\"" << filepath << "\"." << std::endl;
+		ossConfirmationMessage << MESSAGE_FILEPATH_CHANGED << "\"" << filepath << "\"." << std::endl;
 	}
 	else {
-		oss << MESSAGE_OPERATION_NOT_EXECUTED;
+		ossConfirmationMessage << MESSAGE_OPERATION_NOT_EXECUTED;
 	}
 }
 
-void Logic::showHelp(std::ostringstream& oss) {
-	oss << "HELP\n";
+//  This function tells the UI to display the help screen.
+void Logic::showHelp(std::ostringstream& ossConfirmationMessage) {
+	ossConfirmationMessage << "HELP\n";
 }
-
 
 bool Logic::isActionConfirmed() {
 	std::cout << MESSAGE_CONFIRM_ACTION;
 	std::string userConfirmation;
 	std::cin >> userConfirmation;
+	//get rid of the carriage return
+	std::string rubbish;
+	std::getline(std::cin, rubbish);
+
 	if (userConfirmation == "y" || userConfirmation == "Y" || userConfirmation == "yes" || userConfirmation == "Yes" || userConfirmation == "YES") {
 		return true;
 	}
@@ -355,6 +385,7 @@ bool Logic::isRepeated(Task* task) {
 	return false;
 }
 
+//  This function is used internally, and sorts all tasks that are marked as done to be placed at the front of Logic object's _listOfTasks.
 void Logic::sortDoneTasks() {
 	std::vector<Task*> sortedDoneTaskList;
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
@@ -370,10 +401,10 @@ void Logic::sortDoneTasks() {
 	_listOfTasks = sortedDoneTaskList;
 }
 
-void Logic::listToString(std::vector<Task*> listOfTasks, std::ostringstream& oss) {
+void Logic::listToString(std::vector<Task*> listOfTasks, std::ostringstream& ossConfirmationMessage) {
 	int displayIndex = 1;
 	for (unsigned int i = 0; i < listOfTasks.size(); i++) {
-		oss << listOfTasks[i]->toString() << std::endl;
+		ossConfirmationMessage << listOfTasks[i]->toString() << std::endl;
 	}
 }
 
