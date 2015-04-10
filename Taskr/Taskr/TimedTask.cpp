@@ -15,15 +15,15 @@ TimedTask::TimedTask() {
 	_end.setMinute(0);
 }
 
-TimedTask::TimedTask(json taskJson):Task(taskJson) {
+TimedTask::TimedTask(json taskJson) : Task(taskJson) {
 	setStartDateMonth(taskJson[START_DATE_MONTH].as<int>());
 	setStartDateDay(taskJson[START_DATE_DAY].as<int>());
 	setStartTimeHour(taskJson[START_TIME_HOUR].as<int>());
 	setStartTimeMinute(taskJson[START_TIME_MINUTE].as<int>());
 	setEndDateMonth(taskJson[END_DATE_MONTH].as<int>());
-	setEndDateMonth(taskJson[END_DATE_DAY].as<int>());
-	setEndDateMonth(taskJson[END_TIME_HOUR].as<int>());
-	setEndDateMonth(taskJson[END_TIME_MINUTE].as<int>());	
+	setEndDateDay(taskJson[END_DATE_DAY].as<int>());
+	setEndTimeHour(taskJson[END_TIME_HOUR].as<int>());
+	setEndTimeMinute(taskJson[END_TIME_MINUTE].as<int>());	
 }
 
 

@@ -405,8 +405,8 @@ int Parser::getStartTimeMinute() {
 	return _start.getMinute();
 }
 
-int main() {
-	Parser parse(" edit 100  test  tomorrow 730am  ");
-
-	return 0;
-}
+//int main() {
+//	Parser parse(" edit 100  test  tomorrow 730am  ");
+//
+//	return 0;
+//}

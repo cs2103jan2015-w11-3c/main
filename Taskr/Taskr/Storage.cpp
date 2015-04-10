@@ -67,14 +67,20 @@ vector<Task*> Storage::getAllTasks() {
 		for (int i = 0; i < input.size(); i++) {
 			json &taskJson = input[i];
 			int taskType = taskJson[Task::TASK_TYPE].as<int>();
-
-			if (taskType == 1) {
-				tasks.push_back(new FloatingTask(taskJson));
-			} else if (taskType == 2) {
-				tasks.push_back(new TimedTask(taskJson));
-			} else if (taskType == 3) {
-				tasks.push_back(new DeadlineTask(taskJson));
+			Task *task;
+			switch (taskType)
+			{
+			case FloatingTask::TASK_TYPE_ID:
+				task = new FloatingTask(taskJson);
+				break;
+			case TimedTask::TASK_TYPE_ID:
+				task = new TimedTask(taskJson);
+				break;
+			case DeadlineTask::TASK_TYPE_ID:
+				task = new DeadlineTask(taskJson);
+				break;
 			}
+			tasks.push_back(task);
 		}
 	}
 	catch (exception ex) {

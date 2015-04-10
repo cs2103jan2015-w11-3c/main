@@ -45,6 +45,10 @@ void UI::printConfirmationMessage(std::string feedback) {
 void UI::printWholeString(std::string feedback){
 	std::vector<std::string> tokens;
     tokens = doSegment(feedback);
+	if (tokens.empty()) {
+		return;
+	}
+
 	if (tokens[0] == "C"){
 		std::cout << tokens[1] << std::endl;
 	}else if(tokens[0] == "HELP"){
