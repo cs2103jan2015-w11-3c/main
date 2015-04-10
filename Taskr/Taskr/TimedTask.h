@@ -8,8 +8,12 @@ private:
 	DateTime _end;
 
 public:
+	static const int TASK_TYPE_ID = 2;
 	TimedTask();
+	explicit TimedTask(jsoncons::json taskJson);
 	~TimedTask();
+
+	virtual jsoncons::json toJson();
 
 	//to replace individual setters
 	void setStart(DateTime);

@@ -44,7 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -69,6 +69,22 @@
     <ClInclude Include="DeadlineTask.h" />
     <ClInclude Include="FloatingTask.h" />
     <ClInclude Include="History.h" />
+    <ClInclude Include="jsoncons\json.hpp" />
+    <ClInclude Include="jsoncons\json1.hpp" />
+    <ClInclude Include="jsoncons\json2.hpp" />
+    <ClInclude Include="jsoncons\jsoncons.hpp" />
+    <ClInclude Include="jsoncons\jsoncons_config.hpp" />
+    <ClInclude Include="jsoncons\json_deserializer.hpp" />
+    <ClInclude Include="jsoncons\json_exception.hpp" />
+    <ClInclude Include="jsoncons\json_filter.hpp" />
+    <ClInclude Include="jsoncons\json_input_handler.hpp" />
+    <ClInclude Include="jsoncons\json_output_handler.hpp" />
+    <ClInclude Include="jsoncons\json_reader.hpp" />
+    <ClInclude Include="jsoncons\json_serializer.hpp" />
+    <ClInclude Include="jsoncons\json_structures.hpp" />
+    <ClInclude Include="jsoncons\json_type_traits.hpp" />
+    <ClInclude Include="jsoncons\output_format.hpp" />
+    <ClInclude Include="jsoncons\parse_error_handler.hpp" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Storage.h" />

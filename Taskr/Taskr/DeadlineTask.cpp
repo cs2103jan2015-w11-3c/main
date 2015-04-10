@@ -1,5 +1,7 @@
 #include "DeadlineTask.h"
 
+using namespace jsoncons;
+using namespace std;
 
 DeadlineTask::DeadlineTask() {
 	_taskType = 3;
@@ -9,6 +11,12 @@ DeadlineTask::DeadlineTask() {
 	_due.setMinute(0);
 }
 
+DeadlineTask::DeadlineTask(json taskJson) : Task(taskJson) {
+	setDueDateMonth(taskJson[DUE_DATE_MONTH].as<int>());
+	setDueDateDay(taskJson[DUE_DATE_DAY].as<int>());
+	setDueTimeHour(taskJson[DUE_TIME_HOUR].as<int>());
+	setDueTimeMinute(taskJson[DUE_TIME_MINUTE].as<int>());
+}
 void DeadlineTask::setDue(DateTime due) {
 	_due = due;
 }
@@ -154,4 +162,15 @@ int DeadlineTask::checkHour() {
 
 int DeadlineTask::checkMinute() {
 	return getDueTimeMinute();
+}
+
+json DeadlineTask::toJson() {
+	json taskJson = Task::toJson();
+	taskJson[DUE_DATE_MONTH] = getDueDateMonth();
+	taskJson[DUE_DATE_DAY] = getDueDateDay();
+	taskJson[DUE_TIME_HOUR] = getDueTimeHour();
+	taskJson[DUE_TIME_MINUTE] = getDueTimeMinute();
+
+
+	return taskJson;
 }

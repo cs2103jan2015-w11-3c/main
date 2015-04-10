@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iterator>
 #include <sstream>
 #include <stdlib.h>
 #include <cctype>
@@ -26,7 +27,7 @@ public:
 	~Parser();
 
 	//command strings
-	static const std::string CommandArray[10];
+	static const std::string CommandArray[11];
 	static const std::string ADD;
 	static const std::string DELETE;
 	static const std::string DEL;
@@ -37,6 +38,7 @@ public:
 	static const std::string SEARCH;
 	static const std::string UNDO;
 	static const std::string FILE;
+	static const std::string HELP;
 
 	static const char WhiteSpace;
 	static const int Start_Index;
@@ -60,7 +62,9 @@ public:
 	
 	bool isTimedTask(std::string input, int &matchindex, int &foundIndex);
 	bool isDeadlineTask(std::string input, int &index, int &foundIndex);
+	void findDateIndex(std::string input,int dateIndex, int &foundIndex);
 	std::string extractDate(int DateIndex, int foundIndex);
+	int smallerNum(int x, int y);
 	std::string extractTime(int TimeIndex, int foundIndex);
 
 	bool checkStartMonthBeforeEndMonth();

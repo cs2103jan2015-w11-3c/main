@@ -7,7 +7,9 @@ private:
 	DateTime _due;
 
 public:
+	static const int TASK_TYPE_ID = 3;
 	DeadlineTask();
+	explicit DeadlineTask(jsoncons::json taskJson);
 	~DeadlineTask();
 	//to replace individual setters
 	void setDue(DateTime);
@@ -29,6 +31,8 @@ public:
 	int checkMonth();
 	int checkHour();
 	int checkMinute();
+
+	virtual jsoncons::json toJson();
 
 	//std::string getDateString();
 	//std::string getTimeString();

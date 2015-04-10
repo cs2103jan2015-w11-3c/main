@@ -25,14 +25,14 @@ const std::string DateTime::DAY_MONTH[15] =
 
 const int DateTime::MONTHS_31DAYS[7] = {0,2,4,6,7,9,11};
 const int DateTime::MONTHS_30DAYS[5] = {3,5,8,10};
-const int DateTime::FEB_28DAYS = 1;
+const int DateTime::FEB_28or29DAYS = 1;
 
 //time constants 
 const std::string DateTime::PM = "pm";
 const std::string DateTime::AM = "am";
 const std::string DateTime::NOON = "noon";
 
-const std::string DateTime::TimeKeyWords[3] = {PM, AM, NOON};
+const std::string DateTime::TimeKeyWords[3] = {AM, PM, NOON};
 
 const std::string DateTime::HOUR_1 = "1";
 const std::string DateTime::HOUR_2 = "2";
@@ -63,61 +63,63 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 	if(!isEmpty(DateTokens)) {
 		std::string temp = DateTokens[INDEX_ZERO];
 		DateTokens.erase(DateTokens.begin());
-		int x;
-		if(identifyDayMonth(temp,x)) {
-			if(x <= 11) {			//when user input is <day><month> or <month><day>
-				_month = x;
-				_day = identifyDayoftheMonth(temp);
-			}
+		int DayMonthIndex = identifyDayMonth(temp);
+			
+		if(DayMonthIndex <= 11) {			//when user input is <day><month> or <month><day>
+			setMonth(DayMonthIndex);
+			_day = identifyDayoftheMonth(temp);
+			setByMidnight();
 
-			else if(x == 12) {		//when user input "today"
-				setLocalTime();
-			}
+		} else if(DayMonthIndex == 12) {		//when user input "today"
+			setLocalTime();
+			setByMidnight();
 
-			else if(x == 13 || x == 14) {	//when user input "tomorrow" or "tmr"
-				setLocalTime();
-				checkIfNextMonth();
-			}
-		}
-		}
+		} else if(DayMonthIndex == 13 || DayMonthIndex == 14) {	//when user input "tomorrow" or "tmr"
+			setLocalTime();
+			setTomorrowTime();
+			checkIfNextMonth();
+		}	
+	}
 		
-	
 	if(!isEmpty(TimeTokens)) {
 		std::string temp = TimeTokens[INDEX_ZERO];
 		TimeTokens.erase(TimeTokens.begin());
+		identifyTimeKeyWordIndex(temp);
 
 		if(checkDash(temp)) {
 			std::string startTime = splitTime(temp);
-		}
+			TimeTokens.push_back(temp);
 
-		else {
-			std::string time = extractTime(temp);
-			int timeLenth = time.length();
+		} else {
+			std::string time = extractTime(temp);	
+			int timeLenth = time.length();			
+
+			//how to set month and day when "today" or only time given
+			//how to ensure smooth swap of objects later
 			if(timeLenth == 1) {
 				_hour = convertDigits(temp);
+				checkPastNoon();
 				_minute = INDEX_ZERO;
-			}
 
-			else if(timeLenth == 3) {
+			} else if(timeLenth == 3) {
 				int time = convertDigits(temp);
 				_hour = extractHour(time);
+				checkPastNoon();
 				_minute = extractMinute(time);
 			}
 		}
 	}
 }
 
-bool DateTime::identifyDayMonth(std::string input, int &x) {
-	bool DayMonthFound = false;
-	for(int i = 0; i < 15; i++) {
-		int x = input.find(DAY_MONTH[i]);
-		if(x != std::string::npos) {
-			x = i;
-			break;
-		}
+int DateTime::identifyDayMonth(std::string input) {
+	int index = 0;
+	int x = input.find(DAY_MONTH[index]);
+	while(x == -1) {
+		index++;
+		x = input.find(DAY_MONTH[index]);
 	}
 
-	return DayMonthFound;
+	return index;
 }
 
 int DateTime::identifyDayoftheMonth(std::string input) {
@@ -132,10 +134,20 @@ void DateTime::setLocalTime() {
 	struct tm localTime;
 	time(&currentTime);                  
 	localtime_s(&localTime, &currentTime);
+	_year = localTime.tm_year;
 	_month = localTime.tm_mon;
 	_day = localTime.tm_mday;
-	_hour = localTime.tm_hour;
-	
+	_hour = NEGATIVE_1;
+	_minute = NEGATIVE_1;
+}
+
+void DateTime::setByMidnight() {	//set deadline to 23.59
+	_hour = 23;			
+	_minute = 59;
+}
+
+void DateTime::setTomorrowTime() {
+	_day += + 1;
 }
 
 void DateTime::checkIfNextMonth() {			//check if tomorrow is first day of next month
@@ -151,9 +163,32 @@ void DateTime::checkIfNextMonth() {			//check if tomorrow is first day of next m
 		}
 	}
 
-	if(_month == FEB_28DAYS && _day == 28) {
+	if(_month == FEB_28or29DAYS && _day == 28 && !isLeapYear()) {	//when month of Feb and not leap year
+		changeMonth();
+
+	} else if(_month == FEB_28or29DAYS && _day == 29 && isLeapYear()) {
 		changeMonth();
 	}
+}
+
+bool DateTime::isLeapYear() {
+	bool LeapYear = false;
+	if(_year%4 == 0) {
+		LeapYear = true;
+	}
+
+	return LeapYear;
+}
+
+void DateTime::identifyTimeKeyWordIndex(std::string input) {
+	int index = 0;
+	int x = input.find(TimeKeyWords[index]);
+	while(x == -1) {
+		index++;
+		x = input.find(TimeKeyWords[index]);
+	}
+
+	_timeKeyWordIndex = index;
 }
 
 bool DateTime::checkDash(std::string input) {		//ensure both times are not in same token
@@ -180,15 +215,8 @@ std::string DateTime::splitTime(std::string &input) {
 }
 
 std::string DateTime::extractTime(std::string input) {
-	int index;
-	for(int i = 0; i < 3; i++) {
-		int x = input.find(DAY_MONTH[i]);
-		if(x != std::string::npos) {
-			index = i;
-			break;
-		}
-	}	
-	std::string temp = input.substr(INDEX_ZERO, index - INDEX_ZERO);
+	int x = input.find(TimeKeyWords[_timeKeyWordIndex]);
+	std::string temp = input.substr(INDEX_ZERO, x - INDEX_ZERO);
 	return temp;
 }
 
@@ -201,8 +229,8 @@ int DateTime::convertDigits(std::string input) {
 
 int DateTime::extractHour(int time) {
 	int hour = 0;
-	while(time/100 > 0) {
-		time = time/100;
+	while(time - 100 > 0) {
+		time = time - 100;
 		hour++;
 	}
 
@@ -212,6 +240,12 @@ int DateTime::extractHour(int time) {
 int DateTime::extractMinute(int time) {
 	int minute = time%100;
 	return minute;
+}
+
+void DateTime::checkPastNoon() {
+	if(_timeKeyWordIndex >= 1 && _hour <= 11) {
+		_hour += 12;
+	} 
 }
 
 void DateTime::changeMonth() {

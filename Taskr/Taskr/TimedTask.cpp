@@ -1,5 +1,7 @@
 #include "TimedTask.h"
 
+using namespace jsoncons;
+using namespace std;
 
 TimedTask::TimedTask() {
 	_taskType = 2;
@@ -11,6 +13,17 @@ TimedTask::TimedTask() {
 	_end.setDay(0);
 	_end.setHour(0);
 	_end.setMinute(0);
+}
+
+TimedTask::TimedTask(json taskJson) : Task(taskJson) {
+	setStartDateMonth(taskJson[START_DATE_MONTH].as<int>());
+	setStartDateDay(taskJson[START_DATE_DAY].as<int>());
+	setStartTimeHour(taskJson[START_TIME_HOUR].as<int>());
+	setStartTimeMinute(taskJson[START_TIME_MINUTE].as<int>());
+	setEndDateMonth(taskJson[END_DATE_MONTH].as<int>());
+	setEndDateDay(taskJson[END_DATE_DAY].as<int>());
+	setEndTimeHour(taskJson[END_TIME_HOUR].as<int>());
+	setEndTimeMinute(taskJson[END_TIME_MINUTE].as<int>());	
 }
 
 
@@ -240,4 +253,19 @@ int TimedTask::checkHour() {
 
 int TimedTask::checkMinute() {
 	return getStartTimeMinute();
+}
+
+json TimedTask::toJson() {
+	json taskJson = Task::toJson();
+	taskJson[START_DATE_MONTH] = getStartDateMonth();
+	taskJson[START_DATE_DAY] = getStartDateDay();
+	taskJson[START_TIME_HOUR] = getStartTimeHour();
+	taskJson[START_TIME_MINUTE] = getStartTimeMinute();
+	taskJson[END_DATE_MONTH] = getEndDateMonth();
+	taskJson[END_DATE_DAY] = getEndDateDay();
+	taskJson[END_TIME_HOUR] = getEndTimeHour();
+	taskJson[END_TIME_MINUTE] = getEndTimeMinute();
+
+
+	return taskJson;
 }

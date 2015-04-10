@@ -2,6 +2,8 @@
 #include "CppUnitTest.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace jsoncons;
+using namespace std;
 
 namespace TaskUnitTest
 {
@@ -31,8 +33,22 @@ namespace TaskUnitTest
 			Assert::IsTrue(task.isDone());
 		}
 
+		TEST_METHOD(json_TEST)
+		{
+			Task task;
+			string desc = "1";
 
+			task.setDescription(desc);
+			task.setAsDone();
+			json taskJson = task.toJson();
+			Assert::AreEqual(desc, taskJson[Task::TASK_DESCRIPTION].as<string>());
+			Assert::IsTrue(taskJson[Task::IS_DONE].as<bool>());
 
+			Task taskFromJson(taskJson);
+			Assert::AreEqual(desc, taskFromJson.getDescription());
+			Assert::IsTrue(taskFromJson.isDone());
+			
+		}
 	};
 }
 
