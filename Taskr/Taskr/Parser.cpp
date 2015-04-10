@@ -227,7 +227,13 @@ void Parser::findDateIndex(std::string input, int dateIndex, int &foundIndex) {
 std::string Parser::extractDate(int DateIndex, int foundIndex) {
 	std::string dateToken;
 
-	if(DateIndex <= 11) {
+	if(DateIndex <= 2) {
+		std::string dateStringFound = DateTime::DAY_MONTH[DateIndex];
+		int dateStringSize = dateStringFound.length();
+		dateToken = _description.substr(foundIndex, dateStringSize);
+		_description.erase(foundIndex, dateStringSize);
+		
+	} else {
 		int dateStartIndex = foundIndex - 3;			//assumes number is max 3 characters away from month
 		int dateEnd = _description.find_first_of(WhiteSpace, foundIndex);
 		
@@ -237,17 +243,12 @@ std::string Parser::extractDate(int DateIndex, int foundIndex) {
 			it++;
 			EndOfString++;
 		}
+		
 		int dateEndIndex = smallerNum(dateEnd, EndOfString);
-
 		dateToken = _description.substr(dateStartIndex, dateEndIndex);
 		dateToken = convertLowerCase(dateToken);
 		_description.erase(dateStartIndex, dateEndIndex - dateStartIndex + 1);		//removes the token from description
 
-	} else {
-		std::string dateStringFound = DateTime::DAY_MONTH[DateIndex];
-		int dateStringSize = dateStringFound.length();
-		dateToken = _description.substr(foundIndex, dateStringSize);
-		_description.erase(foundIndex, dateStringSize);
 	}
 	
 	return dateToken;
@@ -405,8 +406,8 @@ int Parser::getStartTimeMinute() {
 	return _start.getMinute();
 }
 
-//int main() {
-//	Parser parse(" edit 100  test  tomorrow 730am  ");
-//
-//	return 0;
-//}
+int main() {
+	Parser parse("  add  do this today ");
+
+	return 0;
+}
