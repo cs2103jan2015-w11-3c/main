@@ -406,8 +406,8 @@ int Parser::getStartTimeMinute() {
 	return _start.getMinute();
 }
 
-int main() {
-	Parser parse("  add  do this today 730pm   13 apr 730am ");
-
-	return 0;
-}
+//int main() {
+//	Parser parse("  add  do this today 730pm   13 apr 730am ");
+//
+//	return 0;
+//}
