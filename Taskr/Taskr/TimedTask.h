@@ -1,3 +1,4 @@
+//@author A0111966A
 #pragma once
 
 #include "Task.h"
@@ -15,42 +16,38 @@ public:
 
 	virtual jsoncons::json toJson();
 
-	//to replace individual setters
+	//setters
 	void setStart(DateTime);
 	void setEnd(DateTime);
-
-	int getStartTimeHour();
-	int getStartTimeMinute();
-	int getStartDateDay();
-	int getStartDateMonth();
-	
 	void setStartTimeHour(int);
 	void setStartTimeMinute(int);
 	void setStartDateDay(int);
 	void setStartDateMonth(int);
-
-	int getEndTimeHour();
-	int getEndTimeMinute();
-	int getEndDateDay();
-	int getEndDateMonth();
-	
 	void setEndTimeHour(int);
 	void setEndTimeMinute(int);
 	void setEndDateDay(int);
 	void setEndDateMonth(int);
 
-	std::string toString();
-	std::string startToString();
-	std::string endToString();
-	bool isLessThanTen(int);
+	//getters
+	int getStartTimeHour();
+	int getStartTimeMinute();
+	int getStartDateDay();
+	int getStartDateMonth();
+	int getEndTimeHour();
+	int getEndTimeMinute();
+	int getEndDateDay();
+	int getEndDateMonth();
 	int checkDay();
 	int checkMonth();
 	int checkHour();
 	int checkMinute();
 
+	//helper functions for polymorphic nature
+	std::string toString();
+	std::string startToString();
+	std::string endToString();
+	bool isLessThanTen(int);
 
-	//std::string getDateString();
-	//std::string getTimeString();
 
 };
 

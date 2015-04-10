@@ -1,3 +1,4 @@
+//@author A0111966A
 #ifndef TASK_H
 #define TASK_H
 
@@ -13,9 +14,10 @@ protected:
 	std::string _description;
 	bool _isDone;
 	int _taskType;
-	//_taskType = 1: floating
-	//_taskType = 2: timed
-	//_taskType = 3: deadline.
+	//  _taskType:
+	//  1: floating
+	//  2: timed
+	//  3: deadline
 
 
 public:
@@ -38,14 +40,19 @@ public:
 	Task();
 	explicit Task(jsoncons::json taskJson);
 	~Task();
+	virtual std::string toString();
+
+	//setters for attributes common to all Task child classes
 	void setDescription(std::string description);
 	void setAsDone();
 	void setTaskType(int);
+
+	//getters for attributes common to all Task child classes
 	std::string getDescription();
 	bool isDone();
 	int getTaskType();
-	
-	virtual std::string toString();
+
+	//getters for different types of child classes (floating/timed/deadline) for polymorphism.
 	virtual int checkDay();
 	virtual int checkMonth();
 	virtual int checkHour();

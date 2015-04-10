@@ -1,3 +1,4 @@
+//@author A0111966A
 #ifndef LOGIC_H
 #define LOGIC_H
 
@@ -31,7 +32,6 @@ public:
 
 	std::string executeCommand(std::string userInput);
 	void executeAdd(std::ostringstream&);
-
 	void addTask(Task*, std::ostringstream&);
 	void displayList(std::ostringstream&);
 	void deleteTask(std::ostringstream&);
@@ -43,13 +43,16 @@ public:
 	void showHelp(std::ostringstream&);
 
 	void initializeListOfTasks();
-	bool isValidIndex(int);
-	bool isRepeated(Task*);
-	bool isActionConfirmed();
 	void sortDoneTasks();
 	void listToString(std::vector<Task*>, std::ostringstream&);
 	void sortTasksByTime(std::vector<Task*>&);
+	bool isValidIndex(int);
+	bool isRepeated(Task*);
+	bool isActionConfirmed();
 	bool checkTiming(Task*, Task*);
+
+	//methods for unit testing
+	std::string printListToString();
 
 	static const std::string MESSAGE_ADDED;
 	static const std::string MESSAGE_DELETED;

@@ -1,3 +1,4 @@
+//@author A0111966A
 #pragma once
 
 #include "Task.h"
@@ -11,30 +12,30 @@ public:
 	DeadlineTask();
 	explicit DeadlineTask(jsoncons::json taskJson);
 	~DeadlineTask();
-	//to replace individual setters
+
+	//setters
 	void setDue(DateTime);
-	
 	void setDueTimeHour(int);
 	void setDueTimeMinute(int);
 	void setDueDateDay(int);
 	void setDueDateMonth(int);
-
+	
+	//getters
 	int getDueTimeHour();
 	int getDueTimeMinute();
 	int getDueDateDay();
 	int getDueDateMonth();
-
-	std::string toString();
-	std::string deadlineToString();
-	bool isLessThanTen(int);
 	int checkDay();
 	int checkMonth();
 	int checkHour();
 	int checkMinute();
 
-	virtual jsoncons::json toJson();
+	//helper functions for polymorphic nature
+	std::string toString();
+	std::string deadlineToString();
+	bool isLessThanTen(int);
 
-	//std::string getDateString();
-	//std::string getTimeString();
+
+	virtual jsoncons::json toJson();
 };
 

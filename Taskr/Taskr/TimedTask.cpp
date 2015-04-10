@@ -1,3 +1,4 @@
+//@author A0111966A
 #include "TimedTask.h"
 
 using namespace jsoncons;
@@ -102,47 +103,7 @@ void TimedTask::setEndDateMonth(int endDateMonth) {
 	_end.setMonth(endDateMonth);
 }
 
-//std::string TimedTask::getDateString() {
-//	std::ostringstream oss;
-//	if (isLessThanTen(_start.getDay())) {
-//		oss << "0" << _start.getDay();
-//	}
-//	else {
-//		oss << _start.getDay();
-//	}
-//
-//	oss << "/";
-//
-//	if (isLessThanTen(_start.getMonth())) {
-//		oss << "0" << _start.getMonth();
-//	}
-//	else {
-//		oss << _start.getMonth();
-//	}
-//	return oss.str();
-//}
-//
-//std::string TimedTask::getTimeString() {
-//	std::ostringstream oss;
-//	if (isLessThanTen(_start.getHour())) {
-//		oss << "0" << _start.getHour();
-//	}
-//	else {
-//		oss << _start.getHour();
-//	}
-//
-//	if (isLessThanTen(_start.getMinute())) {
-//		oss << "0" << _start.getMinute();
-//	}
-//	else {
-//		oss << _start.getMinute();
-//	}
-//	return oss.str();
-//}
-
 std::string TimedTask::startToString() {
-	//std::ostringstream oss;
-	//oss << getDateString() << "\n" << getTimeString();
 	std::ostringstream oss;
 	if (isLessThanTen(_start.getDay())) {
 		oss << "0" << _start.getDay();
@@ -175,15 +136,12 @@ std::string TimedTask::startToString() {
 	else {
 		oss << _start.getMinute();
 	}
-
+	oss << std::endl;
 	return oss.str();
 }
 
 std::string TimedTask::endToString() {
 	std::ostringstream oss;
-	//oss << _end.date[0] << "/" << _end.date[1] << std::endl;
-	//oss << _end.time[0] << _end.time[1] << std::endl;
-
 	if (isLessThanTen(_end.getDay())) {
 		oss << "0" << _end.getDay();
 	}
@@ -215,7 +173,7 @@ std::string TimedTask::endToString() {
 	else {
 		oss << _end.getMinute();
 	}
-
+	oss << std::endl;
 	return oss.str();
 }
 

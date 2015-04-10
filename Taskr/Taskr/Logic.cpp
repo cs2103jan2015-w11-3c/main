@@ -1,5 +1,5 @@
+//@author A0111966A
 #include "Logic.h"
-
 
 const std::string Logic::MESSAGE_ADDED = " has been added to Taskr!\n";
 const std::string Logic::MESSAGE_DELETED = " has been deleted from Taskr.\n";
@@ -159,7 +159,7 @@ void Logic::editTask(std::ostringstream& ossConfirmationMessage) {
 		ossConfirmationMessage << ERROR_INVALID_DESCRIPTION;
 	} else {
 		int typeOfTaskToEdit;
-		typeOfTaskToEdit = _listOfTasks[indexToEdit]->getTaskType();
+		typeOfTaskToEdit = _listOfTasks[indexToEdit - 1]->getTaskType();
 		std::string oldTaskDescription;
 		std::string newTaskDescription;
 		oldTaskDescription = _listOfTasks[indexToEdit + _doneTasksCount - 1]->getDescription();
@@ -385,7 +385,8 @@ bool Logic::isRepeated(Task* task) {
 	return false;
 }
 
-//  This function is used internally, and sorts all tasks that are marked as done to be placed at the front of Logic object's _listOfTasks.
+//  This function is used internally, and sorts all tasks that are marked
+//  as done to be placed at the front of Logic object's _listOfTasks.
 void Logic::sortDoneTasks() {
 	std::vector<Task*> sortedDoneTaskList;
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
@@ -441,4 +442,10 @@ bool Logic::checkTiming(Task* taskA, Task* taskB) {
 		}
 	}	
 	return false;
+}
+
+std::string Logic::printListToString() {
+	std::ostringstream oss;
+	listToString(_listOfTasks, oss);
+	return oss.str();	
 }
