@@ -47,7 +47,7 @@ std::string Logic::executeCommand(std::string userInput) {
 			deleteTask(oss);
 		} else if (command == "display") {
 			displayList(oss);
-		} else if (command == "edit") {		//BIG LOGIC PROBLEM HERE.
+		} else if (command == "edit") {
 			editTask(oss);
 		} else if (command == "done") {
 			setDone(oss);
@@ -377,7 +377,7 @@ void Logic::listToString(std::vector<Task*> listOfTasks, std::ostringstream& oss
 	}
 }
 
-void Logic::sortTasksByTime(std::vector<Task*> listOfTasks) {
+void Logic::sortTasksByTime(std::vector<Task*>& listOfTasks) {
 	for (int i = 0; i < (listOfTasks.size() - 1); i++) {
 		int minIndex = i;
 		for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
@@ -386,7 +386,7 @@ void Logic::sortTasksByTime(std::vector<Task*> listOfTasks) {
 			}
 		}
 		if (minIndex != i) {
-			swapTasks(listOfTasks[minIndex], listOfTasks[i]);
+			std::swap(listOfTasks[minIndex], listOfTasks[i]);
 		}
 	}
 }
@@ -410,10 +410,4 @@ bool Logic::checkTiming(Task* taskA, Task* taskB) {
 		}
 	}	
 	return false;
-}
-
-void Logic::swapTasks(Task* taskA, Task* taskB) {
-	Task temp = *taskA;
-	*taskA = *taskB;
-	*taskB = temp;
 }

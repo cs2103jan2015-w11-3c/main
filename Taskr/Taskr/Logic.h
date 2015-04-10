@@ -5,6 +5,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<algorithm>
 #include<ctime>
 #include "Task.h"
 #include "FloatingTask.h"
@@ -48,7 +49,7 @@ public:
 	bool isActionConfirmed();
 	void sortDoneTasks();
 	void listToString(std::vector<Task*>, std::ostringstream&);
-	void sortTasksByTime(std::vector<Task*>);
+	void sortTasksByTime(std::vector<Task*>&);
 	bool checkTiming(Task*, Task*);
 	void swapTasks(Task*, Task*);
 
