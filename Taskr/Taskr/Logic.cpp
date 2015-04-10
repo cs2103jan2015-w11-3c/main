@@ -378,7 +378,7 @@ void Logic::listToString(std::vector<Task*> listOfTasks, std::ostringstream& oss
 }
 
 void Logic::sortTasksByTime(std::vector<Task*>& listOfTasks) {
-	for (int i = 0; i < (listOfTasks.size() - 1); i++) {
+	for (int i = 0; i + 1 < listOfTasks.size(); i++) {
 		int minIndex = i;
 		for (unsigned int j = i + 1; j < listOfTasks.size(); j++) {
 			if (checkTiming(listOfTasks[j], listOfTasks[minIndex])) {

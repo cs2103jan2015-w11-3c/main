@@ -30,6 +30,9 @@ public:
 	int checkHour();
 	int checkMinute();
 
+	virtual jsoncons::json toJson();
+	explicit DeadlineTask(jsoncons::json taskJson);
+
 	//std::string getDateString();
 	//std::string getTimeString();
 };

@@ -11,6 +11,9 @@ public:
 	TimedTask();
 	~TimedTask();
 
+	virtual jsoncons::json toJson();
+	explicit TimedTask(jsoncons::json taskJson);
+
 	//to replace individual setters
 	void setStart(DateTime);
 	void setEnd(DateTime);

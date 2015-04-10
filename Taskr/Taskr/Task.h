@@ -6,7 +6,7 @@
 #include<string>
 #include<vector>
 #include "Parser.h"
-
+#include "jsoncons/json.hpp"
 
 class Task {
 protected:
@@ -17,8 +17,26 @@ protected:
 	//_taskType = 2: timed
 	//_taskType = 3: deadline.
 
+
 public:
+	static const std::string TASK_TYPE;
+	static const std::string TASK_DESCRIPTION;
+	static const std::string IS_DONE;
+	static const std::string START_DATE_MONTH;
+	static const std::string START_DATE_DAY;
+	static const std::string START_TIME_HOUR;
+	static const std::string START_TIME_MINUTE;
+	static const std::string END_DATE_MONTH;
+	static const std::string END_DATE_DAY;
+	static const std::string END_TIME_HOUR;
+	static const std::string END_TIME_MINUTE;
+	static const std::string DUE_DATE_MONTH;
+	static const std::string DUE_DATE_DAY;
+	static const std::string DUE_TIME_HOUR;
+	static const std::string DUE_TIME_MINUTE;
+
 	Task();
+	explicit Task(jsoncons::json taskJson);
 	~Task();
 	void setDescription(std::string description);
 	void setAsDone();
@@ -46,6 +64,8 @@ public:
 	virtual int getEndTimeMinute();
 	virtual int getEndDateDay();
 	virtual int getEndDateMonth();
+
+	virtual jsoncons::json toJson();
 };
 
 #endif
