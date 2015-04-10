@@ -22,9 +22,9 @@ namespace UITest
 			Assert::AreEqual(expected1, tokens[1]);
 
 			std::string expected2("");
-			Assert::AreEqual(expected2, tokens[5]);
+			Assert::AreEqual(expected2, tokens[4]);
 
-			size_t size = 15;
+			size_t size = 14;
 			Assert::AreEqual(size, tokens.size());
 		}
 
@@ -39,7 +39,7 @@ namespace UITest
 
 		TEST_METHOD(getNumberOfTasks){
 			UI ui;
-			std::string feedback("D\ncs v0.4\n8 Apr\n11am\n\nT\nproject meeting\n9 Apr\n2pm\n9 Apr\n4pm\n\nF\ntest task\n\n");
+			std::string feedback("D\ncs v0.4\n8 Apr\n11am\n\nT\nproject meeting\n9 Apr\n2pm\n9 Apr\n4pm\n\nF\ntest task\n\n\n");
 			std::vector<std::string> tokens = ui.doSegment(feedback);
 
 			int expected = 3;

@@ -21,7 +21,7 @@ const std::string DateTime::TODAY = "today";
 const std::string DateTime::TOMORROW = "tomorrow";
 const std::string DateTime::TMR = "tmr";
 const std::string DateTime::DAY_MONTH[15] = 
-{JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC, TODAY, TOMORROW, TMR};
+{TODAY ,TOMORROW ,TMR , JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC};
 
 const int DateTime::MONTHS_31DAYS[7] = {0,2,4,6,7,9,11};
 const int DateTime::MONTHS_30DAYS[5] = {3,5,8,10};
@@ -49,6 +49,7 @@ const std::string DateTime::HOUR_12 = "12";
 const std::string DateTime::HOURS[12] = 
 {HOUR_1, HOUR_2, HOUR_3, HOUR_4, HOUR_5,HOUR_6, HOUR_7, HOUR_8, HOUR_9, HOUR_10, HOUR_11, HOUR_12};
 
+//need to check indexing for day_month
 DateTime::DateTime() {	
 	_month = NEGATIVE_1;
 	_day = NEGATIVE_1;
@@ -65,20 +66,21 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 		DateTokens.erase(DateTokens.begin());
 		int DayMonthIndex = identifyDayMonth(temp);
 			
-		if(DayMonthIndex <= 11) {			//when user input is <day><month> or <month><day>
-			setMonth(DayMonthIndex);
-			_day = identifyDayoftheMonth(temp);
-			setByMidnight();
-
-		} else if(DayMonthIndex == 12) {		//when user input "today"
+		if(DayMonthIndex == 0) {		//when user input "today"
 			setLocalTime();
 			setByMidnight();
 
-		} else if(DayMonthIndex == 13 || DayMonthIndex == 14) {	//when user input "tomorrow" or "tmr"
+		} else if(DayMonthIndex == 1 || DayMonthIndex == 2) {	//when user input "tomorrow" or "tmr"
 			setLocalTime();
 			setTomorrowTime();
 			checkIfNextMonth();
-		}	
+
+		} else if(DayMonthIndex >= 3) {			//when user input is <day><month> or <month><day>
+			setMonth(DayMonthIndex-3);
+			_day = identifyDayoftheMonth(temp);
+			setByMidnight();
+
+		} 
 	}
 		
 	if(!isEmpty(TimeTokens)) {
