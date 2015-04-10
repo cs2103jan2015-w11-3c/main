@@ -17,6 +17,9 @@ private:
 	int _day;
 	int _hour;
 	int _minute;
+	int _year;
+
+	int _timeKeyWordIndex;
 
 public:
 	
@@ -41,9 +44,10 @@ public:
 	static const std::string TOMORROW;
 	static const std::string TMR;
 	static const std::string DAY_MONTH[15];
+	
 	static const int MONTHS_31DAYS[7];
 	static const int MONTHS_30DAYS[5];
-	static const int FEB_28DAYS;
+	static const int FEB_28or29DAYS;
 
 	//time constants 
 	static const std::string PM;
@@ -70,13 +74,18 @@ public:
 	~DateTime();
 
 	bool isEmpty(std::vector<std::string> tokens);
-	bool identifyDayMonth(std::string input,int &x);
+	int identifyDayMonth(std::string input);
 	int identifyDayoftheMonth(std::string temp);
 	int retrieveMonth(std::string input);
-
-	void setLocalTime();
 	void checkIfNextMonth();
 	void changeMonth();
+	bool isLeapYear();
+
+	void identifyTimeKeyWordIndex(std::string input);
+	void setLocalTime();
+	void setTomorrowTime();
+	void checkPastNoon();
+	void setByMidnight();
 	bool checkDash(std::string input);
 	int findDash(std::string input);
 	std::string splitTime(std::string &input);
@@ -85,7 +94,6 @@ public:
 	int extractHour(int time);
 	int extractMinute(int time);
 
-	//setters
 	void setMonth(int month);
 	void setDay(int day);
 	void setHour(int hour);

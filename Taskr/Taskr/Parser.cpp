@@ -1,7 +1,5 @@
 #include "Parser.h"
 
-const std::string Parser::CommandArray[10] = 
-{ADD, DELETE, DEL, EDIT, DISPLAY, DONE, EXIT, SEARCH, UNDO, FILE};
 const std::string Parser::ADD = "add";
 const std::string Parser::DELETE = "delete";
 const std::string Parser::DEL = "del";
@@ -12,6 +10,9 @@ const std::string Parser::EXIT = "exit";
 const std::string Parser::SEARCH = "search";
 const std::string Parser::UNDO = "undo";
 const std::string Parser::FILE = "file";
+const std::string Parser::HELP= "help";
+const std::string Parser::CommandArray[11] = 
+{ADD, DELETE, DEL, EDIT, DISPLAY, DONE, EXIT, SEARCH, UNDO, FILE, HELP};
 
 const char Parser::WhiteSpace = ' ';
 const int Parser::Start_Index = 0;
@@ -39,7 +40,6 @@ Parser::Parser(std::string input) {
 void Parser::trimInput(std::string &input) {
 	trimStart(input);
 	trimEnd(input);
-	
 }
 
 void Parser::trimStart(std::string &input) {
@@ -53,20 +53,18 @@ void Parser::trimStart(std::string &input) {
 
 void Parser::trimEnd(std::string &input) {
 	int endInput = input.length();
-	while((endInput > 0) && input[endInput] == WhiteSpace) {
+	while((endInput > 0) && input[endInput-1] == WhiteSpace) {
 		endInput--;
 	}
 
 	input = input.substr(Start_Index, endInput);
 }
+
 void Parser::removeWhiteSpaces(std::string &input) {   //to remove consecutive white spaces
 	int index;
-	int end = input.length();
-
-	for(index = Start_Index; index < end; index++) {
-		if((input[index] == WhiteSpace) && (input[index+1] == WhiteSpace)) {
+	for (index = Start_Index; index < input.length() - 1; index++) {
+		if (input[index] == WhiteSpace && input[index + 1] == WhiteSpace) {
 			input.erase(index + 1, 1);
-			index--;
 		}
 	}
 }
@@ -93,14 +91,10 @@ void Parser::extractParameters() {
 	if(_command == ADD || _command == SEARCH || _command == DISPLAY || _command == FILE) {
 		removeCommand();
 		setDescription();
-	}
-
-	else if(_command == DELETE || _command == DONE) {
+	} else if(_command == DELETE || _command == DONE) {
 		removeCommand();
 		setIndex();
-	}
-
-	else if(_command == EDIT) {
+	} else if(_command == EDIT) {
 		removeCommand();
 		setIndex();
 		removeIndex();
@@ -125,13 +119,21 @@ void Parser::setIndex() {
 }
 
 void Parser::retrieveIndex() {
-	int temp = _userInput[Start_Index] - '0';
+	std::istringstream iss(_userInput);
+	int temp;
+	iss >> temp;
 	_index = temp;
-
 }
 
 void Parser::removeIndex() {
-	_userInput.erase(Start_Index, 1);
+	int temp = _index;
+	int NumberOfDigits = 0;
+	do {
+		temp = temp/10;
+		NumberOfDigits++;
+	} while(temp > 0);
+
+	_userInput.erase(Start_Index, NumberOfDigits);
 	trimStart(_userInput);
 }
 
@@ -146,27 +148,26 @@ void Parser::extractDateTimeTokens() {
 		int matchDate;
 		int foundTime;
 		int foundDate;
-		 {	
-			
-			 if(!isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {			//check if float task
+		{	
+			 if(!isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {		//check if float task
 			_TaskType = 1;
-			}
+			} else if(isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {	//check if timed task due today
+				_TaskType = 2;
+				TimeTokens.push_back(extractTime(matchTime, foundTime));
 
-			else if(isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {		//check if timed task due today
+			} else if(isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {	//check if timed task with deadline
 				_TaskType = 2;
-				TimeTokens.push_back(extractTime(matchTime, foundTime));
-			}
-			
-			else if(isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {		//check if timed task with deadline
-				_TaskType = 2;
-				TimeTokens.push_back(extractTime(matchTime, foundTime));
-				DateTokens.push_back(extractDate(matchDate, foundDate));
-			}
-			
-			else if(!isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {		//check if only deadline task
+				TimeTokens.push_back(extractTime(matchTime, foundTime)); 
+				int foundIndex;
+				temp = _description;
+				temp = convertLowerCase(temp);
+				findDateIndex(temp, matchDate, foundIndex);
+				DateTokens.push_back(extractDate(matchDate, foundIndex));
+
+			} else if(!isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {	//check if only deadline task
 				_TaskType = 3;
 				DateTokens.push_back(extractDate(matchDate, foundDate));
-			}
+				}
 
 			temp = _description;
 			temp = convertLowerCase(temp);
@@ -205,7 +206,8 @@ bool Parser::isDeadlineTask(std::string input, int &matchIndex, int &foundIndex)
 
 	bool isDeadline = false;
 	for(int index = 0; index < Deadline.size(); index++) {
-		int FoundDeadline = input.find(Deadline[index]);
+		std::string temp = Deadline[index];
+		int FoundDeadline = input.find(temp);
 		if(FoundDeadline > 0) {
 			isDeadline = true;
 			matchIndex = index;
@@ -217,30 +219,62 @@ bool Parser::isDeadlineTask(std::string input, int &matchIndex, int &foundIndex)
 	return isDeadline;
 }
 
+void Parser::findDateIndex(std::string input, int dateIndex, int &foundIndex) {
+	std::string temp = DateTime::DAY_MONTH[dateIndex];
+	foundIndex = input.find(temp);
+}
+
 std::string Parser::extractDate(int DateIndex, int foundIndex) {
-	std::string dateStringFound = DateTime::DAY_MONTH[DateIndex];
-	int dateStringSize = dateStringFound.length();
+	std::string dateToken;
 
-	int dateStartIndex = foundIndex - 3;			//assumes number is max 3 characters away from month
-	int dateEndIndex = foundIndex + dateStringSize - 1;
+	if(DateIndex <= 11) {
+		int dateStartIndex = foundIndex - 3;			//assumes number is max 3 characters away from month
+		int dateEnd = _description.find_first_of(WhiteSpace, foundIndex);
+		
+		std::string::iterator it = _description.begin();
+		int EndOfString = 0;
+		while(it != _description.end()) {
+			it++;
+			EndOfString++;
+		}
+		int dateEndIndex = smallerNum(dateEnd, EndOfString);
 
-	std::string dateToken = _description.substr(dateStartIndex, dateEndIndex);
-	_description.erase(dateStartIndex, dateEndIndex - dateStartIndex + 1);		//removes the token from description
+		dateToken = _description.substr(dateStartIndex, dateEndIndex);
+		dateToken = convertLowerCase(dateToken);
+		_description.erase(dateStartIndex, dateEndIndex - dateStartIndex + 1);		//removes the token from description
 
+	} else {
+		std::string dateStringFound = DateTime::DAY_MONTH[DateIndex];
+		int dateStringSize = dateStringFound.length();
+		dateToken = _description.substr(foundIndex, dateStringSize);
+		_description.erase(foundIndex, dateStringSize);
+	}
+	
 	return dateToken;
+}
+
+int Parser::smallerNum(int x, int y) {
+	if( x < y && x > 0) {
+		return x;
+	} else {
+		return y;
+	}
 }
 
 std::string Parser::extractTime(int TimeIndex, int foundIndex) {
 	std::string timeStringFound = DateTime::TimeKeyWords[TimeIndex];
 	int timeStringSize = timeStringFound.length();
 
-	int timeStartIndex = TimeIndex - 4;				//assumes max 4 characters away from time string
-	int timeEndIndex = TimeIndex + timeStringSize;
-	std::string timeToken = _description.substr(timeStartIndex, timeEndIndex);
-	int checkSpace = timeToken.find_first_of(" ");
-	if(checkSpace != std::string::npos) {			//ensure no white space in timeToken
-		timeToken.erase(checkSpace, 1);
-	}
+	int timeStart = foundIndex - 4;				//assumes max 4 characters away from time string
+	int findWhiteSpace = _description.find_first_of(WhiteSpace, timeStart) + 1;
+	int timeStartIndex = smallerNum(timeStart, findWhiteSpace);
+
+	findWhiteSpace = _description.find_first_of(WhiteSpace, foundIndex);
+	int timeEnd = foundIndex + timeStringSize;
+	int timeEndIndex = smallerNum(findWhiteSpace, timeEnd);
+
+	std::string timeToken = _description.substr(timeStartIndex, timeEndIndex - timeStartIndex);
+	trimStart(timeToken);								//ensure no white space at start
 
 	_description.erase(timeStartIndex, timeEndIndex - timeStartIndex);		//removes the token from description
 	return timeToken;
@@ -250,9 +284,8 @@ void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std
 	if(DateTokens.size() == 1  || TimeTokens.size() == 1){
 		DateTime End(DateTokens, TimeTokens);
 		_end = End;
-	}
 
-	else if(DateTokens.size() == 2 || TimeTokens.size() == 2) {
+	} else if(DateTokens.size() == 2 || TimeTokens.size() == 2) {
 		DateTime End(DateTokens, TimeTokens);
 		DateTime Start(DateTokens, TimeTokens);
 		_end = End;
@@ -260,7 +293,7 @@ void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std
 		compareDateTime();
 	}
 }
-
+//still need to check
 void Parser::compareDateTime() {
 	int endMonth = _end.getMonth();
 	int endHour = _end.getHour();
@@ -278,19 +311,13 @@ void Parser::compareDateTime() {
 void Parser::checkStartBeforeEnd() {
 	if(checkStartMonthBeforeEndMonth()) {
 		swapDateTime();
-	}
-
-	else {
+	} else {
 		if(checkStartDayBeforeEndDay()) {
 			swapDateTime();
-		}
-
-		else {
+		} else {
 			if(checkStartHourBeforeEndHour()) {
 				swapDateTime();
-			}
-
-			else {
+			} else {
 				if(checkStartMinuteBeforeEndMinute()) {
 					swapDateTime();
 				}
@@ -376,4 +403,10 @@ int Parser::getStartTimeHour() {
 
 int Parser::getStartTimeMinute() {
 	return _start.getMinute();
+}
+
+int main() {
+	Parser parse(" edit 100  test  tomorrow 730am  ");
+
+	return 0;
 }
