@@ -250,8 +250,8 @@ std::string Parser::extractTime(int TimeIndex, int foundIndex) {
 	int timeStringSize = timeStringFound.length();
 
 	int timeStart = foundIndex - 4;				//assumes max 4 characters away from time string
-	int emptySpace = findWhiteSpace(timeStart) + 1;
-	int timeStartIndex = smallerNum(timeStart, emptySpace);
+	int emptySpace = findWhiteSpace(timeStart);
+	int timeStartIndex = smallerNum(emptySpace, timeStart);
 
 	emptySpace = _description.find_first_of(WhiteSpace, foundIndex);
 	int timeEnd = foundIndex + timeStringSize;
