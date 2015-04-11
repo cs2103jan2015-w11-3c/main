@@ -89,6 +89,7 @@ public:
 	bool checkDash(std::string input);
 	int findDash(std::string input);
 	std::string splitTime(std::string &input);
+	void removeDash(std::string &input);
 	std::string extractTime(std::string input);
 	int convertDigits(std::string input);
 	int extractHour(int time);

@@ -89,6 +89,11 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 
 		if(checkDash(temp)) {
 			std::string startTime = splitTime(temp);
+			removeDash(temp);
+			int time = convertDigits(startTime);
+			_hour = extractHour(time);
+			checkPastNoon();
+			_minute = extractMinute(time);
 			TimeTokens.push_back(temp);
 
 		} else {

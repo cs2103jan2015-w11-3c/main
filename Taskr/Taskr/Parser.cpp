@@ -332,6 +332,8 @@ void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std
 	if(DateTokens.size() == 1  || TimeTokens.size() == 1){
 		DateTime End(DateTokens, TimeTokens);
 		_end = End;
+		DateTime Start(DateTokens, TimeTokens);
+		_start = Start;
 
 	} else if(DateTokens.size() == 2 || TimeTokens.size() == 2) {
 		DateTime End(DateTokens, TimeTokens);
@@ -451,4 +453,10 @@ int Parser::getStartTimeHour() {
 
 int Parser::getStartTimeMinute() {
 	return _start.getMinute();
+}
+
+int main() {
+	Parser parse("  add  do this tomorrow 4-5pm ");
+
+	return 0;
 }
