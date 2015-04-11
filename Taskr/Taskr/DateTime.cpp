@@ -89,25 +89,33 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 
 		if(checkDash(temp)) {
 			std::string startTime = splitTime(temp);
+			int timeLength = startTime.length();
 			removeDash(temp);
-			int time = convertDigits(startTime);
-			_hour = extractHour(time);
-			checkPastNoon();
-			_minute = extractMinute(time);
+
+			if(timeLength == 1) {
+				_hour = convertDigits(startTime);
+				checkPastNoon();
+				_minute = INDEX_ZERO;
+
+			} else if(timeLength == 3) {
+				int time = convertDigits(startTime);
+				_hour = extractHour(time);
+				checkPastNoon();
+				_minute = extractMinute(time);
+			}
+		
 			TimeTokens.push_back(temp);
 
 		} else {
 			std::string time = extractTime(temp);	
-			int timeLenth = time.length();			
+			int timeLength = time.length();			
 
-			//how to set month and day when "today" or only time given
-			//how to ensure smooth swap of objects later
-			if(timeLenth == 1) {
+			if(timeLength == 1) {
 				_hour = convertDigits(temp);
 				checkPastNoon();
 				_minute = INDEX_ZERO;
 
-			} else if(timeLenth == 3) {
+			} else if(timeLength == 3) {
 				int time = convertDigits(temp);
 				_hour = extractHour(time);
 				checkPastNoon();
@@ -214,10 +222,15 @@ int DateTime::findDash(std::string input) {		//returns index of dash
 
 std::string DateTime::splitTime(std::string &input) {
 	int dashIndex = findDash(input);
-	std::string startTime = input.substr(INDEX_ZERO, dashIndex - INDEX_ZERO- 1);
+	std::string startTime = input.substr(INDEX_ZERO, dashIndex - INDEX_ZERO);
 	input.erase(INDEX_ZERO, dashIndex);
 
 	return startTime;
+}
+
+void DateTime::removeDash(std::string &input) {
+	int index = input.find(TIME_DASH);
+	input.erase(index, 1);
 }
 
 std::string DateTime::extractTime(std::string input) {
