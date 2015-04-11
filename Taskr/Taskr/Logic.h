@@ -16,7 +16,7 @@
 #include "Parser.h"
 #include "Storage.h"
 #include "History.h"
-
+#include "easylogging++.h"
 
 class Logic {
 private:

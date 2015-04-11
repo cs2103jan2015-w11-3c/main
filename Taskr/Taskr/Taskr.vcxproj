@@ -67,6 +67,7 @@
   <ItemGroup>
     <ClInclude Include="DateTime.h" />
     <ClInclude Include="DeadlineTask.h" />
+    <ClInclude Include="easylogging++.h" />
     <ClInclude Include="FloatingTask.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="jsoncons\json.hpp" />

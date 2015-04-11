@@ -1,5 +1,6 @@
 //@author A0111966A
 #include "Logic.h"
+INITIALIZE_EASYLOGGINGPP
 
 const std::string Logic::MESSAGE_ADDED = " has been added to Taskr!\n";
 const std::string Logic::MESSAGE_DELETED = " has been deleted from Taskr.\n";
@@ -47,6 +48,7 @@ std::string Logic::executeCommand(std::string userInput) {
 		std::string description;
 		std::ostringstream ossConfirmationMessage;
 		
+		LOG(INFO) << "userInput is " << userInput << std::endl;
 		assert(userInput != "");
 		_parse = Parser(userInput);
 		command = _parse.getCommand();
@@ -84,6 +86,7 @@ std::string Logic::executeCommand(std::string userInput) {
 	} catch (std::string& errmsg) {
 		std::cout << errmsg;
 	}
+	return _confirmationMessage;
 }
 
 //  This function calls getAllTasks on the private _store attribute to read
@@ -140,6 +143,7 @@ void Logic::executeAdd(std::ostringstream& ossConfirmationMessage) {
 		} else {
 			ossConfirmationMessage << "C\n" << ERROR_INVALID_DESCRIPTION;
 		}
+		LOG(INFO) << "Result of addTask is:\n" << ossConfirmationMessage.str() << std::endl;
 	}
 	catch (std::string& errmsg) {
 		std::ostringstream errorOSS;
@@ -224,6 +228,7 @@ void Logic::editTask(std::ostringstream& ossConfirmationMessage) {
 		_store.saveFile(_listOfTasks);
 		ossConfirmationMessage << "\"" << oldTaskDescription << "\"" << MESSAGE_EDITED << "\"" << newTaskDescription << "\"." << std::endl;
 	}
+	LOG(INFO) << "Result of editTask is:\n" << ossConfirmationMessage.str() << std::endl;
 }
 
 //  This function has an option of taking in a parameter after the command "display", ie the user can enter "display <parameter>".
@@ -284,6 +289,7 @@ void Logic::displayList(std::ostringstream& ossConfirmationMessage) {
 	} else {
 		ossConfirmationMessage << "C\n" << ERROR_EMPTY_LIST;
 	}
+	LOG(INFO) << "Result of displayList is:\n" << ossConfirmationMessage.str() << std::endl;
 }
 
 //  This function deletes an item from Taskr, but can be undone using the "undo" command.
@@ -329,6 +335,7 @@ void Logic::setDone(std::ostringstream& ossConfirmationMessage) {
 	else {
 		ossConfirmationMessage << indexToSet << ERROR_INDEX_OUT_OF_RANGE;
 	}
+	LOG(INFO) << "Result of setDone is:\n" << ossConfirmationMessage.str() << std::endl;
 }
 
 //  This function makes use of the History object to save up to three snapshots of the Logic object's _listOfTasks.
@@ -347,6 +354,7 @@ void Logic::undoLastAction(std::ostringstream& ossConfirmationMessage) {
 	} else {
 		ossConfirmationMessage << MESSAGE_OPERATION_NOT_EXECUTED;
 	}
+	LOG(INFO) << "Result of undoLastAction is:\n" << ossConfirmationMessage.str() << std::endl;
 }
 
 //  This function searches all the tasks being tracked for a string that the user inputs, and returns all the tasks that contain that string.
@@ -369,6 +377,7 @@ void Logic::searchList(std::string searchString, std::ostringstream& ossConfirma
 		}
 		listToString(tempList, ossConfirmationMessage);
 	}
+	LOG(INFO) << "Result of searchList is:\n" << ossConfirmationMessage.str() << std::endl;
 }
 
 //  This function changes the file location where Taskr.txt is stored. As this action cannot be undone, the user is required to confirm
@@ -383,6 +392,7 @@ void Logic::changeFilePath(std::string filepath, std::ostringstream& ossConfirma
 	else {
 		ossConfirmationMessage << MESSAGE_OPERATION_NOT_EXECUTED;
 	}
+	LOG(INFO) << "Result of changeFilePath is:\n" << ossConfirmationMessage.str() << std::endl;
 }
 
 //  This function tells the UI to display the help screen.
@@ -399,9 +409,11 @@ bool Logic::isActionConfirmed() {
 	std::getline(std::cin, rubbish);
 
 	if (userConfirmation == "y" || userConfirmation == "Y" || userConfirmation == "yes" || userConfirmation == "Yes" || userConfirmation == "YES") {
+		LOG(INFO) << "User confirmed action." << std::endl;
 		return true;
 	}
 	else {
+		LOG(INFO) << "User canceled action." << std::endl;
 		return false;
 	}
 }
@@ -413,6 +425,7 @@ bool Logic::isValidIndex(int index) {
 bool Logic::isRepeated(Task* task) {
 	for (unsigned int i = 0; i < _listOfTasks.size(); i++) {
 		if (task->getDescription() == _listOfTasks[i]->getDescription()) {
+			LOG(INFO) << "Task entered is repeated." << std::endl;
 			return true;
 		}
 	}
@@ -434,6 +447,7 @@ void Logic::sortDoneTasks() {
 		}
 	}
 	_listOfTasks = sortedDoneTaskList;
+	LOG(INFO) << "Done tasks sorted to the top." << std::endl;
 }
 
 void Logic::listToString(std::vector<Task*> listOfTasks, std::ostringstream& ossConfirmationMessage) {
@@ -455,6 +469,7 @@ void Logic::sortTasksByTime(std::vector<Task*>& listOfTasks) {
 			std::swap(listOfTasks[minIndex], listOfTasks[i]);
 		}
 	}
+	LOG(INFO) << "Tasks have been sorted chronologically." << std::endl;
 }
 
 bool Logic::checkTiming(Task* taskA, Task* taskB) {
