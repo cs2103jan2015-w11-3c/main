@@ -454,9 +454,3 @@ int Parser::getStartTimeHour() {
 int Parser::getStartTimeMinute() {
 	return _start.getMinute();
 }
-
-int main() {
-	Parser parse("  add  do this tomorrow 4-5pm ");
-
-	return 0;
-}
