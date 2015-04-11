@@ -28,9 +28,7 @@ Task::Task() {
 Task::Task(json taskJson)  {
 	setTaskType(taskJson[TASK_TYPE].as<int>());
 	setDescription(taskJson[TASK_DESCRIPTION].as<string>());
-	if (taskJson[IS_DONE].as<bool>()) {
-		setAsDone();
-	}
+	_isDone = taskJson[IS_DONE].as<bool>();
 }
 
 Task::~Task() {
