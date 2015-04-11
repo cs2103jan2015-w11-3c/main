@@ -12,7 +12,7 @@ namespace DeadlineTaskUnit
 	public:
 
 		
-
+		//json test for timed task
 		TEST_METHOD(json_TEST)
 		{
 			TimedTask timedTask;
@@ -52,6 +52,66 @@ namespace DeadlineTaskUnit
 			Assert::AreEqual(6, timedTaskFromJson.getEndDateMonth());
 			Assert::AreEqual(7, timedTaskFromJson.getEndTimeHour());
 			Assert::AreEqual(8, timedTaskFromJson.getEndTimeMinute());
+		}
+
+		TEST_METHOD(setStartDate_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setStartDateDay(1);
+			Assert::AreEqual(timedTask.getStartDateDay(), 1);
+		}
+
+		TEST_METHOD(setStartDateDay_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setStartDateMonth(2);
+			Assert::AreEqual(timedTask.getStartDateMonth(), 2);
+		}
+
+		TEST_METHOD(setStartDateHour_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setStartTimeHour(3);
+			Assert::AreEqual(timedTask.getStartTimeHour(), 3);
+
+		}
+
+		TEST_METHOD(setStartDateMinute_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setStartTimeMinute(4);
+			Assert::AreEqual(timedTask.getStartTimeMinute(), 4);
+
+		}
+
+		TEST_METHOD(setEndDateDay_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setEndDateDay(5);
+			Assert::AreEqual(timedTask.getEndDateDay(), 5);
+		}
+
+		TEST_METHOD(setEndDateMonth_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setEndDateMonth(6);
+			Assert::AreEqual(timedTask.getEndDateMonth(), 6);
+		}
+
+		TEST_METHOD(setEndDateHour_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setEndTimeHour(7);
+			Assert::AreEqual(timedTask.getEndTimeHour(), 7);
+
+		}
+
+		TEST_METHOD(setEndDateMinute_TEST)
+		{
+			TimedTask timedTask;
+			timedTask.setEndTimeMinute(8);
+			Assert::AreEqual(timedTask.getEndTimeMinute(), 8);
+
 		}
 
 
