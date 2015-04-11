@@ -49,7 +49,6 @@ const std::string DateTime::HOUR_12 = "12";
 const std::string DateTime::HOURS[12] = 
 {HOUR_1, HOUR_2, HOUR_3, HOUR_4, HOUR_5,HOUR_6, HOUR_7, HOUR_8, HOUR_9, HOUR_10, HOUR_11, HOUR_12};
 
-//need to check indexing for day_month
 DateTime::DateTime() {	
 	_month = NEGATIVE_1;
 	_day = NEGATIVE_1;

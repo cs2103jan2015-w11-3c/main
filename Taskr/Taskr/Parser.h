@@ -65,6 +65,10 @@ public:
 	void findDateIndex(std::string input,int dateIndex, int &foundIndex);
 	std::string extractDate(int DateIndex, int foundIndex);
 	int smallerNum(int x, int y);
+	int findFirstTimeToken(std::string input);
+	bool checkIfTimeToken(int index);
+	bool isInteger(std::string input);
+	int findWhiteSpace(int index);
 	std::string extractTime(int TimeIndex, int foundIndex);
 
 	bool checkStartMonthBeforeEndMonth();

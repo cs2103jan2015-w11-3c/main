@@ -169,6 +169,7 @@ void Parser::extractDateTimeTokens() {
 				DateTokens.push_back(extractDate(matchDate, foundDate));
 				}
 
+			removeWhiteSpaces(_description);
 			temp = _description;
 			temp = convertLowerCase(temp);
 
@@ -178,24 +179,89 @@ void Parser::extractDateTimeTokens() {
 	}	
 }
 
-bool Parser::isTimedTask(std::string input, int &matchIndex, int &foundIndex) {
-	std::vector<std::string> Time;
-	for(int i = 0; i < 3; i++) {
-		Time.push_back(DateTime::TimeKeyWords[i]);
-	}
-
+bool Parser::isTimedTask(std::string input, int &matchIndex, int &foundIndex) { //check for time through whole string
+	int TimeTokenIndex = findFirstTimeToken(input);
 	bool isTimed = false;
-	for(int index = 0; index < Time.size(); index++) {
-		int TimeFound = input.find(Time[index]);
-		if(TimeFound > 0) {
+	if(TimeTokenIndex > 0) {
+		if(checkIfTimeToken(TimeTokenIndex)) {
 			isTimed = true;
+			int emptySpace = findWhiteSpace(TimeTokenIndex);
+			std::string timeKeyWord = _description.substr(TimeTokenIndex);
+			timeKeyWord = retrieveInfo(timeKeyWord);
+			int index = 0;
+			while(timeKeyWord != DateTime::TimeKeyWords[index]) {
+				index++;
+			}
+			
 			matchIndex = index;
-			foundIndex = TimeFound;
+			foundIndex = TimeTokenIndex;
+		}
+	}
+	
+	return isTimed;
+}
+
+int Parser::findFirstTimeToken(std::string input) { //return TimeToken index
+	int index = -1;
+	std::string temp;
+	int descriptionLength = _description.length();
+	for(int i = Start_Index; i < descriptionLength - 1; i++) {
+		temp = input.substr(i, 2);
+		if(temp == DateTime::AM || temp == DateTime::PM || temp == DateTime::NOON) {
+			index = i;
 			break;
 		}
 	}
 
-	return isTimed;
+	return index;
+}
+
+bool Parser::checkIfTimeToken(int timeTokenIndex) { //check if TimeToken has integer values
+	int timeTokenStart = timeTokenIndex - 4;
+	int emptySpace = findWhiteSpace(timeTokenStart);
+	timeTokenStart = smallerNum(emptySpace, timeTokenStart);
+
+	int timeTokenLength = timeTokenIndex -  timeTokenStart;
+	std::string temp = _description.substr(timeTokenStart, timeTokenLength);
+	trimStart(temp);
+	if(isInteger(temp)) {
+		return true;
+	}
+	
+	return false;
+}
+
+bool Parser::isInteger(std::string input) {
+	char temp = input[0];
+	bool isInt = false;
+	if(isdigit(temp)) {
+		isInt = true;
+	}
+
+	return isInt;
+}
+
+int Parser::findWhiteSpace(int index) {
+	return _description.find_first_of(WhiteSpace, index);
+}
+
+std::string Parser::extractTime(int TimeIndex, int foundIndex) {
+	std::string timeStringFound = DateTime::TimeKeyWords[TimeIndex];
+	int timeStringSize = timeStringFound.length();
+
+	int timeStart = foundIndex - 4;				//assumes max 4 characters away from time string
+	int emptySpace = findWhiteSpace(timeStart) + 1;
+	int timeStartIndex = smallerNum(timeStart, emptySpace);
+
+	emptySpace = _description.find_first_of(WhiteSpace, foundIndex);
+	int timeEnd = foundIndex + timeStringSize;
+	int timeEndIndex = smallerNum(emptySpace, timeEnd);
+
+	std::string timeToken = _description.substr(timeStartIndex, timeEndIndex - timeStartIndex);
+	trimStart(timeToken);								//ensure no white space at start
+
+	_description.erase(timeStartIndex, timeEndIndex - timeStartIndex);		//removes the token from description
+	return timeToken;
 }
 
 bool Parser::isDeadlineTask(std::string input, int &matchIndex, int &foundIndex) {
@@ -260,25 +326,6 @@ int Parser::smallerNum(int x, int y) {
 	} else {
 		return y;
 	}
-}
-
-std::string Parser::extractTime(int TimeIndex, int foundIndex) {
-	std::string timeStringFound = DateTime::TimeKeyWords[TimeIndex];
-	int timeStringSize = timeStringFound.length();
-
-	int timeStart = foundIndex - 4;				//assumes max 4 characters away from time string
-	int findWhiteSpace = _description.find_first_of(WhiteSpace, timeStart) + 1;
-	int timeStartIndex = smallerNum(timeStart, findWhiteSpace);
-
-	findWhiteSpace = _description.find_first_of(WhiteSpace, foundIndex);
-	int timeEnd = foundIndex + timeStringSize;
-	int timeEndIndex = smallerNum(findWhiteSpace, timeEnd);
-
-	std::string timeToken = _description.substr(timeStartIndex, timeEndIndex - timeStartIndex);
-	trimStart(timeToken);								//ensure no white space at start
-
-	_description.erase(timeStartIndex, timeEndIndex - timeStartIndex);		//removes the token from description
-	return timeToken;
 }
 
 void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std::string> TimeTokens) {
@@ -406,8 +453,8 @@ int Parser::getStartTimeMinute() {
 	return _start.getMinute();
 }
 
-//int main() {
-//	Parser parse("  add  do this today 730pm   13 apr 730am ");
-//
-//	return 0;
-//}
+int main() {
+	Parser parse("  add  do this today 730pm   13 apr 730am ");
+
+	return 0;
+}
