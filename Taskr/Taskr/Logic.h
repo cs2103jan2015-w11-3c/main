@@ -1,11 +1,12 @@
 //@author A0111966A
 #ifndef LOGIC_H
 #define LOGIC_H
-
+#define NDEBUG
 
 #include<iostream>
 #include<string>
 #include<vector>
+#include <assert.h>
 #include<algorithm>
 #include<ctime>
 #include "Task.h"
@@ -65,6 +66,7 @@ public:
 	static const std::string MESSAGE_CONFIRM_ACTION;
 	static const std::string MESSAGE_HELP;
 
+	static const std::string ERROR_EXCEPTION_OCCURRED;
 	static const std::string ERROR_REPEATED_TASK;
 	static const std::string ERROR_INDEX_OUT_OF_RANGE;
 	static const std::string ERROR_EMPTY_LIST;
