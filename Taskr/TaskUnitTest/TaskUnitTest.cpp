@@ -33,6 +33,7 @@ namespace TaskUnitTest
 			Assert::IsTrue(task.isDone());
 		}
 
+		//json test for task/floating task
 		TEST_METHOD(json_TEST)
 		{
 			Task task;
