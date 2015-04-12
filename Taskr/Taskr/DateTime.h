@@ -70,6 +70,7 @@ public:
 	static const std::string HOURS[12];
 
 	DateTime();
+	DateTime(std::vector<std::string> &TimeTokens);
 	DateTime(std::vector<std::string> &DateTokens, std::vector<std::string> &TimeTokens);
 	~DateTime();
 
@@ -83,6 +84,7 @@ public:
 
 	void identifyTimeKeyWordIndex(std::string input);
 	void setLocalTime();
+	void setDate();
 	void setTomorrowTime();
 	void checkPastNoon();
 	void setByMidnight();

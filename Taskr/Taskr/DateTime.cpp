@@ -59,6 +59,48 @@ DateTime::DateTime() {
 DateTime::~DateTime() {
 }
 
+DateTime::DateTime(std::vector<std::string> &TimeTokens) {
+	std::string temp = TimeTokens[INDEX_ZERO];
+	TimeTokens.erase(TimeTokens.begin());
+	identifyTimeKeyWordIndex(temp);
+	setDate();
+
+	if(checkDash(temp)) {
+		std::string startTime = splitTime(temp);
+		int timeLength = startTime.length();
+		removeDash(temp);
+
+		if(timeLength == 1) {
+			_hour = convertDigits(startTime);
+			checkPastNoon();
+			_minute = INDEX_ZERO;
+
+			} else if(timeLength == 3) {
+				int time = convertDigits(startTime);
+				_hour = extractHour(time);
+				checkPastNoon();
+				_minute = extractMinute(time);
+			}
+
+		} else {
+			std::string time = extractTime(temp);	
+			int timeLength = time.length();			
+
+			if(timeLength == 1 || timeLength == 2) {
+				_hour = convertDigits(temp);
+				checkPastNoon();
+				_minute = INDEX_ZERO;
+
+			} else if(timeLength == 3 || timeLength == 4) {
+				int time = convertDigits(temp);
+				_hour = extractHour(time);
+				checkPastNoon();
+				_minute = extractMinute(time);
+			}
+
+		}
+}
+
 DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string> &TimeTokens) {
 	if(!isEmpty(DateTokens)) {
 		std::string temp = DateTokens[INDEX_ZERO];
@@ -72,6 +114,7 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 		} else if(DayMonthIndex == 1 || DayMonthIndex == 2) {	//when user input "tomorrow" or "tmr"
 			setLocalTime();
 			setTomorrowTime();
+			setByMidnight();
 			checkIfNextMonth();
 
 		} else if(DayMonthIndex >= 3) {			//when user input is <day><month> or <month><day>
@@ -83,6 +126,9 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 	}
 		
 	if(!isEmpty(TimeTokens)) {
+		/*if(isEmpty(DateTokens)) {
+			setLocalTime();
+		}*/
 		std::string temp = TimeTokens[INDEX_ZERO];
 		TimeTokens.erase(TimeTokens.begin());
 		identifyTimeKeyWordIndex(temp);
@@ -110,17 +156,18 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 			std::string time = extractTime(temp);	
 			int timeLength = time.length();			
 
-			if(timeLength == 1) {
+			if(timeLength == 1 || timeLength == 2) {
 				_hour = convertDigits(temp);
 				checkPastNoon();
 				_minute = INDEX_ZERO;
 
-			} else if(timeLength == 3) {
+			} else if(timeLength == 3 || timeLength == 4) {
 				int time = convertDigits(temp);
 				_hour = extractHour(time);
 				checkPastNoon();
 				_minute = extractMinute(time);
 			}
+
 		}
 	}
 }
@@ -153,6 +200,16 @@ void DateTime::setLocalTime() {
 	_day = localTime.tm_mday;
 	_hour = NEGATIVE_1;
 	_minute = NEGATIVE_1;
+}
+
+void DateTime::setDate() {
+	time_t currentTime;
+	struct tm localTime;
+	time(&currentTime);                  
+	localtime_s(&localTime, &currentTime);
+	_year = localTime.tm_year;
+	_month = localTime.tm_mon;
+	_day = localTime.tm_mday;
 }
 
 void DateTime::setByMidnight() {	//set deadline to 23.59

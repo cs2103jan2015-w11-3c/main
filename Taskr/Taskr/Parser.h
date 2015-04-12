@@ -70,6 +70,7 @@ public:
 	bool isInteger(std::string input);
 	int findWhiteSpace(int index);
 	std::string extractTime(int TimeIndex, int foundIndex);
+	std::string retrieveTime(std::string input);
 
 	bool checkStartMonthBeforeEndMonth();
 	bool checkStartDayBeforeEndDay();
