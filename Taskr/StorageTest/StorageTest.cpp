@@ -48,7 +48,7 @@ namespace StorageTest
 			vector<Task*> tasksFromFile = storage.getAllTasks();
 			Assert::AreEqual(tasks.size(), tasksFromFile.size());
 
-			for (int i = 0; i <= tasks.size(); i++)
+			for (int i = 0; i < tasks.size(); i++)
 			{
 				Task *task = tasks[i];
 				Task *taskFromFile = tasksFromFile[i];
