@@ -118,7 +118,7 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 			checkIfNextMonth();
 
 		} else if(DayMonthIndex >= 3) {			//when user input is <day><month> or <month><day>
-			setMonth(DayMonthIndex-3);
+			setMonth(DayMonthIndex-2);
 			_day = identifyDayoftheMonth(temp);
 			setByMidnight();
 

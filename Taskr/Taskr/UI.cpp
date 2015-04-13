@@ -41,7 +41,7 @@ std::string UI::getUserInput(){
 	std::string userInput;
 	std::getline(std::cin, userInput);
 	if (userInput.empty()){
-		throw std::runtime_error("error! empty user input!");
+		throw std::runtime_error("error! user input cannot be empty!");
 	}
 	return userInput;
 	
@@ -169,7 +169,7 @@ void UI::printSegment(std::vector<std::string> tokens){
     }
     else if (tokens[0] == "D"){
 		setColour(13);
-        std::cout << "[ by " << std::left << std::setw(7) << tokens[3] << "] ";
+        std::cout << "[ by " << std::left << std::setw(5) << tokens[3] << "] ";
 		setColour(13);
 		std::cout << tokens[1] << std::endl;
     }
