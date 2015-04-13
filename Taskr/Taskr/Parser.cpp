@@ -482,3 +482,4 @@ int Parser::getStartTimeHour() {
 int Parser::getStartTimeMinute() {
 	return _start.getMinute();
 }
+

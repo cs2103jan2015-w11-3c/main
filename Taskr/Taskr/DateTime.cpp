@@ -23,9 +23,9 @@ const std::string DateTime::TMR = "tmr";
 const std::string DateTime::DAY_MONTH[15] = 
 {TODAY ,TOMORROW ,TMR , JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC};
 
-const int DateTime::MONTHS_31DAYS[7] = {0,2,4,6,7,9,11};
-const int DateTime::MONTHS_30DAYS[5] = {3,5,8,10};
-const int DateTime::FEB_28or29DAYS = 1;
+const int DateTime::MONTHS_31DAYS[7] = {1,3,5,7,8,10,12};
+const int DateTime::MONTHS_30DAYS[5] = {4,6,9,11};
+const int DateTime::FEB_28or29DAYS = 2;
 
 //time constants 
 const std::string DateTime::PM = "pm";
@@ -196,7 +196,7 @@ void DateTime::setLocalTime() {
 	time(&currentTime);                  
 	localtime_s(&localTime, &currentTime);
 	_year = localTime.tm_year;
-	_month = localTime.tm_mon;
+	_month = localTime.tm_mon + 1;
 	_day = localTime.tm_mday;
 	_hour = NEGATIVE_1;
 	_minute = NEGATIVE_1;
@@ -208,7 +208,7 @@ void DateTime::setDate() {
 	time(&currentTime);                  
 	localtime_s(&localTime, &currentTime);
 	_year = localTime.tm_year;
-	_month = localTime.tm_mon;
+	_month = localTime.tm_mon + 1;
 	_day = localTime.tm_mday;
 }
 
