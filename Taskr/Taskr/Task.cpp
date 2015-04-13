@@ -25,6 +25,7 @@ Task::Task() {
 	_isDone = false;
 }
 
+//@author A0114077L
 Task::Task(json taskJson)  {
 	setTaskType(taskJson[TASK_TYPE].as<int>());
 	setDescription(taskJson[TASK_DESCRIPTION].as<string>());

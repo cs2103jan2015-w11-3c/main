@@ -41,7 +41,7 @@ std::string UI::getUserInput(){
 	std::string userInput;
 	std::getline(std::cin, userInput);
 	if (userInput.empty()){
-		throw std::runtime_error("error! empty user input!");
+		throw std::runtime_error("error! user input cannot be empty!");
 	}
 	return userInput;
 	
@@ -119,6 +119,7 @@ std::vector<std::string> UI::doSegment(std::string feedback)
     return tokens;
 }
 
+//return index of the first empty line in vector<string> tokens
 int UI::findFirstEmptyIndex(std::vector<std::string> tokens){
     for (int i=0; i<tokens.size(); i++){
         if (tokens[i] == "")
@@ -158,7 +159,6 @@ std::string UI::getDate(std::vector<std::string> tokens){
     return date;
 }
 
-//C:confirmation message
 //F:floating tasks
 //D:deadline tasks
 //T:timed tasks
@@ -169,7 +169,7 @@ void UI::printSegment(std::vector<std::string> tokens){
     }
     else if (tokens[0] == "D"){
 		setColour(13);
-        std::cout << "[ by " << std::left << std::setw(7) << tokens[3] << "] ";
+        std::cout << "[ by " << std::left << std::setw(5) << tokens[3] << "] ";
 		setColour(13);
 		std::cout << tokens[1] << std::endl;
     }

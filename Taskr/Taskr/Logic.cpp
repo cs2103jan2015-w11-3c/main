@@ -160,7 +160,7 @@ void Logic::addTask(Task* tempTask, std::ostringstream& ossConfirmationMessage) 
 	try {
 		ossConfirmationMessage << "C\n";
 		if (isRepeated(tempTask)) {
-			ossConfirmationMessage << ERROR_REPEATED_TASK;
+			ossConfirmationMessage << "\"" << tempTask->getDescription() << "\"" << ERROR_REPEATED_TASK;
 		} else if (tempTask->getDescription() == "") {
 			ossConfirmationMessage << ERROR_INVALID_DESCRIPTION;
 		} else {

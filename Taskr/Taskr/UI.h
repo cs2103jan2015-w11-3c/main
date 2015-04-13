@@ -20,7 +20,6 @@ public:
 
 	void processUserInput();
 	std::string getUserInput();
-	void printConfirmationMessage(std::string);
 	std::vector<std::string> doSegment(std::string);
 	int findFirstEmptyIndex(std::vector<std::string>);
 	std::vector<std::string> removePrinted(std::vector<std::string>);
@@ -32,6 +31,7 @@ public:
 	void setColour(int);
 	void printDate(std::string);
 	void printHelp();
+
 };
 
 #endif

@@ -12,6 +12,7 @@ DeadlineTask::DeadlineTask() {
 	_due.setMinute(0);
 }
 
+//@author A0114077L
 DeadlineTask::DeadlineTask(json taskJson) : Task(taskJson) {
 	setDueDateMonth(taskJson[DUE_DATE_MONTH].as<int>());
 	setDueDateDay(taskJson[DUE_DATE_DAY].as<int>());
@@ -123,6 +124,7 @@ int DeadlineTask::checkMinute() {
 	return getDueTimeMinute();
 }
 
+//@author A0114077L
 json DeadlineTask::toJson() {
 	json taskJson = Task::toJson();
 	taskJson[DUE_DATE_MONTH] = getDueDateMonth();

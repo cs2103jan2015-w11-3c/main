@@ -1,4 +1,3 @@
-//@author A0116507L
 #include "DateTime.h"
 
 const int DateTime::NEGATIVE_1 = -1;
@@ -119,7 +118,7 @@ DateTime::DateTime(std::vector<std::string> &DateTokens, std::vector<std::string
 			checkIfNextMonth();
 
 		} else if(DayMonthIndex >= 3) {			//when user input is <day><month> or <month><day>
-			setMonth(DayMonthIndex-3);
+			setMonth(DayMonthIndex-2);
 			_day = identifyDayoftheMonth(temp);
 			setByMidnight();
 
