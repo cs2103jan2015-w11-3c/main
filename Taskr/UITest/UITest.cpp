@@ -8,7 +8,7 @@ namespace UITest
 	TEST_CLASS(UITest)
 	{
 	public:
-		
+		//@author A0114943H
 		TEST_METHOD(doSegment)
 		{
 			UI ui;

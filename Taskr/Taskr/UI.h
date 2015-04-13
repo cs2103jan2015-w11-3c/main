@@ -1,3 +1,4 @@
+//@author A0114943H
 #ifndef UI_H
 #define UI_H
 
@@ -16,6 +17,7 @@ public:
 	~UI();
 	
 	static const std::string MESSAGE_WELCOME;
+	static const std::string ERROR_INPUT_EMPTY;
 
 	void processUserInput();
 	std::string getUserInput();

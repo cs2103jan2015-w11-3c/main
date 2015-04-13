@@ -19,9 +19,11 @@ namespace ParserTest
 		}
 		TEST_METHOD(isTimedTask){
 			Parser parse;
-			std::string task1("task1 8 apr 8am - 9am");
+			std::string input1("add task1 8 apr 8am 9am");
+			Parser parse1(input1);
+			parse1.setDescription();
 			int matchIndex, foundIndex;
-			Assert::IsTrue(parse.isTimedTask(task1, matchIndex, foundIndex));
+			Assert::IsTrue(parse1.isTimedTask(input1, matchIndex, foundIndex));
 			Assert::AreEqual(0, matchIndex);
 
 			std::string task2("task2 8 apr");

@@ -1,3 +1,4 @@
+//@author A0114943H
 #include "UI.h"
 #include <sstream>
 #include <Windows.h>
@@ -5,6 +6,7 @@
 #include <cstdlib>
 
 const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
+const std::string UI::ERROR_INPUT_EMPTY = "ERROR! UserInput cannot be empty!";
 
 UI::UI() {
 }
@@ -21,8 +23,14 @@ void UI::processUserInput(){
 	std::string feedback;
 	while (feedback != "exit") {
 		std::cout << "command: ";
-		std::string userInput = getUserInput();
+		std::string userInput;
+		try{
+			userInput = getUserInput();
+		}catch(std::runtime_error & e){
+			std::cerr << e.what();
+		}
 		feedback = _logic.executeCommand(userInput);
+		assert(!feedback.empty());
 		if (feedback!="exit"){
 			system("cls");
 			printWholeString(feedback);
@@ -33,14 +41,12 @@ void UI::processUserInput(){
 std::string UI::getUserInput(){
 	std::string userInput;
 	std::getline(std::cin, userInput);
+	if (userInput.empty()){
+		throw std::runtime_error("error! empty user input!");
+	}
 	return userInput;
+	
 }
-
-/*
-void UI::printConfirmationMessage(std::string feedback) {
-	std::cout << feedback << std::endl;
-}
-*/
 
 void UI::printWholeString(std::string feedback){
 	std::vector<std::string> tokens;
@@ -161,8 +167,6 @@ std::string UI::getDate(std::vector<std::string> tokens){
 //T:timed tasks
 void UI::printSegment(std::vector<std::string> tokens){
 	if (tokens[0] == "F"){
-		//setColour(8);
-        //std::cout <<"[ unscheduled ] ";
 		setColour(6);
 		std::cout << " " << tokens[1] << std::endl;
     }
