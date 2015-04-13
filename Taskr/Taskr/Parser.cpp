@@ -1,8 +1,8 @@
+//@author A0116507L
 #include "Parser.h"
 
 const std::string Parser::ADD = "add";
-const std::string Parser::DELETE = "delete";
-const std::string Parser::DEL = "del";
+const std::string Parser::DEL = "delete";
 const std::string Parser::EDIT = "edit";
 const std::string Parser::DISPLAY = "display";
 const std::string Parser::DONE = "done";
@@ -12,7 +12,7 @@ const std::string Parser::UNDO = "undo";
 const std::string Parser::FILE = "file";
 const std::string Parser::HELP= "help";
 const std::string Parser::CommandArray[11] = 
-{ADD, DELETE, DEL, EDIT, DISPLAY, DONE, EXIT, SEARCH, UNDO, FILE, HELP};
+{ADD, DEL, EDIT, DISPLAY, DONE, EXIT, SEARCH, UNDO, FILE, HELP};
 
 const char Parser::WhiteSpace = ' ';
 const int Parser::Start_Index = 0;
@@ -34,6 +34,8 @@ Parser::Parser(std::string input) {
 	_command = command;
 	extractParameters();
 	extractDateTimeTokens();
+	assert(_description != "");
+
 	checkStartBeforeEnd();
 }
 
@@ -91,7 +93,7 @@ void Parser::extractParameters() {
 	if(_command == ADD || _command == SEARCH || _command == DISPLAY || _command == FILE) {
 		removeCommand();
 		setDescription();
-	} else if(_command == DELETE || _command == DONE) {
+	} else if(_command == DEL || _command == DONE) {
 		removeCommand();
 		setIndex();
 	} else if(_command == EDIT) {
@@ -150,10 +152,13 @@ void Parser::extractDateTimeTokens() {
 		int foundDate;
 		do {	
 			 if(!isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {		//check if float task
-			_TaskType = 1;
+				_TaskType = 1;
+				LOG(INFO) << "Type of task is float" << std::endl;
+
 			} else if(isTimedTask(temp, matchTime, foundTime) && !isDeadlineTask(temp, matchDate, foundDate)) {	//check if timed task due today
 				_TaskType = 2;
 				TimeTokens.push_back(extractTime(matchTime, foundTime));
+				LOG(INFO) << "Type of task is timed" << std::endl;
 
 			} else if(isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {	//check if timed task with deadline
 				_TaskType = 2;
@@ -163,10 +168,12 @@ void Parser::extractDateTimeTokens() {
 				temp = convertLowerCase(temp);
 				findDateIndex(temp, matchDate, foundIndex);
 				DateTokens.push_back(extractDate(matchDate, foundIndex));
+				LOG(INFO) << "Type of task is timed2" << std::endl;
 
 			} else if(!isTimedTask(temp, matchTime, foundTime) && isDeadlineTask(temp, matchDate, foundDate)) {	//check if only deadline task
 				_TaskType = 3;
 				DateTokens.push_back(extractDate(matchDate, foundDate));
+				LOG(INFO) << "Type of task is deadline" << std::endl;
 				}
 
 			removeWhiteSpaces(_description);
@@ -351,11 +358,14 @@ void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std
 	if(TimeTokens.size() == 1 && DateTokens.empty()) {
 		DateTime End(TimeTokens);
 		_end = End;
+		LOG(INFO) << "Due date today with time" << std::endl;
 	}
 	
 	if(DateTokens.size() == 1  || TimeTokens.size() == 1){
 		DateTime End(DateTokens, TimeTokens);
 		_end = End;
+		LOG(INFO) << "Due by deadline 2359" << std::endl;
+
 		if(!TimeTokens.empty()) { 
 			DateTime Start(TimeTokens);
 			_start = Start;
@@ -363,12 +373,15 @@ void Parser::assignDateTime(std::vector<std::string> DateTokens, std::vector<std
 			int endDay = _end.getDay();
 			_start.setMonth(endMonth);
 			_start.setDay(endDay);
+			LOG(INFO) << "Timed task on same day" << std::endl;
+
 		}
 	} else if(DateTokens.size() == 2 || TimeTokens.size() == 2) {
 		DateTime End(DateTokens, TimeTokens);
 		DateTime Start(DateTokens, TimeTokens);
 		_end = End;
 		_start = Start;
+		LOG(INFO) << "Timed task on different days" << std::endl;
 		
 	}
 }
