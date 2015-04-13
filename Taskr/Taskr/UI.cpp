@@ -6,7 +6,6 @@
 #include <cstdlib>
 
 const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
-const std::string UI::ERROR_INPUT_EMPTY = "ERROR! UserInput cannot be empty!";
 
 UI::UI() {
 }
@@ -17,7 +16,7 @@ UI::~UI() {
 
 
 void UI::processUserInput(){
-	//std::cout << MESSAGE_WELCOME << std::endl;
+
 	_logic.initializeListOfTasks();
 	printWelcome();
 	std::string feedback;
@@ -89,13 +88,9 @@ void UI::printWholeString(std::string feedback){
 }
 
 void UI::printDate(std::string date){
-	if (date == ""){
-		setColour(15);
-		std::cout << "[unscheduled]=================================================" << std::endl;
-	}else{
-		setColour(15);
-		std::cout << "[ " << date << " ]=========================================================" << std::endl;
-	}
+	setColour(15);
+	std::cout << "[" << date << "]=========================================================" << std::endl;
+
 	setColour(7);
 }
 
@@ -172,13 +167,13 @@ void UI::printSegment(std::vector<std::string> tokens){
     }
     else if (tokens[0] == "D"){
 		setColour(13);
-        std::cout << "[ by " << std::left << std::setw(9) << tokens[3] << "] ";
+        std::cout << "[ by " << std::left << std::setw(7) << tokens[3] << "] ";
 		setColour(13);
 		std::cout << tokens[1] << std::endl;
     }
     else if (tokens[0] == "T"){
 		setColour(3);
-		std::cout << "[" << std::right << std::setw(6) << tokens[3] << "-" << std::left << std::setw(6) << tokens[5] << "] ";
+		std::cout << "[" << std::right << std::setw(4) << tokens[3] << "-" << std::left << std::setw(4) << tokens[5] << "] ";
 		setColour(3);
 		std::cout << tokens[1] << std::endl;
     }
@@ -216,7 +211,7 @@ void UI::printHelp(){
 	setColour(14);
 	std::cout << "add timed task" << std::endl;
 	setColour(7);
-	std::cout << "-> enter \"add <task description> <start date and time> - <end date and time>\".\n";
+	std::cout << "-> enter \"add <task description> <start date and time> <end date and time>\".\n";
 	setColour(14);
 	std::cout << "add deadline task" << std::endl;
 	setColour(7);
@@ -240,7 +235,7 @@ void UI::printHelp(){
 	setColour(14);
 	std::cout << "done" << std::endl;
 	setColour(7);
-	std::cout << "-> enter \"display\", then enter \"done <index>\".\n";
+	std::cout << "-> enter \"display\", then enter \"done <index>\" to mark task as done.\n";
 	setColour(14);
 	std::cout << "search" << std::endl;
 	setColour(7);

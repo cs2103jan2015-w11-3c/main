@@ -17,7 +17,6 @@ public:
 	~UI();
 	
 	static const std::string MESSAGE_WELCOME;
-	static const std::string ERROR_INPUT_EMPTY;
 
 	void processUserInput();
 	std::string getUserInput();
