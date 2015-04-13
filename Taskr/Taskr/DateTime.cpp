@@ -1,4 +1,3 @@
-//@author A0116507L
 #include "DateTime.h"
 
 const int DateTime::NEGATIVE_1 = -1;

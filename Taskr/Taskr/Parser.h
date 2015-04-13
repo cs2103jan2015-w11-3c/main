@@ -1,4 +1,3 @@
-//@author A0116507L
 #ifndef PARSER_H
 #define PARSER_H
 
@@ -9,7 +8,6 @@
 #include <stdlib.h>
 #include <cctype>
 #include <assert.h>
-#include "easylogging++.h"
 
 #include "DateTime.h"
 
