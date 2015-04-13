@@ -235,7 +235,6 @@ void Logic::editTask(std::ostringstream& ossConfirmationMessage) {
 //  Parameters include:
 //  1. done  == displays all tasks that are marked as done
 //  2. today == displays all tasks that are due today
-//  3. tomorrow? == displays all tasks that are due tomorrow.?
 //  
 //  If the user does not specify a parameter, this function will return all outstanding tasks that are being tracked.
 void Logic::displayList(std::ostringstream& ossConfirmationMessage) {

@@ -90,28 +90,7 @@ namespace LogicTest
 			Assert::AreEqual(expectedEdit, confirmationMessage);
 		}
 
-		//TEST_METHOD(testEditTimedTask) {
-		//	Logic logic;
-		//	std::string confirmationMessage;
-		//	std::string expectedAdd = "C\n\"test editing a timed task.\" has been added to Taskr!\n\n";
-		//	std::string expectedEdit = "C\n\"test editing a timed task.\" has been edited to \"this test works.\".\n\n";
-		//	confirmationMessage = logic.executeCommand("add test editing a timed task.");
-		//	Assert::AreEqual(expectedAdd, confirmationMessage);
-		//	confirmationMessage = logic.executeCommand("edit 1 this test works.");
-		//	Assert::AreEqual(expectedEdit, confirmationMessage);
-		//}
-
-		//TEST_METHOD(testEditDeadlineTask) {
-		//	Logic logic;
-		//	std::string confirmationMessage;
-		//	std::string expectedAdd = "C\n\"test editing a deadline task.\" has been added to Taskr!\n\n";
-		//	std::string expectedEdit = "C\n\"test editing a deadline task.\" has been edited to \"this test works.\".\n\n";
-		//	confirmationMessage = logic.executeCommand("add test editing a deadline task.");
-		//	Assert::AreEqual(expectedAdd, confirmationMessage);
-		//	confirmationMessage = logic.executeCommand("edit 1 this test works.");
-		//	Assert::AreEqual(expectedEdit, confirmationMessage);
-		//}
-
+	
 		TEST_METHOD(testMarkingDone) {
 			Logic logic;
 			std::string confirmationMessage;

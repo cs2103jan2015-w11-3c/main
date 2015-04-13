@@ -14,10 +14,6 @@ protected:
 	std::string _description;
 	bool _isDone;
 	int _taskType;
-	//  _taskType:
-	//  1: floating
-	//  2: timed
-	//  3: deadline
 
 
 public:
