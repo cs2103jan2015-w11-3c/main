@@ -1,3 +1,4 @@
+//@author A0116507L
 #ifndef PARSER_H
 #define PARSER_H
 
@@ -7,6 +8,8 @@
 #include <sstream>
 #include <stdlib.h>
 #include <cctype>
+#include <assert.h>
+#include "easylogging++.h"
 
 #include "DateTime.h"
 
@@ -29,7 +32,6 @@ public:
 	//command strings
 	static const std::string CommandArray[11];
 	static const std::string ADD;
-	static const std::string DELETE;
 	static const std::string DEL;
 	static const std::string EDIT;
 	static const std::string DISPLAY;
