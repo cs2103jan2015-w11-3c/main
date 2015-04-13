@@ -119,6 +119,7 @@ std::vector<std::string> UI::doSegment(std::string feedback)
     return tokens;
 }
 
+//return index of the first empty line in vector<string> tokens
 int UI::findFirstEmptyIndex(std::vector<std::string> tokens){
     for (int i=0; i<tokens.size(); i++){
         if (tokens[i] == "")
@@ -158,7 +159,6 @@ std::string UI::getDate(std::vector<std::string> tokens){
     return date;
 }
 
-//C:confirmation message
 //F:floating tasks
 //D:deadline tasks
 //T:timed tasks
