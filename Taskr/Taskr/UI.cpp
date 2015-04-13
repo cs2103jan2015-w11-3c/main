@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <cstdlib>
 
-const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.";
+const std::string UI::MESSAGE_WELCOME = "Welcome to Taskr! Taskr is ready to use.\n";
 
 UI::UI() {
 }
@@ -96,8 +96,10 @@ void UI::printDate(std::string date){
 
 void UI::printWelcome(){
 	std::cout << MESSAGE_WELCOME << std::endl;
+	std::cout << "List of today's tasks:" << std::endl;
 	printWholeString(_logic.executeCommand("display today"));
-	std::cout << "Enter \"help\" to see list of possible commands! " << std::endl;
+	std::cout << std::endl;
+	std::cout << "Enter \"help\" to see list of possible commands!\n " << std::endl;
 }
 
 //store string feedback into vector<string> tokens line by line

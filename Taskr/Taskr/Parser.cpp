@@ -34,7 +34,7 @@ Parser::Parser(std::string input) {
 	_command = command;
 	extractParameters();
 	extractDateTimeTokens();
-	assert(_description != "");
+	//assert(_description != "");
 
 	checkStartBeforeEnd();
 }
