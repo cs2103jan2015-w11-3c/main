@@ -16,7 +16,6 @@ TimedTask::TimedTask() {
 	_end.setMinute(0);
 }
 
-//@author A0114077L
 TimedTask::TimedTask(json taskJson) : Task(taskJson) {
 	setStartDateMonth(taskJson[START_DATE_MONTH].as<int>());
 	setStartDateDay(taskJson[START_DATE_DAY].as<int>());
@@ -214,7 +213,6 @@ int TimedTask::checkMinute() {
 	return getStartTimeMinute();
 }
 
-//@author A0114077L
 json TimedTask::toJson() {
 	json taskJson = Task::toJson();
 	taskJson[START_DATE_MONTH] = getStartDateMonth();
